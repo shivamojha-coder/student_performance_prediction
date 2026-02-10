@@ -1,0 +1,23 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.env
+.venv/
+venv/
+ENV/
+
+# Local secrets
+.env.local
+
+# OS / tooling
+.DS_Store
+Thumbs.db
+
+# SQLite database
+student_perf.db
+
+# Model artifacts
+model/*.pkl

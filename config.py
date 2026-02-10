@@ -13,9 +13,10 @@ DEBUG = True
 #   1. Enable 2-Step Verification on your Google Account
 #   2. Go to https://myaccount.google.com/apppasswords
 #   3. Generate an App Password for "Mail"
-#   4. Paste the 16-char password below (no spaces)
+#   4. Store the 16-char password in a secret store or env var (do NOT hardcode)
 SMTP_SERVER = 'smtp.gmail.com'
 SMTP_PORT = 587
-SMTP_EMAIL = os.environ.get('SMTP_EMAIL', 'mrsnewzebral82@gmail.com')       
-SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', 'ozpqqfvtynptigfy')
-OTP_EXPIRY_SECONDS = 300  # 5 minutesss
+SMTP_EMAIL = os.environ.get('mrsnewzebral82@gmail.com')       
+# Never default to a real password; require it from environment/secret manager
+SMTP_PASSWORD = os.environ.get( 'tywa qefo xbev tglp')
+OTP_EXPIRY_SECONDS = 300  # 5 minutes
