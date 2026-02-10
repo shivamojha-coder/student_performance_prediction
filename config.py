@@ -18,4 +18,4 @@ SMTP_SERVER = 'smtp.gmail.com'
 SMTP_PORT = 587
 SMTP_EMAIL = os.environ.get('SMTP_EMAIL', 'mrsnewzebral82@gmail.com')       
 SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', 'ozpqqfvtynptigfy')
-OTP_EXPIRY_SECONDS = 300  # 5 minutes
+OTP_EXPIRY_SECONDS = 300  # 5 minutesss
