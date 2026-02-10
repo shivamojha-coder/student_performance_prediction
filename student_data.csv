@@ -1,0 +1,501 @@
+Student_ID,Gender,Attendance_Rate,Study_Hours_per_Week,Past_Exam_Scores,Assignments_Completed,Total_Assignments,Internal_Marks,Class,Final_Exam_Score,Pass_Fail
+S001,Female,62.47,29.4,43.0,6,18,26.1,UI/UX Design,61.8,Pass
+S002,Female,97.04,23.8,67.9,10,18,11.3,Advanced Math,69.0,Pass
+S003,Female,83.92,15.8,91.1,16,16,5.8,Computer Science 101,65.3,Pass
+S004,Male,75.92,33.5,81.3,9,17,23.5,ML Fundamentals,84.3,Pass
+S005,Male,49.36,29.0,86.5,17,15,7.7,Advanced Math,65.5,Pass
+S006,Female,49.36,10.7,76.1,14,19,12.9,Database Systems,57.4,Pass
+S007,Female,43.49,36.9,78.5,13,18,5.1,ML Fundamentals,65.0,Pass
+S008,Male,91.97,33.8,89.4,16,19,22.0,Statistical Analysis,76.1,Pass
+S009,Male,76.07,38.2,47.5,9,16,9.2,ML Fundamentals,61.2,Pass
+S010,Female,82.48,30.4,64.3,6,19,21.4,ML Fundamentals,67.6,Pass
+S011,Male,41.24,26.5,45.5,9,16,29.8,UI/UX Design,58.9,Pass
+S012,Female,98.19,19.6,99.1,19,19,6.8,ML Fundamentals,79.1,Pass
+S013,Male,89.95,37.6,96.1,16,15,6.9,Statistical Analysis,88.6,Pass
+S014,Female,52.74,35.3,32.8,8,15,13.5,Statistical Analysis,53.7,Pass
+S015,Female,50.91,6.6,79.4,19,15,26.7,Computer Science 101,70.0,Pass
+S016,Male,51.0,5.9,94.8,15,15,10.4,ML Fundamentals,59.4,Pass
+S017,Female,58.25,18.2,42.6,11,15,14.0,UI/UX Design,47.2,Fail
+S018,Female,71.49,33.4,69.8,10,15,6.7,ML Fundamentals,65.5,Pass
+S019,Female,65.92,39.6,94.1,18,16,24.1,Database Systems,92.4,Pass
+S020,Male,57.47,10.3,32.4,6,18,15.2,Database Systems,45.7,Fail
+S021,Male,76.71,25.8,78.8,16,19,24.0,UI/UX Design,79.1,Pass
+S022,Male,48.37,18.3,50.8,15,15,27.6,Computer Science 101,69.4,Pass
+S023,Female,57.53,38.9,94.7,15,16,10.8,Computer Science 101,79.1,Pass
+S024,Male,61.98,34.5,98.0,17,16,25.2,Statistical Analysis,90.1,Pass
+S025,Female,67.36,34.3,96.1,9,16,6.5,Statistical Analysis,74.4,Pass
+S026,Female,87.11,21.4,63.2,11,18,27.5,Advanced Math,70.1,Pass
+S027,Male,51.98,19.5,90.3,15,19,21.3,UI/UX Design,71.4,Pass
+S028,Male,70.85,14.6,89.1,11,18,26.9,ML Fundamentals,65.2,Pass
+S029,Female,75.54,7.0,52.3,19,17,5.0,UI/UX Design,56.5,Pass
+S030,Female,42.79,35.3,88.0,9,16,9.2,Advanced Math,66.3,Pass
+S031,Male,76.45,33.5,32.6,16,17,14.7,Statistical Analysis,70.7,Pass
+S032,Male,50.23,40.0,71.7,19,15,14.5,UI/UX Design,80.8,Pass
+S033,Male,43.9,39.9,46.1,13,15,10.7,UI/UX Design,66.1,Pass
+S034,Female,96.93,24.4,38.4,8,18,14.5,Statistical Analysis,59.5,Pass
+S035,Female,97.94,31.9,35.4,15,19,8.2,Advanced Math,63.5,Pass
+S036,Female,88.5,38.1,78.7,7,17,15.3,Statistical Analysis,73.3,Pass
+S037,Female,58.28,34.7,53.8,19,19,25.1,Computer Science 101,74.2,Pass
+S038,Female,45.86,13.7,80.7,8,18,17.0,ML Fundamentals,44.6,Fail
+S039,Male,81.05,20.8,34.6,9,15,5.5,Statistical Analysis,57.7,Pass
+S040,Male,66.41,9.5,52.1,17,19,15.5,Advanced Math,55.8,Pass
+S041,Female,47.32,38.4,67.8,10,19,5.7,Database Systems,56.6,Pass
+S042,Female,69.71,26.2,85.4,7,15,29.2,Computer Science 101,60.8,Pass
+S043,Male,42.06,13.0,52.3,6,17,8.2,Database Systems,39.3,Fail
+S044,Male,94.56,28.5,73.8,18,15,22.7,Statistical Analysis,84.7,Pass
+S045,Male,55.53,26.6,92.0,17,19,29.3,Computer Science 101,73.8,Pass
+S046,Male,79.75,17.5,73.1,8,17,25.7,ML Fundamentals,63.5,Pass
+S047,Female,58.7,9.0,46.3,9,17,22.5,Statistical Analysis,49.8,Fail
+S048,Male,71.2,28.5,31.7,8,15,26.0,ML Fundamentals,58.0,Pass
+S049,Female,72.8,23.2,90.9,18,19,29.5,UI/UX Design,84.4,Pass
+S050,Male,51.09,32.0,31.5,15,18,20.5,Database Systems,55.7,Pass
+S051,Male,98.18,23.2,91.2,17,19,19.0,Computer Science 101,82.6,Pass
+S052,Male,86.51,34.8,67.0,19,16,20.7,ML Fundamentals,89.9,Pass
+S053,Female,96.37,24.3,95.7,16,18,18.3,Advanced Math,82.5,Pass
+S054,Female,93.69,24.6,85.9,7,17,20.9,ML Fundamentals,75.6,Pass
+S055,Male,75.87,35.7,99.9,12,18,16.2,Advanced Math,81.4,Pass
+S056,Female,95.31,19.1,54.5,14,17,10.5,Statistical Analysis,64.6,Pass
+S057,Female,45.31,9.7,83.7,8,17,8.0,Computer Science 101,47.8,Fail
+S058,Male,51.76,6.0,58.1,18,18,6.7,ML Fundamentals,46.0,Fail
+S059,Male,42.71,31.4,63.6,6,17,11.6,ML Fundamentals,54.1,Pass
+S060,Female,59.52,26.7,73.9,6,17,6.2,Computer Science 101,53.7,Pass
+S061,Female,63.32,29.6,91.2,5,16,19.2,ML Fundamentals,75.4,Pass
+S062,Female,56.28,12.5,98.9,17,19,12.1,Advanced Math,68.5,Pass
+S063,Male,89.72,9.8,83.8,8,19,25.6,ML Fundamentals,60.1,Pass
+S064,Male,61.41,5.5,59.2,14,16,6.9,Database Systems,42.5,Fail
+S065,Female,56.86,17.3,59.5,13,18,10.7,Statistical Analysis,53.2,Pass
+S066,Male,72.56,25.6,81.6,18,15,23.3,UI/UX Design,79.0,Pass
+S067,Male,48.46,18.7,46.7,15,15,20.0,Advanced Math,57.2,Pass
+S068,Female,88.13,20.3,37.7,11,15,6.6,Database Systems,59.2,Pass
+S069,Female,44.47,36.6,54.8,19,16,26.9,Statistical Analysis,76.0,Pass
+S070,Male,99.21,17.2,50.1,16,16,26.9,Computer Science 101,75.9,Pass
+S071,Male,86.33,23.0,50.7,14,17,13.3,Advanced Math,72.0,Pass
+S072,Female,51.92,32.4,46.4,11,15,13.5,UI/UX Design,51.6,Pass
+S073,Male,40.33,18.9,32.9,17,18,29.7,Statistical Analysis,57.3,Pass
+S074,Male,88.93,26.8,31.3,19,18,20.7,UI/UX Design,66.7,Pass
+S075,Female,82.41,35.2,99.1,11,15,18.3,Computer Science 101,90.3,Pass
+S076,Female,83.74,38.2,59.9,19,15,26.0,Computer Science 101,76.0,Pass
+S077,Male,86.28,10.1,56.9,12,15,12.1,Advanced Math,48.1,Fail
+S078,Male,44.44,37.4,77.6,5,16,15.7,ML Fundamentals,63.3,Pass
+S079,Male,61.51,22.2,45.3,14,16,11.7,Computer Science 101,62.4,Pass
+S080,Female,46.95,14.0,96.5,17,16,24.7,Statistical Analysis,75.0,Pass
+S081,Male,91.79,21.1,85.0,14,19,19.3,ML Fundamentals,71.5,Pass
+S082,Male,77.4,39.3,36.3,12,18,21.5,Database Systems,76.3,Pass
+S083,Female,59.85,22.2,59.2,8,18,11.3,UI/UX Design,47.1,Fail
+S084,Female,43.81,16.5,91.5,8,17,10.5,ML Fundamentals,60.9,Pass
+S085,Male,58.66,27.2,96.1,8,16,17.2,UI/UX Design,62.9,Pass
+S086,Female,59.51,13.4,62.7,10,19,23.4,ML Fundamentals,55.1,Pass
+S087,Female,83.78,7.7,72.9,11,19,18.1,Database Systems,64.0,Pass
+S088,Male,78.25,9.5,41.7,10,18,5.8,Computer Science 101,38.7,Fail
+S089,Female,93.23,9.5,99.4,5,16,26.7,Database Systems,78.3,Pass
+S090,Female,68.33,10.3,46.2,16,17,6.6,Computer Science 101,49.4,Fail
+S091,Male,47.18,9.9,96.0,12,16,28.9,Computer Science 101,67.1,Pass
+S092,Female,82.79,27.4,75.5,17,15,5.6,UI/UX Design,78.9,Pass
+S093,Male,85.65,11.4,72.5,14,16,22.4,Statistical Analysis,65.6,Pass
+S094,Male,73.68,17.1,65.9,19,15,7.1,Database Systems,71.3,Pass
+S095,Female,86.26,36.4,46.1,15,15,27.8,ML Fundamentals,88.4,Pass
+S096,Female,69.63,21.6,42.4,17,17,16.6,Database Systems,58.8,Pass
+S097,Female,71.36,28.4,45.4,11,18,8.4,UI/UX Design,63.6,Pass
+S098,Male,65.65,11.0,43.1,10,16,13.5,Computer Science 101,40.0,Fail
+S099,Female,41.53,11.7,84.6,10,15,9.1,UI/UX Design,53.9,Pass
+S100,Male,46.47,6.4,54.5,9,16,9.3,Advanced Math,35.4,Fail
+S101,Female,41.89,10.9,34.0,10,18,28.7,Advanced Math,51.8,Pass
+S102,Female,78.18,14.8,97.8,16,18,16.1,ML Fundamentals,77.1,Pass
+S103,Female,58.86,11.2,91.9,13,19,24.7,UI/UX Design,76.3,Pass
+S104,Male,70.51,8.1,94.9,14,18,21.0,ML Fundamentals,74.7,Pass
+S105,Female,94.45,9.2,99.6,13,17,21.9,ML Fundamentals,74.7,Pass
+S106,Female,54.96,21.1,42.2,19,15,8.3,Advanced Math,52.6,Pass
+S107,Male,64.62,12.2,57.7,14,19,10.9,ML Fundamentals,56.0,Pass
+S108,Male,85.33,17.7,83.1,12,17,24.7,Advanced Math,73.6,Pass
+S109,Female,53.73,22.6,78.7,14,16,29.3,Computer Science 101,79.9,Pass
+S110,Female,44.62,29.2,40.8,13,15,11.6,UI/UX Design,43.9,Fail
+S111,Female,57.39,6.4,87.1,17,18,11.8,ML Fundamentals,70.3,Pass
+S112,Male,49.67,33.0,45.7,14,15,16.8,Advanced Math,65.4,Pass
+S113,Male,95.78,27.0,45.7,12,16,29.6,Database Systems,70.8,Pass
+S114,Male,88.49,7.9,67.6,12,19,11.7,ML Fundamentals,62.0,Pass
+S115,Male,78.0,35.6,71.5,5,19,15.2,Statistical Analysis,73.2,Pass
+S116,Female,92.29,37.2,70.6,14,19,27.3,Computer Science 101,84.6,Pass
+S117,Male,88.22,7.1,36.4,15,18,5.1,Computer Science 101,40.9,Fail
+S118,Male,51.19,14.7,91.4,9,17,6.0,Database Systems,52.5,Pass
+S119,Male,93.55,33.2,48.6,8,17,20.1,Advanced Math,74.5,Pass
+S120,Female,72.36,31.2,39.1,6,15,27.7,ML Fundamentals,65.8,Pass
+S121,Female,88.45,11.5,92.2,12,18,11.0,Advanced Math,65.6,Pass
+S122,Male,93.77,12.3,96.9,7,19,16.7,Computer Science 101,74.3,Pass
+S123,Male,59.08,18.0,90.3,8,19,16.3,Advanced Math,64.5,Pass
+S124,Female,46.6,22.0,86.7,16,16,16.8,Computer Science 101,71.8,Pass
+S125,Female,53.68,26.6,75.9,11,16,20.6,Advanced Math,64.2,Pass
+S126,Female,65.63,17.9,68.6,14,19,16.7,Database Systems,59.4,Pass
+S127,Female,89.08,21.2,36.1,13,19,16.2,UI/UX Design,51.7,Pass
+S128,Female,91.64,31.2,58.6,6,18,16.9,Database Systems,65.3,Pass
+S129,Female,40.42,6.3,56.1,7,17,19.8,Database Systems,48.0,Fail
+S130,Female,70.64,13.8,48.2,8,16,18.4,UI/UX Design,52.3,Pass
+S131,Female,65.04,30.0,80.6,14,17,26.4,UI/UX Design,79.2,Pass
+S132,Male,53.33,36.3,64.7,5,18,6.2,ML Fundamentals,60.5,Pass
+S133,Male,47.19,22.9,35.7,11,19,25.8,ML Fundamentals,55.6,Pass
+S134,Male,60.26,23.6,45.4,6,17,26.1,Database Systems,58.9,Pass
+S135,Male,96.57,8.8,77.8,9,19,12.1,Database Systems,54.4,Pass
+S136,Male,59.39,20.7,35.3,19,19,16.6,Computer Science 101,55.7,Pass
+S137,Male,71.13,23.6,89.6,5,15,16.0,Computer Science 101,73.6,Pass
+S138,Female,82.18,13.5,64.7,7,17,10.5,ML Fundamentals,55.4,Pass
+S139,Female,61.82,14.4,63.6,16,17,14.9,Statistical Analysis,69.6,Pass
+S140,Male,98.31,18.2,71.5,6,19,6.1,Statistical Analysis,55.7,Pass
+S141,Male,97.75,5.7,87.7,5,18,11.9,ML Fundamentals,60.5,Pass
+S142,Female,55.11,16.3,54.3,11,15,25.4,Computer Science 101,57.3,Pass
+S143,Female,69.83,12.4,77.5,9,19,12.1,Computer Science 101,59.1,Pass
+S144,Female,58.05,16.5,69.6,5,16,25.5,Statistical Analysis,62.0,Pass
+S145,Male,57.09,9.2,48.7,10,16,18.3,Advanced Math,52.6,Pass
+S146,Female,42.21,36.2,91.5,9,15,27.0,Advanced Math,79.2,Pass
+S147,Male,76.57,25.8,85.8,19,18,19.4,Computer Science 101,78.9,Pass
+S148,Male,70.16,28.8,76.1,7,19,5.7,Advanced Math,58.4,Pass
+S149,Female,43.09,32.6,89.5,16,17,21.9,UI/UX Design,65.7,Pass
+S150,Female,56.72,22.4,90.7,11,15,6.1,ML Fundamentals,65.3,Pass
+S151,Male,94.5,8.0,79.6,15,18,16.3,ML Fundamentals,69.0,Pass
+S152,Female,54.37,23.8,88.6,14,17,28.2,Computer Science 101,73.8,Pass
+S153,Female,48.69,25.5,78.8,13,16,9.1,Database Systems,60.4,Pass
+S154,Male,69.37,31.1,77.6,18,16,14.7,Statistical Analysis,76.4,Pass
+S155,Female,99.14,20.1,73.3,17,17,23.2,Computer Science 101,78.6,Pass
+S156,Male,54.52,9.5,82.7,17,15,27.1,Advanced Math,66.9,Pass
+S157,Male,80.33,14.9,41.1,13,16,21.8,Statistical Analysis,62.1,Pass
+S158,Female,85.7,17.7,91.7,18,19,11.5,Database Systems,75.6,Pass
+S159,Male,54.26,27.6,91.0,13,17,21.9,Advanced Math,68.7,Pass
+S160,Male,83.69,25.0,32.0,6,17,12.4,UI/UX Design,50.9,Pass
+S161,Female,62.07,17.5,87.8,7,16,23.0,Advanced Math,63.2,Pass
+S162,Female,77.94,39.5,39.0,11,15,28.9,UI/UX Design,74.5,Pass
+S163,Female,78.01,26.2,53.5,9,19,23.0,Statistical Analysis,64.0,Pass
+S164,Male,72.15,13.3,82.0,6,15,26.6,UI/UX Design,67.8,Pass
+S165,Male,45.42,8.6,41.3,7,18,5.1,Statistical Analysis,26.0,Fail
+S166,Female,90.12,10.4,87.3,14,18,22.9,Statistical Analysis,65.3,Pass
+S167,Male,59.25,13.6,88.2,10,16,25.7,Statistical Analysis,66.9,Pass
+S168,Female,51.19,10.6,65.5,17,16,6.0,Statistical Analysis,50.4,Pass
+S169,Female,42.45,11.5,30.4,11,16,26.8,Statistical Analysis,52.1,Pass
+S170,Male,75.45,15.0,50.1,13,18,11.4,Advanced Math,61.3,Pass
+S171,Female,80.65,11.1,73.2,5,15,21.6,Statistical Analysis,61.0,Pass
+S172,Male,41.0,36.4,98.7,15,15,25.0,Advanced Math,75.3,Pass
+S173,Male,70.73,7.8,74.2,11,16,21.6,Statistical Analysis,66.5,Pass
+S174,Female,53.59,23.4,48.2,12,19,7.3,UI/UX Design,51.2,Pass
+S175,Male,78.71,19.4,74.4,16,15,19.9,Statistical Analysis,66.5,Pass
+S176,Female,50.46,39.4,67.8,18,18,18.7,Database Systems,66.6,Pass
+S177,Male,81.46,8.9,84.6,7,17,27.5,Statistical Analysis,73.5,Pass
+S178,Male,63.2,18.9,37.5,8,17,15.1,Statistical Analysis,56.0,Pass
+S179,Male,96.2,38.9,83.3,14,17,13.0,UI/UX Design,70.6,Pass
+S180,Female,48.25,35.3,67.9,10,19,23.7,ML Fundamentals,59.7,Pass
+S181,Male,60.46,33.6,97.4,14,16,15.3,UI/UX Design,82.8,Pass
+S182,Female,46.81,14.0,53.9,11,18,21.2,Database Systems,51.8,Pass
+S183,Male,95.48,11.0,74.3,17,19,21.2,ML Fundamentals,75.4,Pass
+S184,Male,92.64,28.4,95.2,18,18,27.2,Computer Science 101,89.5,Pass
+S185,Female,55.48,37.5,37.2,8,18,20.0,Computer Science 101,61.8,Pass
+S186,Female,79.6,24.5,95.6,12,16,17.6,Database Systems,76.1,Pass
+S187,Female,89.03,25.0,78.2,9,17,8.5,UI/UX Design,64.3,Pass
+S188,Female,73.31,14.8,34.7,5,16,7.9,Advanced Math,48.3,Fail
+S189,Female,71.78,31.9,51.1,8,19,8.9,Database Systems,58.4,Pass
+S190,Male,54.51,11.5,79.6,7,19,9.3,ML Fundamentals,52.7,Pass
+S191,Male,45.59,16.3,34.7,13,19,20.9,ML Fundamentals,49.8,Fail
+S192,Female,93.83,19.9,70.8,12,16,23.5,Statistical Analysis,71.7,Pass
+S193,Male,94.03,22.8,54.2,5,18,18.2,Computer Science 101,69.8,Pass
+S194,Male,77.99,13.5,73.5,15,18,25.7,ML Fundamentals,71.7,Pass
+S195,Male,60.34,9.0,33.2,10,15,29.8,Database Systems,51.0,Pass
+S196,Female,60.95,26.4,91.0,13,19,25.5,ML Fundamentals,80.6,Pass
+S197,Male,83.56,15.1,98.1,11,18,22.4,Database Systems,66.7,Pass
+S198,Male,93.83,25.3,97.8,8,15,18.3,Advanced Math,88.9,Pass
+S199,Male,93.23,10.4,82.5,17,18,16.2,Statistical Analysis,70.5,Pass
+S200,Female,86.79,21.8,39.1,5,19,7.1,Computer Science 101,43.6,Fail
+S201,Male,78.52,23.6,83.1,16,17,15.0,ML Fundamentals,83.4,Pass
+S202,Male,45.05,6.8,31.7,6,19,27.8,Database Systems,38.9,Fail
+S203,Female,49.7,16.8,31.5,16,16,25.2,UI/UX Design,57.5,Pass
+S204,Female,93.91,9.7,52.7,9,18,10.4,Computer Science 101,57.8,Pass
+S205,Male,76.39,7.2,64.2,16,18,16.7,Advanced Math,66.3,Pass
+S206,Male,40.55,39.6,83.9,15,16,25.4,Database Systems,79.2,Pass
+S207,Female,46.09,16.3,77.8,9,16,6.7,Statistical Analysis,47.7,Fail
+S208,Female,79.81,33.3,61.2,12,17,14.7,Statistical Analysis,71.0,Pass
+S209,Female,40.3,13.9,49.2,10,18,26.3,Advanced Math,48.7,Fail
+S210,Female,49.65,28.9,99.8,12,18,15.1,Advanced Math,70.6,Pass
+S211,Female,72.92,31.6,59.8,6,17,6.9,Statistical Analysis,65.9,Pass
+S212,Female,81.51,25.8,61.6,7,15,18.6,ML Fundamentals,68.8,Pass
+S213,Female,79.12,21.5,41.5,10,17,26.5,ML Fundamentals,64.0,Pass
+S214,Male,53.46,19.4,85.6,16,19,19.8,Database Systems,70.7,Pass
+S215,Female,82.73,17.2,78.6,17,18,10.7,UI/UX Design,72.5,Pass
+S216,Female,54.23,37.5,45.5,14,16,14.6,Database Systems,58.7,Pass
+S217,Male,59.52,34.1,35.8,7,19,16.3,UI/UX Design,54.7,Pass
+S218,Female,84.79,38.8,77.6,10,18,19.5,Advanced Math,90.9,Pass
+S219,Female,78.98,9.4,75.8,10,17,24.0,Computer Science 101,70.3,Pass
+S220,Male,90.95,30.6,49.1,6,19,7.5,Database Systems,56.3,Pass
+S221,Female,79.46,37.8,96.6,11,18,27.2,Database Systems,82.7,Pass
+S222,Male,74.1,11.3,40.6,16,15,5.3,UI/UX Design,49.8,Fail
+S223,Male,45.62,7.3,60.3,6,15,14.3,Advanced Math,47.6,Fail
+S224,Male,62.06,30.9,96.1,10,16,5.7,Advanced Math,75.3,Pass
+S225,Male,55.91,25.1,59.4,5,18,14.8,UI/UX Design,55.9,Pass
+S226,Female,54.64,34.5,74.7,7,15,18.1,Advanced Math,66.4,Pass
+S227,Male,98.38,9.9,57.8,6,17,17.8,Statistical Analysis,56.0,Pass
+S228,Male,63.59,32.8,49.2,11,18,9.1,ML Fundamentals,60.0,Pass
+S229,Female,93.52,12.1,98.9,18,17,21.1,Statistical Analysis,76.5,Pass
+S230,Male,77.87,10.7,58.7,8,17,6.1,Computer Science 101,39.9,Fail
+S231,Male,87.69,10.7,92.6,12,15,24.0,Database Systems,82.7,Pass
+S232,Male,70.16,33.5,46.1,10,18,28.7,Computer Science 101,63.5,Pass
+S233,Male,74.61,28.3,44.9,16,19,13.5,Database Systems,61.8,Pass
+S234,Female,69.55,23.3,32.2,14,15,17.9,ML Fundamentals,63.3,Pass
+S235,Male,51.71,17.6,75.6,8,15,14.5,Advanced Math,63.0,Pass
+S236,Female,83.35,35.7,55.8,9,18,5.2,Statistical Analysis,64.0,Pass
+S237,Female,56.85,18.7,90.5,17,18,14.6,UI/UX Design,61.7,Pass
+S238,Male,41.46,33.6,63.1,17,17,24.8,Statistical Analysis,68.8,Pass
+S239,Male,78.73,20.4,97.8,19,18,19.9,ML Fundamentals,76.7,Pass
+S240,Male,50.63,18.2,43.0,19,17,7.5,Computer Science 101,52.8,Pass
+S241,Male,96.43,21.2,90.8,13,15,26.2,UI/UX Design,89.7,Pass
+S242,Female,97.24,15.5,84.4,11,16,18.3,Advanced Math,59.9,Pass
+S243,Female,94.89,31.2,84.0,14,19,26.0,ML Fundamentals,82.3,Pass
+S244,Female,62.21,22.6,89.1,18,15,19.5,UI/UX Design,74.5,Pass
+S245,Male,40.93,13.1,83.3,18,18,19.0,ML Fundamentals,55.8,Pass
+S246,Female,95.7,36.5,73.8,13,19,7.6,ML Fundamentals,77.6,Pass
+S247,Male,65.69,18.4,39.2,11,16,9.2,Advanced Math,43.3,Fail
+S248,Male,98.0,24.0,32.3,16,16,29.3,Database Systems,67.7,Pass
+S249,Male,97.82,36.7,94.5,5,17,10.7,UI/UX Design,80.5,Pass
+S250,Male,91.18,26.8,73.2,16,19,29.4,Advanced Math,89.4,Pass
+S251,Male,57.67,9.1,85.8,12,17,18.3,ML Fundamentals,59.8,Pass
+S252,Female,63.11,37.9,63.7,8,15,8.4,Advanced Math,56.8,Pass
+S253,Female,91.07,27.0,38.2,7,19,7.5,Database Systems,51.5,Pass
+S254,Male,59.02,16.7,38.8,18,15,10.2,Statistical Analysis,61.0,Pass
+S255,Female,50.17,9.9,78.0,17,17,28.1,UI/UX Design,66.6,Pass
+S256,Male,73.41,32.8,60.1,11,19,15.4,Database Systems,65.6,Pass
+S257,Male,96.17,26.7,44.0,16,17,14.9,Computer Science 101,71.5,Pass
+S258,Male,81.76,23.7,64.4,7,19,12.8,UI/UX Design,60.1,Pass
+S259,Female,74.2,36.3,34.5,12,17,8.7,Database Systems,68.0,Pass
+S260,Male,45.83,32.6,70.7,10,16,17.2,ML Fundamentals,59.7,Pass
+S261,Male,76.9,10.3,48.8,9,17,8.3,UI/UX Design,44.3,Fail
+S262,Female,99.4,15.9,85.8,8,16,25.9,UI/UX Design,67.8,Pass
+S263,Female,48.41,13.7,51.7,12,17,14.3,Advanced Math,46.9,Fail
+S264,Female,71.1,31.0,61.9,12,19,14.4,ML Fundamentals,60.0,Pass
+S265,Male,92.64,6.2,30.8,16,19,16.9,Computer Science 101,56.1,Pass
+S266,Male,84.45,24.9,35.1,5,19,16.1,Statistical Analysis,54.5,Pass
+S267,Female,81.82,31.7,57.5,13,18,29.9,Database Systems,71.0,Pass
+S268,Male,82.15,35.7,63.6,18,15,18.6,Advanced Math,84.5,Pass
+S269,Female,61.57,17.0,72.0,9,19,7.2,Database Systems,60.2,Pass
+S270,Female,57.62,33.7,50.4,8,16,20.2,Computer Science 101,63.3,Pass
+S271,Male,88.56,8.9,78.6,10,19,8.8,Computer Science 101,45.8,Fail
+S272,Male,88.61,34.6,90.2,10,18,5.8,UI/UX Design,83.2,Pass
+S273,Female,92.02,9.5,84.6,6,16,29.3,Computer Science 101,72.9,Pass
+S274,Female,94.79,18.9,32.8,12,18,24.3,Database Systems,73.3,Pass
+S275,Female,70.68,32.9,63.6,11,16,29.5,ML Fundamentals,80.5,Pass
+S276,Female,70.09,10.2,37.3,5,17,16.9,ML Fundamentals,51.3,Pass
+S277,Male,87.9,13.0,46.9,9,15,18.3,UI/UX Design,59.4,Pass
+S278,Female,79.0,30.3,99.1,16,15,9.2,Statistical Analysis,78.9,Pass
+S279,Female,82.12,30.2,40.0,10,18,11.2,Database Systems,61.4,Pass
+S280,Female,87.75,27.4,64.9,8,15,26.0,Database Systems,69.3,Pass
+S281,Male,93.4,29.3,73.3,6,18,13.9,Computer Science 101,70.4,Pass
+S282,Male,60.28,24.0,79.2,17,18,25.7,Database Systems,60.7,Pass
+S283,Female,62.53,13.8,69.2,18,18,22.7,Advanced Math,66.4,Pass
+S284,Male,45.64,17.1,30.7,8,15,9.4,Statistical Analysis,47.1,Fail
+S285,Male,74.7,11.4,52.9,5,18,17.7,Computer Science 101,51.0,Pass
+S286,Male,42.16,36.8,66.2,11,15,21.9,Advanced Math,76.1,Pass
+S287,Female,67.94,25.4,36.2,6,18,10.9,UI/UX Design,47.9,Fail
+S288,Female,72.56,19.0,54.5,17,19,25.8,ML Fundamentals,72.6,Pass
+S289,Male,57.19,21.2,32.3,6,18,18.6,UI/UX Design,42.9,Fail
+S290,Female,75.45,38.2,35.5,13,16,9.1,ML Fundamentals,68.4,Pass
+S291,Female,41.83,10.4,57.8,9,18,19.6,UI/UX Design,48.5,Fail
+S292,Male,42.24,25.5,39.3,6,17,30.0,Database Systems,52.3,Pass
+S293,Male,89.36,22.7,69.7,15,18,8.8,Advanced Math,55.1,Pass
+S294,Female,61.61,26.4,78.3,13,16,25.4,ML Fundamentals,71.8,Pass
+S295,Male,47.62,5.6,86.0,13,16,10.2,Computer Science 101,54.6,Pass
+S296,Female,71.33,35.5,44.0,5,15,24.6,Advanced Math,68.0,Pass
+S297,Female,86.2,37.6,41.7,15,19,23.4,Computer Science 101,82.1,Pass
+S298,Male,52.95,24.8,37.3,7,18,12.5,Advanced Math,57.2,Pass
+S299,Female,77.37,29.4,74.6,8,15,13.1,Advanced Math,73.5,Pass
+S300,Female,45.12,37.3,79.5,18,19,24.8,UI/UX Design,73.6,Pass
+S301,Male,43.1,29.8,32.2,11,18,16.5,ML Fundamentals,49.6,Fail
+S302,Male,71.88,10.3,95.5,14,17,23.3,ML Fundamentals,74.7,Pass
+S303,Male,72.44,25.2,33.6,8,18,8.7,Advanced Math,52.7,Pass
+S304,Female,78.25,26.2,67.9,6,16,26.3,Database Systems,76.6,Pass
+S305,Male,83.57,19.8,79.6,11,16,22.8,Database Systems,84.8,Pass
+S306,Male,98.55,30.8,91.0,10,17,27.7,Computer Science 101,96.8,Pass
+S307,Male,70.98,37.7,80.0,7,15,8.3,Computer Science 101,75.2,Pass
+S308,Male,59.38,37.4,86.1,10,19,19.8,UI/UX Design,75.5,Pass
+S309,Female,87.71,20.8,53.8,15,18,20.0,Advanced Math,75.0,Pass
+S310,Female,56.25,9.0,87.0,19,16,13.8,Computer Science 101,73.3,Pass
+S311,Male,66.34,39.5,35.6,10,15,16.5,Computer Science 101,62.7,Pass
+S312,Female,44.71,34.4,92.6,16,17,5.9,Statistical Analysis,65.9,Pass
+S313,Male,41.52,9.4,68.3,9,16,23.6,Advanced Math,48.6,Fail
+S314,Male,97.76,37.2,87.2,8,17,18.7,UI/UX Design,76.9,Pass
+S315,Female,90.16,35.4,61.7,14,18,6.4,Computer Science 101,63.7,Pass
+S316,Female,81.76,23.2,75.1,16,19,22.0,UI/UX Design,75.7,Pass
+S317,Male,64.54,25.7,66.8,19,16,16.7,ML Fundamentals,66.8,Pass
+S318,Male,50.4,19.0,81.2,5,16,5.9,UI/UX Design,46.1,Fail
+S319,Female,49.39,6.9,35.7,14,18,29.2,Database Systems,54.5,Pass
+S320,Male,55.01,16.7,34.2,10,15,28.7,Database Systems,55.9,Pass
+S321,Female,72.95,33.1,47.3,6,19,17.8,UI/UX Design,62.4,Pass
+S322,Male,82.88,5.2,41.2,17,16,7.3,Database Systems,60.0,Pass
+S323,Male,79.61,16.7,91.0,7,19,23.9,ML Fundamentals,72.8,Pass
+S324,Female,56.8,18.9,45.3,18,16,17.3,Advanced Math,68.1,Pass
+S325,Female,97.29,23.8,98.3,12,19,12.6,Database Systems,77.0,Pass
+S326,Female,84.27,37.2,53.6,14,17,17.3,Database Systems,82.1,Pass
+S327,Female,73.26,17.1,42.7,18,16,18.1,UI/UX Design,65.3,Pass
+S328,Female,76.7,17.1,85.3,18,19,19.1,ML Fundamentals,73.7,Pass
+S329,Female,65.18,30.8,76.1,10,15,16.0,Advanced Math,76.1,Pass
+S330,Female,54.86,20.8,64.9,7,17,20.1,UI/UX Design,52.2,Pass
+S331,Male,61.36,12.9,68.9,11,17,28.0,UI/UX Design,72.8,Pass
+S332,Male,85.47,20.8,80.3,8,15,14.1,Statistical Analysis,65.5,Pass
+S333,Male,40.86,9.9,46.0,18,19,23.1,ML Fundamentals,46.4,Fail
+S334,Female,46.96,11.2,99.7,13,18,27.4,Advanced Math,70.0,Pass
+S335,Female,42.76,22.4,98.2,19,15,16.4,ML Fundamentals,71.8,Pass
+S336,Female,42.44,19.7,75.5,9,19,16.1,Advanced Math,64.6,Pass
+S337,Male,91.33,37.0,44.0,7,15,20.1,ML Fundamentals,67.2,Pass
+S338,Female,82.22,17.7,77.6,6,15,19.8,UI/UX Design,66.3,Pass
+S339,Female,68.45,25.3,35.1,15,16,25.2,UI/UX Design,58.1,Pass
+S340,Male,45.87,27.1,32.1,6,19,16.9,Computer Science 101,50.3,Pass
+S341,Female,69.5,5.5,48.0,7,18,29.9,Database Systems,49.0,Fail
+S342,Male,68.41,28.2,62.4,6,16,6.5,Statistical Analysis,59.1,Pass
+S343,Male,50.39,11.2,90.8,18,15,5.1,ML Fundamentals,59.3,Pass
+S344,Female,66.03,38.6,80.9,8,15,21.0,Statistical Analysis,64.3,Pass
+S345,Female,63.91,10.2,82.0,6,15,12.5,Computer Science 101,54.5,Pass
+S346,Female,76.95,19.5,59.8,14,19,11.0,Database Systems,60.9,Pass
+S347,Male,78.11,8.0,54.2,13,19,12.8,ML Fundamentals,58.1,Pass
+S348,Male,42.72,39.9,56.0,6,16,11.4,Advanced Math,63.7,Pass
+S349,Male,62.48,22.6,99.1,13,18,5.8,Database Systems,75.0,Pass
+S350,Female,77.55,25.8,32.8,17,16,29.3,UI/UX Design,75.4,Pass
+S351,Female,70.19,7.3,90.7,10,17,10.5,Computer Science 101,59.4,Pass
+S352,Female,91.39,31.2,70.5,5,15,23.4,Database Systems,65.6,Pass
+S353,Female,79.52,12.3,60.7,8,15,24.1,Database Systems,62.3,Pass
+S354,Male,49.78,36.4,80.8,19,15,28.2,UI/UX Design,85.0,Pass
+S355,Male,44.23,12.2,64.1,18,16,5.8,ML Fundamentals,51.9,Pass
+S356,Male,78.55,11.7,91.1,5,16,26.8,Advanced Math,69.5,Pass
+S357,Male,41.59,6.3,93.0,18,15,18.2,UI/UX Design,69.5,Pass
+S358,Female,75.15,21.5,59.5,10,16,20.8,Advanced Math,60.1,Pass
+S359,Female,96.41,24.8,49.4,18,19,21.1,ML Fundamentals,69.4,Pass
+S360,Female,74.53,7.3,71.5,17,19,25.5,Database Systems,65.6,Pass
+S361,Male,63.29,32.1,93.9,8,16,13.3,Advanced Math,66.5,Pass
+S362,Male,78.6,20.9,44.7,7,15,23.3,Computer Science 101,51.7,Pass
+S363,Female,67.5,23.4,73.6,7,16,18.2,Computer Science 101,57.6,Pass
+S364,Female,72.74,20.4,74.2,13,16,24.8,UI/UX Design,65.4,Pass
+S365,Male,96.49,19.0,81.3,10,16,29.8,ML Fundamentals,84.3,Pass
+S366,Female,63.17,24.6,39.2,13,17,10.0,UI/UX Design,62.9,Pass
+S367,Male,97.67,10.4,80.1,17,19,29.9,UI/UX Design,72.5,Pass
+S368,Male,94.32,11.4,93.6,9,18,7.2,Statistical Analysis,66.5,Pass
+S369,Male,51.75,35.2,42.6,6,18,5.1,UI/UX Design,53.1,Pass
+S370,Female,44.16,38.1,46.6,12,17,6.1,Statistical Analysis,47.9,Fail
+S371,Female,46.05,18.1,98.0,9,16,13.5,Computer Science 101,61.1,Pass
+S372,Male,41.09,14.5,42.7,6,17,20.8,Computer Science 101,56.6,Pass
+S373,Female,45.67,27.5,89.8,8,17,6.7,UI/UX Design,61.4,Pass
+S374,Male,80.98,19.3,64.5,13,15,5.1,Computer Science 101,60.4,Pass
+S375,Male,44.27,5.9,47.3,19,19,28.4,ML Fundamentals,52.3,Pass
+S376,Male,59.14,10.5,91.0,8,18,25.5,Statistical Analysis,52.1,Pass
+S377,Male,90.69,30.1,61.2,17,16,25.2,Statistical Analysis,83.9,Pass
+S378,Female,41.4,28.1,66.0,16,18,27.1,UI/UX Design,77.5,Pass
+S379,Male,88.87,5.9,55.1,16,18,22.5,Computer Science 101,59.5,Pass
+S380,Male,56.91,12.8,71.5,16,19,7.6,Advanced Math,45.2,Fail
+S381,Female,47.09,13.1,41.4,17,18,15.0,Statistical Analysis,47.0,Fail
+S382,Male,81.8,28.5,57.4,19,18,23.1,UI/UX Design,80.8,Pass
+S383,Male,77.74,5.7,97.9,18,17,12.0,UI/UX Design,66.5,Pass
+S384,Female,92.65,8.6,48.1,8,19,22.2,ML Fundamentals,52.8,Pass
+S385,Female,84.1,33.0,76.0,6,15,5.6,Database Systems,65.4,Pass
+S386,Female,88.21,11.2,52.8,17,16,12.7,Database Systems,64.3,Pass
+S387,Male,56.92,27.8,84.1,16,18,18.7,Statistical Analysis,64.9,Pass
+S388,Female,50.65,13.3,39.2,19,16,20.8,ML Fundamentals,56.2,Pass
+S389,Female,85.04,8.5,97.9,10,15,19.4,ML Fundamentals,67.2,Pass
+S390,Male,88.41,13.5,61.8,17,16,22.4,ML Fundamentals,68.3,Pass
+S391,Male,99.43,30.3,46.5,15,15,5.2,Statistical Analysis,64.1,Pass
+S392,Male,64.76,34.9,35.1,18,17,7.5,Database Systems,66.8,Pass
+S393,Male,62.32,34.1,41.9,6,18,26.7,ML Fundamentals,58.2,Pass
+S394,Male,86.58,18.9,66.4,16,15,22.0,Computer Science 101,64.7,Pass
+S395,Female,60.45,28.4,53.6,11,16,7.8,UI/UX Design,58.2,Pass
+S396,Female,95.85,12.2,88.0,7,18,26.1,UI/UX Design,74.5,Pass
+S397,Female,91.5,15.3,60.2,19,17,11.1,Advanced Math,63.9,Pass
+S398,Male,65.74,36.4,47.4,7,18,17.0,Advanced Math,58.0,Pass
+S399,Male,85.05,5.5,73.2,9,15,8.6,Statistical Analysis,52.4,Pass
+S400,Male,85.27,8.0,79.5,7,17,22.8,Statistical Analysis,61.0,Pass
+S401,Female,46.19,12.3,41.7,6,16,21.7,UI/UX Design,50.1,Pass
+S402,Female,94.15,5.9,41.7,14,17,10.3,Computer Science 101,53.9,Pass
+S403,Male,70.32,11.4,32.6,13,17,26.6,Database Systems,60.4,Pass
+S404,Female,89.59,25.4,81.5,6,19,15.0,Database Systems,62.9,Pass
+S405,Male,59.2,19.7,76.5,18,17,12.3,Statistical Analysis,63.9,Pass
+S406,Female,93.73,36.2,63.2,15,17,8.8,Computer Science 101,79.8,Pass
+S407,Female,63.35,33.6,89.1,6,18,11.7,Statistical Analysis,61.7,Pass
+S408,Female,40.65,17.0,86.4,17,16,5.6,Database Systems,64.0,Pass
+S409,Male,94.32,14.1,71.0,19,18,19.6,Statistical Analysis,70.8,Pass
+S410,Female,45.48,18.3,90.8,12,18,26.1,ML Fundamentals,64.6,Pass
+S411,Female,59.16,25.7,44.4,19,15,18.7,Statistical Analysis,75.4,Pass
+S412,Male,97.0,14.4,37.8,13,18,10.5,UI/UX Design,54.8,Pass
+S413,Female,97.04,26.8,48.9,11,19,5.8,Statistical Analysis,62.2,Pass
+S414,Male,74.41,19.3,34.0,7,19,10.4,UI/UX Design,50.6,Pass
+S415,Male,77.91,24.3,67.2,13,15,15.4,Computer Science 101,70.3,Pass
+S416,Male,66.91,20.3,95.6,7,16,24.0,Database Systems,70.6,Pass
+S417,Male,57.59,15.3,32.8,9,16,9.7,Advanced Math,43.2,Fail
+S418,Male,59.72,38.2,38.5,13,18,23.0,Advanced Math,59.5,Pass
+S419,Female,80.35,31.7,61.7,16,18,26.7,Database Systems,79.8,Pass
+S420,Male,85.14,9.9,95.4,18,18,16.3,Advanced Math,69.6,Pass
+S421,Male,87.49,35.4,52.1,18,16,25.5,Statistical Analysis,86.1,Pass
+S422,Male,87.38,22.1,65.5,7,17,18.9,Computer Science 101,71.7,Pass
+S423,Male,45.47,36.3,32.9,11,19,20.9,Computer Science 101,47.9,Fail
+S424,Female,69.67,33.0,40.4,16,17,18.2,Database Systems,74.1,Pass
+S425,Male,43.45,19.9,99.1,5,17,16.6,Advanced Math,56.2,Pass
+S426,Female,72.97,5.8,97.6,8,16,10.9,Statistical Analysis,57.8,Pass
+S427,Male,66.49,14.4,30.3,8,17,12.6,Computer Science 101,40.2,Fail
+S428,Female,93.26,24.0,96.6,11,15,12.2,Computer Science 101,77.5,Pass
+S429,Male,61.05,27.2,74.7,12,18,19.1,ML Fundamentals,67.4,Pass
+S430,Male,47.02,14.0,90.8,5,15,8.0,ML Fundamentals,55.8,Pass
+S431,Female,48.58,9.9,61.8,9,19,27.9,Computer Science 101,49.9,Fail
+S432,Male,85.69,34.2,66.1,11,18,23.0,Database Systems,84.0,Pass
+S433,Female,77.09,39.5,64.2,16,17,15.0,UI/UX Design,80.0,Pass
+S434,Male,46.07,23.4,76.7,8,19,9.0,UI/UX Design,53.6,Pass
+S435,Female,45.05,11.0,39.8,17,18,27.0,Statistical Analysis,53.5,Pass
+S436,Male,82.06,14.5,32.1,8,17,25.6,Computer Science 101,54.1,Pass
+S437,Male,44.37,5.6,51.6,8,15,23.0,Computer Science 101,45.1,Fail
+S438,Female,89.31,37.0,79.3,16,18,11.8,Computer Science 101,80.7,Pass
+S439,Male,82.37,9.1,44.1,10,17,15.1,Database Systems,51.5,Pass
+S440,Male,44.88,25.2,77.1,11,15,7.6,ML Fundamentals,54.7,Pass
+S441,Male,45.09,14.6,97.9,6,19,9.7,Computer Science 101,53.5,Pass
+S442,Male,99.2,24.4,36.6,19,19,24.6,Computer Science 101,69.2,Pass
+S443,Male,62.46,27.8,77.1,9,19,22.9,Advanced Math,68.9,Pass
+S444,Male,62.24,34.0,61.1,8,19,19.8,Database Systems,63.0,Pass
+S445,Female,88.77,12.2,90.8,19,16,27.4,Statistical Analysis,86.0,Pass
+S446,Female,96.83,5.4,42.4,18,18,19.6,Computer Science 101,67.2,Pass
+S447,Female,99.16,9.8,78.5,17,18,16.7,Advanced Math,76.8,Pass
+S448,Male,85.2,36.5,88.7,7,16,13.5,UI/UX Design,76.6,Pass
+S449,Female,62.58,35.6,96.1,11,17,28.5,Statistical Analysis,83.6,Pass
+S450,Male,45.01,25.9,77.8,15,17,7.1,Computer Science 101,58.8,Pass
+S451,Male,86.63,26.0,64.8,16,19,28.3,Computer Science 101,81.0,Pass
+S452,Male,73.5,28.3,73.2,10,15,25.7,Advanced Math,77.6,Pass
+S453,Male,65.45,11.1,90.8,18,17,8.2,Database Systems,56.8,Pass
+S454,Female,94.38,37.0,69.9,11,15,19.1,Computer Science 101,82.0,Pass
+S455,Male,46.67,19.7,32.1,9,18,26.7,UI/UX Design,57.2,Pass
+S456,Female,69.56,18.4,95.2,17,15,19.3,Computer Science 101,75.3,Pass
+S457,Male,40.68,23.2,78.3,10,18,27.7,UI/UX Design,60.6,Pass
+S458,Female,68.12,6.6,77.4,9,16,28.6,Statistical Analysis,60.3,Pass
+S459,Female,43.38,10.8,45.1,18,16,15.6,Statistical Analysis,44.7,Fail
+S460,Female,47.13,30.8,76.1,11,19,14.4,ML Fundamentals,62.8,Pass
+S461,Female,47.05,7.9,57.6,6,17,28.4,ML Fundamentals,49.8,Fail
+S462,Female,78.95,26.1,75.6,18,19,21.9,UI/UX Design,77.8,Pass
+S463,Female,84.76,13.6,37.5,15,18,7.9,Database Systems,55.9,Pass
+S464,Male,75.0,18.6,76.0,9,19,6.1,Computer Science 101,53.2,Pass
+S465,Female,97.73,15.1,100.0,10,15,19.1,Computer Science 101,77.9,Pass
+S466,Male,62.49,17.4,33.4,10,18,28.3,ML Fundamentals,57.4,Pass
+S467,Female,57.14,30.2,98.4,19,16,26.1,UI/UX Design,82.4,Pass
+S468,Male,92.12,15.4,58.5,9,17,21.9,Computer Science 101,66.3,Pass
+S469,Female,53.42,24.8,91.0,14,18,8.5,Computer Science 101,64.8,Pass
+S470,Female,97.79,21.7,84.8,11,18,11.4,Database Systems,68.2,Pass
+S471,Male,40.73,28.2,69.7,14,15,26.9,Advanced Math,70.6,Pass
+S472,Female,98.19,37.8,81.7,12,17,9.6,ML Fundamentals,77.8,Pass
+S473,Female,42.59,30.6,91.5,11,16,12.0,ML Fundamentals,68.6,Pass
+S474,Female,93.47,12.5,58.3,9,18,8.2,Advanced Math,54.6,Pass
+S475,Male,71.66,6.1,52.9,5,18,21.9,Computer Science 101,42.9,Fail
+S476,Female,99.58,14.2,76.7,17,15,28.6,Database Systems,83.8,Pass
+S477,Male,44.43,25.8,86.5,9,19,11.7,Database Systems,59.8,Pass
+S478,Female,73.23,6.8,83.4,14,16,16.9,ML Fundamentals,58.7,Pass
+S479,Female,98.16,22.4,85.8,6,17,20.9,Database Systems,76.7,Pass
+S480,Male,71.39,25.9,60.5,17,18,30.0,Statistical Analysis,78.6,Pass
+S481,Female,77.76,16.7,87.2,9,18,7.6,Advanced Math,56.6,Pass
+S482,Female,81.74,32.0,38.4,9,16,17.5,Computer Science 101,59.9,Pass
+S483,Male,67.27,8.7,68.1,6,19,14.6,Statistical Analysis,49.6,Fail
+S484,Female,77.65,7.6,30.4,9,18,26.6,Advanced Math,47.9,Fail
+S485,Male,75.06,30.5,52.7,17,16,16.9,UI/UX Design,74.8,Pass
+S486,Male,94.07,22.3,55.7,8,15,7.8,ML Fundamentals,61.2,Pass
+S487,Male,42.73,29.1,57.7,5,19,20.9,Database Systems,48.6,Fail
+S488,Female,56.86,20.2,78.7,7,17,24.3,UI/UX Design,58.2,Pass
+S489,Male,97.02,13.6,57.2,5,18,5.1,Database Systems,58.0,Pass
+S490,Male,93.42,33.7,61.4,16,16,26.5,Statistical Analysis,91.5,Pass
+S491,Female,67.34,33.0,46.6,15,15,9.7,Computer Science 101,67.5,Pass
+S492,Male,77.21,29.3,56.1,19,17,18.8,Computer Science 101,73.1,Pass
+S493,Female,56.64,14.5,45.9,9,16,15.4,Computer Science 101,46.8,Fail
+S494,Female,51.29,25.7,35.1,8,16,23.0,Database Systems,56.2,Pass
+S495,Female,67.82,17.6,72.2,11,17,14.3,UI/UX Design,61.1,Pass
+S496,Female,61.2,8.2,76.8,9,15,26.7,Computer Science 101,52.9,Pass
+S497,Male,75.02,37.1,73.4,14,15,23.3,UI/UX Design,86.4,Pass
+S498,Male,44.66,9.8,62.4,18,19,21.2,Database Systems,63.2,Pass
+S499,Male,98.46,38.3,56.6,8,18,24.9,Statistical Analysis,80.7,Pass
+S500,Male,99.17,20.6,90.4,6,17,23.9,UI/UX Design,69.5,Pass

@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+{% block title %}EduPredict — Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <div class="dashboard-header">
+        <div>
+            <h1 class="page-title">Admin Analytics Dashboard</h1>
+            <p class="page-subtitle">Welcome back, here's what's happening today.</p>
+        </div>
+        <div class="dashboard-controls">
+            <div class="class-selector">
+                <label>VIEWING:</label>
+                <select id="classFilter" class="form-input form-select compact" onchange="updateDashboard(this.value)">
+                    <option value="All" {% if selected_class == 'All' %}selected{% endif %}>All Classes</option>
+                    {% for cls in classes %}
+                    <option value="{{ cls.class_name }}" {% if selected_class == cls.class_name %}selected{% endif %}>{{ cls.class_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button class="btn btn-outline compact"><i class="fas fa-calendar"></i> This Semester</button>
+            <a href="{{ url_for('admin_reports') }}" class="btn btn-primary compact"><i class="fas fa-download"></i> Export Report</a>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-card-icon blue">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-card-content">
+                <span class="stat-trend up">+4.2%</span>
+                <p class="stat-card-label">Total Students</p>
+                <h2 class="stat-card-value" id="statStudents">{{ stats.total_students }}</h2>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-icon amber">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="stat-card-content">
+                <span class="stat-trend up">+1.5%</span>
+                <p class="stat-card-label">Avg. Class Score</p>
+                <h2 class="stat-card-value" id="statAvgScore">{{ stats.avg_score }}%</h2>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-icon purple">
+                <i class="fas fa-brain"></i>
+            </div>
+            <div class="stat-card-content">
+                <span class="stat-trend up">+12%</span>
+                <p class="stat-card-label">Predictions Made</p>
+                <h2 class="stat-card-value" id="statPredictions">{{ stats.total_predictions }}</h2>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-icon red">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="stat-card-content">
+                <span class="stat-trend up danger-trend">+8%</span>
+                <p class="stat-card-label">At Risk Students</p>
+                <h2 class="stat-card-value" id="statAtRisk">{{ stats.at_risk }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="charts-row">
+        <div class="card chart-card">
+            <div class="card-header">
+                <h3>Performance Distribution</h3>
+                <button class="btn-icon"><i class="fas fa-ellipsis-h"></i></button>
+            </div>
+            <div class="card-body chart-body-pie">
+                <canvas id="pieChart"></canvas>
+                <div class="pie-legend">
+                    <div class="pie-legend-item">
+                        <span class="pie-dot blue"></span>
+                        <span>Good Performers</span>
+                        <strong id="legendGood">{{ stats.good }}</strong>
+                    </div>
+                    <div class="pie-legend-item">
+                        <span class="pie-dot light-blue"></span>
+                        <span>Average</span>
+                        <strong id="legendAvg">{{ stats.average }}</strong>
+                    </div>
+                    <div class="pie-legend-item">
+                        <span class="pie-dot gray"></span>
+                        <span>Poor / At Risk</span>
+                        <strong id="legendPoor">{{ stats.poor }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card chart-card">
+            <div class="card-header">
+                <h3>Comparative Performance</h3>
+                <p class="card-subtitle">Student count by score bracket</p>
+                <div class="legend">
+                    <span class="legend-item"><span class="legend-dot blue"></span> Top Performers</span>
+                    <span class="legend-item"><span class="legend-dot gray"></span> Below Avg</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <canvas id="barChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trend Chart -->
+    <div class="card chart-card full-width">
+        <div class="card-header">
+            <div>
+                <h3>Historical Performance Trends</h3>
+                <p class="card-subtitle">Average class score progression over the academic year</p>
+            </div>
+            <div class="trend-toggle">
+                <button class="btn btn-sm btn-primary active">Monthly</button>
+                <button class="btn btn-sm btn-outline">Quarterly</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <canvas id="lineChart" height="80"></canvas>
+        </div>
+    </div>
+
+    <!-- Recent Prediction Flags -->
+    <div class="card full-width">
+        <div class="card-header">
+            <h3>Recent Prediction Flags</h3>
+            <a href="{{ url_for('admin_students') }}" class="link-btn">View All Students</a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Class</th>
+                            <th>Current Avg</th>
+                            <th>Prediction</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for flag in recent_flags %}
+                        <tr>
+                            <td>
+                                <div class="student-cell">
+                                    <div class="avatar avatar-sm {% if flag.performance_label == 'Good' %}avatar-blue{% elif flag.performance_label == 'Average' %}avatar-amber{% else %}avatar-red{% endif %}">
+                                        <span>{{ flag.name[:2]|upper }}</span>
+                                    </div>
+                                    <span>{{ flag.name }}</span>
+                                </div>
+                            </td>
+                            <td>{{ flag.class_name }}</td>
+                            <td>{{ flag.predicted_score }}%</td>
+                            <td>
+                                <span class="prediction-indicator {{ flag.performance_label|lower }}">
+                                    {% if flag.performance_label == 'Poor' %}
+                                    <i class="fas fa-exclamation-triangle"></i> Critical Risk
+                                    {% elif flag.performance_label == 'Average' %}
+                                    <i class="fas fa-arrow-trend-down"></i> Risk of Failure
+                                    {% else %}
+                                    <i class="fas fa-arrow-trend-up"></i> Excellence
+                                    {% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="status-badge status-{{ flag.performance_label|lower }}">
+                                    {% if flag.performance_label == 'Poor' %}ALERTED{% elif flag.performance_label == 'Average' %}REVIEW PENDING{% else %}STABLE{% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% if not recent_flags %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">No prediction data yet.</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="admin-footer">
+    <p>&copy; 2024 EduPredict Analytics Platform. All rights reserved. Professional Data Visualization Suite v2.4.1</p>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initial chart data from server
+    const initialData = {
+        distribution: {
+            good: {{ stats.good }},
+            average: {{ stats.average }},
+            poor: {{ stats.poor }}
+        }
+    };
+
+    // Render pie chart
+    renderPieChart('pieChart', initialData.distribution);
+
+    // Fetch full data via API
+    fetchAndRenderDashboard('{{ selected_class }}');
+});
+</script>
+{% endblock %}

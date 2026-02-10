@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% block title %}PredictEdu — Prediction Results{% endblock %}
+
+{% block content %}
+<div class="results-page">
+    <div class="results-header">
+        <div>
+            <h1 class="page-title">Prediction Results</h1>
+            <p class="page-subtitle">Analysis completed on {{ prediction.created_at[:10] if prediction.created_at else 'Today' }} for Semester Fall 2023</p>
+        </div>
+        <div class="results-actions">
+            <button class="btn btn-outline" onclick="window.print()">
+                <i class="fas fa-share-alt"></i> Share Results
+            </button>
+            <button class="btn btn-primary" onclick="window.print()">
+                <i class="fas fa-download"></i> Download Report
+            </button>
+        </div>
+    </div>
+
+    <div class="results-grid">
+        <!-- Predicted Grade Card -->
+        <div class="card result-grade-card">
+            <h3 class="card-title-center">Predicted Final Grade</h3>
+            <div class="gauge-container">
+                <canvas id="gaugeChart" width="200" height="200"></canvas>
+                <div class="gauge-center-text">
+                    <span class="gauge-score">{{ prediction.predicted_score }}%</span>
+                    <span class="gauge-gpa">GPA {{ (prediction.predicted_score / 25)|round(1) }} Est.</span>
+                </div>
+            </div>
+            <div class="performance-badge performance-{{ prediction.performance_label|lower }}">
+                <i class="fas fa-{% if prediction.performance_label == 'Good' %}check-circle{% elif prediction.performance_label == 'Average' %}info-circle{% else %}exclamation-triangle{% endif %}"></i>
+                Performance: {{ prediction.performance_label }}
+            </div>
+            <p class="result-note">
+                {% if prediction.performance_label == 'Good' %}
+                Your performance is currently in the top 15% of your class cohort. Keep up the consistent effort.
+                {% elif prediction.performance_label == 'Average' %}
+                Your performance is around the class average. Small improvements in study hours could make a big difference.
+                {% else %}
+                Your performance needs attention. Consider connecting with a tutor or advisor for additional support.
+                {% endif %}
+            </p>
+        </div>
+
+        <!-- Comparative Analysis -->
+        <div class="card comparative-card">
+            <div class="card-header">
+                <h3>Comparative Analysis</h3>
+                <p class="card-subtitle">Your metrics vs. Class Average</p>
+                <div class="legend">
+                    <span class="legend-item"><span class="legend-dot blue"></span> You</span>
+                    <span class="legend-item"><span class="legend-dot gray"></span> Class Avg</span>
+                </div>
+            </div>
+            <div class="card-body chart-body">
+                <canvas id="radarChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="results-grid results-grid-2">
+        <!-- Input Metrics Card -->
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-sliders-h"></i> Current Input Metrics</h3>
+            </div>
+            <div class="card-body">
+                <div class="metric-row">
+                    <span class="metric-name">Attendance Rate</span>
+                    <span class="metric-val">{{ prediction.attendance|round(0)|int }}%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Weekly Study Hours</span>
+                    <div class="metric-bar-wrap">
+                        <div class="metric-bar" style="width: {{ (prediction.study_hours / 40 * 100)|round(0) }}%"></div>
+                    </div>
+                    <span class="metric-val">{{ prediction.study_hours|round(0)|int }} hrs</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Assignment Avg</span>
+                    <div class="metric-bar-wrap">
+                        <div class="metric-bar" style="width: {{ (prediction.assignments / 20 * 100)|round(0) }}%"></div>
+                    </div>
+                    <span class="metric-val">{{ prediction.assignments|round(0)|int }}/20</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Internal Marks</span>
+                    <span class="metric-val">{{ prediction.internal_marks|round(1) }}/30</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Previous Marks</span>
+                    <span class="metric-val">{{ prediction.previous_marks|round(1) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Feedback Card -->
+        <div class="card ai-feedback-card">
+            <div class="card-header">
+                <h3><i class="fas fa-robot"></i> AI Feedback</h3>
+            </div>
+            <div class="card-body">
+                <blockquote class="ai-quote">
+                    {% if prediction.performance_label == 'Good' %}
+                    "Based on your current study patterns, you are on track for a high grade. However, increasing your peer-review participation could boost your score further as it correlates highly with top-tier results in this module."
+                    {% elif prediction.performance_label == 'Average' %}
+                    "Your metrics suggest room for improvement. Focusing on consistent attendance and increasing daily study time by even 30 minutes could significantly raise your predicted score in the coming weeks."
+                    {% else %}
+                    "Your current patterns indicate a risk of falling behind. Immediate action is recommended — set up a structured study plan and consider attending office hours for targeted help in weak areas."
+                    {% endif %}
+                </blockquote>
+            </div>
+        </div>
+
+        <!-- Improvement Plan -->
+        <div class="card improvement-card">
+            <div class="card-header">
+                <h3><i class="fas fa-lightbulb"></i> Improvement Plan</h3>
+            </div>
+            <div class="card-body">
+                <ul class="improvement-list">
+                    {% if prediction.study_hours < 15 %}
+                    <li><i class="fas fa-check-circle"></i> Increase weekly study hours by 2h for {{ prediction.class_name }}</li>
+                    {% endif %}
+                    <li><i class="fas fa-check-circle"></i> Focus on Module 4 ({{ prediction.class_name }}) review sessions</li>
+                    <li><i class="fas fa-check-circle"></i> Submit peer-review forum posts (Min. 3/week)</li>
+                    {% if prediction.attendance < 85 %}
+                    <li><i class="fas fa-check-circle"></i> Improve attendance rate to at least 85%</li>
+                    {% endif %}
+                    {% if prediction.internal_marks < 20 %}
+                    <li><i class="fas fa-check-circle"></i> Target internal assessment improvement in next cycle</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="results-actions-bottom">
+        <a href="{{ url_for('student_dashboard') }}" class="btn btn-outline btn-lg">
+            <i class="fas fa-redo"></i> Retake Assessment
+        </a>
+        <a href="#" class="btn btn-outline btn-lg">
+            <i class="fas fa-question-circle"></i> Speak with Advisor
+        </a>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Gauge Chart
+    const score = {{ prediction.predicted_score }};
+    renderGauge('gaugeChart', score);
+
+    // Radar Chart
+    const radarData = {
+        labels: ['Attendance', 'Study Hours', 'Previous Marks', 'Assignments', 'Internal Marks'],
+        you: [
+            {{ prediction.attendance }},
+            {{ (prediction.study_hours / 40 * 100)|round(1) }},
+            {{ prediction.previous_marks }},
+            {{ (prediction.assignments / 20 * 100)|round(1) }},
+            {{ (prediction.internal_marks / 30 * 100)|round(1) }}
+        ],
+        classAvg: [
+            {{ class_avg.avg_attendance|round(1) if class_avg and class_avg.avg_attendance else 75 }},
+            50,
+            {{ class_avg.avg_marks|round(1) if class_avg and class_avg.avg_marks else 65 }},
+            70,
+            65
+        ]
+    };
+    renderRadarChart('radarChart', radarData);
+});
+</script>
+{% endblock %}

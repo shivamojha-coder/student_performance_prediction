@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}EduPredict — Reports{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <div class="dashboard-header">
+        <div>
+            <h1 class="page-title">Export Reports</h1>
+            <p class="page-subtitle">Generate and download reports for administrative use.</p>
+        </div>
+    </div>
+
+    <div class="reports-grid">
+        <div class="card report-card">
+            <div class="report-icon csv">
+                <i class="fas fa-file-csv"></i>
+            </div>
+            <h3>CSV Export</h3>
+            <p>Download all student prediction data as a CSV spreadsheet for analysis in Excel or Google Sheets.</p>
+            <form method="GET" action="{{ url_for('export_csv') }}" class="report-form">
+                <div class="form-group">
+                    <label class="form-label">Filter by Class</label>
+                    <select name="class" class="form-input form-select">
+                        <option value="">All Classes</option>
+                        {% for cls in classes %}
+                        <option value="{{ cls.class_name }}">{{ cls.class_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-download"></i> Download CSV
+                </button>
+            </form>
+        </div>
+
+        <div class="card report-card">
+            <div class="report-icon pdf">
+                <i class="fas fa-file-pdf"></i>
+            </div>
+            <h3>PDF Report</h3>
+            <p>Generate a formatted PDF report with student performance summaries suitable for print or presentation.</p>
+            <form method="GET" action="{{ url_for('export_pdf') }}" class="report-form">
+                <div class="form-group">
+                    <label class="form-label">Filter by Class</label>
+                    <select name="class" class="form-input form-select">
+                        <option value="">All Classes</option>
+                        {% for cls in classes %}
+                        <option value="{{ cls.class_name }}">{{ cls.class_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-danger btn-block">
+                    <i class="fas fa-download"></i> Download PDF
+                </button>
+            </form>
+        </div>
+
+        <div class="card report-card">
+            <div class="report-icon stats">
+                <i class="fas fa-chart-bar"></i>
+            </div>
+            <h3>Analytics Summary</h3>
+            <p>View a quick snapshot of platform-wide statistics including averages, distributions, and trends.</p>
+            <div class="summary-stats">
+                <div class="summary-item">
+                    <span class="summary-label">Total Predictions</span>
+                    <span class="summary-value">—</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Avg Score</span>
+                    <span class="summary-value">—</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Pass Rate</span>
+                    <span class="summary-value">—</span>
+                </div>
+            </div>
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline btn-block">
+                <i class="fas fa-chart-pie"></i> View Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

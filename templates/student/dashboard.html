@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block title %}PredictorHub — Dashboard{% endblock %}
+
+{% block content %}
+<div class="student-dashboard-layout">
+    <!-- Main Content: Prediction Form -->
+    <div class="dashboard-main">
+        <div class="page-header">
+            <h1 class="page-title">Academic Performance Forecast</h1>
+            <p class="page-subtitle">Fill in your current metrics to get an AI-driven prediction of your final marks.</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('student_predict') }}" class="prediction-form" id="predictionForm">
+            <div class="form-row">
+                <div class="form-group flex-1">
+                    <label class="form-label"><i class="fas fa-graduation-cap"></i> Current Class / Section</label>
+                    <select name="class_name" class="form-input form-select">
+                        <option value="Computer Science 101" {% if session.get('class_name')=='Computer Science 101' %}selected{% endif %}>Computer Science - Section A</option>
+                        <option value="Advanced Math" {% if session.get('class_name')=='Advanced Math' %}selected{% endif %}>Advanced Math</option>
+                        <option value="Database Systems" {% if session.get('class_name')=='Database Systems' %}selected{% endif %}>Database Systems</option>
+                        <option value="ML Fundamentals" {% if session.get('class_name')=='ML Fundamentals' %}selected{% endif %}>ML Fundamentals</option>
+                        <option value="UI/UX Design" {% if session.get('class_name')=='UI/UX Design' %}selected{% endif %}>UI/UX Design</option>
+                        <option value="Statistical Analysis" {% if session.get('class_name')=='Statistical Analysis' %}selected{% endif %}>Statistical Analysis</option>
+                    </select>
+                </div>
+                <div class="form-group flex-1">
+                    <label class="form-label"><i class="fas fa-book"></i> Subject Focus</label>
+                    <select name="subject_focus" class="form-input form-select">
+                        <option value="Machine Learning Fundamentals">Machine Learning Fundamentals</option>
+                        <option value="Data Structures">Data Structures</option>
+                        <option value="Calculus III">Calculus III</option>
+                        <option value="Database Design">Database Design</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Engagement & Dedication</h3>
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label class="form-label">
+                            Attendance (%)
+                            <span class="form-hint">Required: 75%</span>
+                        </label>
+                        <input type="number" name="attendance" placeholder="e.g. 85" class="form-input"
+                               min="0" max="100" step="0.1" required>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label class="form-label">Daily Study Hours</label>
+                        <input type="number" name="study_hours" placeholder="e.g. 4.5" class="form-input"
+                               min="0" max="24" step="0.5" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Current Standing</h3>
+                <div class="form-row form-row-3">
+                    <div class="form-group">
+                        <label class="form-label">Previous Semester GPA</label>
+                        <input type="number" name="previous_marks" placeholder="0.00 - 4.00" class="form-input"
+                               min="0" max="100" step="0.1" required>
+                        <span class="form-hint-below">Out of 100 or scale</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Internal Marks (Avg)</label>
+                        <input type="number" name="internal_marks" placeholder="Out of 30" class="form-input"
+                               min="0" max="30" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Assignment Completion</label>
+                        <input type="number" name="assignments" placeholder="Completed / Total" class="form-input"
+                               min="0" max="20" step="1" required>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-lg predict-btn" id="predictBtn">
+                <i class="fas fa-bolt"></i> Predict Performance
+            </button>
+            <p class="form-disclaimer">Prediction algorithms are based on historical anonymized student data trends.</p>
+        </form>
+
+        <!-- Study Tip -->
+        <div class="tip-card">
+            <div class="tip-icon">
+                <i class="fas fa-lightbulb"></i>
+            </div>
+            <div class="tip-content">
+                <h4 class="tip-title">Study Tip of the Day</h4>
+                <p>Research shows that studying in 25-minute sprints (Pomodoro) followed by 5-minute breaks
+                increases long-term retention by 30%.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar: Recent History -->
+    <div class="dashboard-sidebar">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-history"></i> Recent History</h3>
+                <a href="{{ url_for('student_history') }}" class="link-btn">View All</a>
+            </div>
+            <div class="card-body">
+                {% if recent_predictions %}
+                {% for pred in recent_predictions %}
+                <div class="history-item">
+                    <div class="history-date">{{ pred.created_at[:10] if pred.created_at else 'N/A' }}</div>
+                    <div class="history-details">
+                        <span class="history-class">{{ pred.class_name }}</span>
+                        <div class="history-scores">
+                            <div class="history-metric">
+                                <span class="metric-label">Predicted</span>
+                                <span class="metric-value">{{ pred.predicted_score }}%</span>
+                            </div>
+                            <div class="history-metric">
+                                <span class="metric-label">Attendance</span>
+                                <span class="metric-value">{{ pred.attendance|round(0)|int }}%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="badge badge-{{ 'success' if pred.performance_label == 'Good' else ('warning' if pred.performance_label == 'Average' else 'danger') }}">
+                        {{ 'On Track' if pred.performance_label == 'Good' else ('Moderate Risk' if pred.performance_label == 'Average' else 'At Risk') }}
+                    </span>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state-small">
+                    <i class="fas fa-chart-bar"></i>
+                    <p>No predictions yet. Submit your first forecast!</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Season Performance Card -->
+        <div class="card mt-20">
+            <div class="card-header">
+                <h3>Season Performance</h3>
+            </div>
+            <div class="card-body">
+                <div class="season-stat">
+                    <span class="season-label">Average Prediction</span>
+                    <div class="progress-bar-wrap">
+                        <div class="progress-bar" style="width: 81%"></div>
+                    </div>
+                    <span class="season-value text-primary">81.2%</span>
+                </div>
+                <div class="season-stat">
+                    <span class="season-label">Attendance Average</span>
+                    <div class="progress-bar-wrap">
+                        <div class="progress-bar progress-green" style="width: 87%"></div>
+                    </div>
+                    <span class="season-value text-success">86.7%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Improve Card -->
+        <div class="card improve-card mt-20">
+            <h3>Improve Your Prediction</h3>
+            <p>Want to see a higher predicted score? Connect with a peer mentor for Statistical Analysis.</p>
+            <a href="#" class="btn btn-outline">Find a Mentor</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/prediction.js') }}"></script>
+{% endblock %}

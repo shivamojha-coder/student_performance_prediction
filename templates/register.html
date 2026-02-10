@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %}SuccessPredict — Register{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <!-- Left Panel: Hero -->
+    <div class="auth-hero">
+        <div class="auth-hero-content">
+            <div class="auth-brand">
+                <div class="brand-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <span class="brand-text">SuccessPredict</span>
+            </div>
+            <h1 class="auth-headline">Predicting Success,<br>Empowering Futures.</h1>
+            <p class="auth-subtext">
+                Join thousands of students using AI-driven predictions to
+                track academic performance and get personalized improvement plans.
+            </p>
+            <div class="auth-stats">
+                <div class="auth-stat">
+                    <span class="stat-number">98%</span>
+                    <span class="stat-label">Accuracy Rate</span>
+                </div>
+                <div class="auth-stat">
+                    <span class="stat-number">15k+</span>
+                    <span class="stat-label">Active Students</span>
+                </div>
+            </div>
+        </div>
+        <div class="auth-hero-bg"></div>
+    </div>
+
+    <!-- Right Panel: Register Form -->
+    <div class="auth-form-panel">
+        <div class="auth-form-container">
+            <h2 class="auth-form-title">Create Account</h2>
+            <p class="auth-form-subtitle">Fill in your details to register as a student.</p>
+
+            <!-- Login/Register Toggle -->
+            <div class="auth-toggle">
+                <a href="{{ url_for('login') }}" class="auth-toggle-btn">Login</a>
+                <a href="{{ url_for('register') }}" class="auth-toggle-btn active">Register</a>
+            </div>
+
+            <form method="POST" action="{{ url_for('register') }}" class="auth-form">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <div class="input-icon-wrap">
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="name" placeholder="Alex Johnson" class="form-input" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <div class="input-icon-wrap">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" name="email" placeholder="name@institution.edu" class="form-input" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="input-icon-wrap">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="password" placeholder="Min. 6 characters" class="form-input" required minlength="6">
+                        <button type="button" class="password-toggle" onclick="togglePassword(this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Class / Section</label>
+                    <div class="input-icon-wrap">
+                        <i class="fas fa-chalkboard"></i>
+                        <select name="class_name" class="form-input form-select">
+                            <option value="Computer Science 101">Computer Science 101</option>
+                            <option value="Advanced Math">Advanced Math</option>
+                            <option value="Database Systems">Database Systems</option>
+                            <option value="ML Fundamentals">ML Fundamentals</option>
+                            <option value="UI/UX Design">UI/UX Design</option>
+                            <option value="Statistical Analysis">Statistical Analysis</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block btn-lg">
+                    Create Account
+                </button>
+            </form>
+
+            <p class="auth-switch-text">
+                Already have an account? <a href="{{ url_for('login') }}">Sign in</a>
+            </p>
+
+            <div class="auth-footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Help Center</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePassword(btn) {
+    const input = btn.parentElement.querySelector('input');
+    const icon = btn.querySelector('i');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+</script>
+{% endblock %}

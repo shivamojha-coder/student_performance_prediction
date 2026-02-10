@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}PredictorHub — Prediction History{% endblock %}
+
+{% block content %}
+<div class="history-page">
+    <div class="page-header">
+        <h1 class="page-title">Prediction History</h1>
+        <p class="page-subtitle">Review all your past academic performance predictions.</p>
+    </div>
+
+    {% if predictions %}
+    <div class="card">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Class</th>
+                        <th>Attendance</th>
+                        <th>Study Hours</th>
+                        <th>Prev. Marks</th>
+                        <th>Internal</th>
+                        <th>Predicted Score</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pred in predictions %}
+                    <tr>
+                        <td class="text-muted">{{ loop.index }}</td>
+                        <td>{{ pred.created_at[:10] if pred.created_at else 'N/A' }}</td>
+                        <td><span class="text-bold">{{ pred.class_name }}</span></td>
+                        <td>{{ pred.attendance|round(1) }}%</td>
+                        <td>{{ pred.study_hours|round(1) }}h</td>
+                        <td>{{ pred.previous_marks|round(1) }}</td>
+                        <td>{{ pred.internal_marks|round(1) }}/30</td>
+                        <td>
+                            <span class="score-highlight score-{{ pred.performance_label|lower }}">
+                                {{ pred.predicted_score }}%
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge badge-{{ 'success' if pred.performance_label == 'Good' else ('warning' if pred.performance_label == 'Average' else 'danger') }}">
+                                {{ pred.performance_label }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('student_result', pred_id=pred.id) }}" class="btn btn-sm btn-outline" title="View Details">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">
+            <i class="fas fa-chart-line"></i>
+        </div>
+        <h3>No Predictions Yet</h3>
+        <p>Head to the dashboard to submit your first performance forecast.</p>
+        <a href="{{ url_for('student_dashboard') }}" class="btn btn-primary btn-lg">
+            <i class="fas fa-bolt"></i> Make Your First Prediction
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

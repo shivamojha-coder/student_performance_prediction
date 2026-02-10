@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SuccessPredict{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+    {% if session.get('role') == 'admin' %}
+    <!-- Admin Sidebar Layout -->
+    <div class="app-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <span class="brand-text">EduPredict</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('admin_dashboard') }}" class="nav-item {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{{ url_for('admin_students') }}" class="nav-item {% if request.endpoint == 'admin_students' %}active{% endif %}">
+                    <i class="fas fa-users"></i>
+                    <span>Student Directory</span>
+                </a>
+                <a href="{{ url_for('admin_reports') }}" class="nav-item {% if request.endpoint == 'admin_reports' %}active{% endif %}">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Reports</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="admin-profile">
+                    <div class="avatar admin-avatar">
+                        <span>{{ session.get('user_name', 'A')[0] }}</span>
+                    </div>
+                    <div class="admin-info">
+                        <span class="admin-name">{{ session.get('user_name', 'Admin') }}</span>
+                        <span class="admin-role">Senior Administrator</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <button class="hamburger" id="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="topbar-right">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search students, classes...">
+                    </div>
+                    <div class="topbar-actions">
+                        <button class="icon-btn"><i class="fas fa-bell"></i></button>
+                        <a href="{{ url_for('logout') }}" class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
+                    </div>
+                </div>
+            </header>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                <div class="flash flash-{{ category }}">
+                    <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-circle{% elif category == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                    {{ message }}
+                    <button class="flash-close" onclick="this.parentElement.remove()">&times;</button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+    {% elif session.get('role') == 'student' %}
+    <!-- Student Top Nav Layout -->
+    <div class="app-layout student-layout">
+        <header class="student-topnav">
+            <div class="brand-row">
+                <div class="brand-icon small">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <span class="brand-text">PredictorHub</span>
+            </div>
+            <nav class="student-nav">
+                <a href="{{ url_for('student_dashboard') }}" class="{% if request.endpoint == 'student_dashboard' %}active{% endif %}">Dashboard</a>
+                <a href="{{ url_for('student_history') }}" class="{% if request.endpoint == 'student_history' %}active{% endif %}">My Results</a>
+            </nav>
+            <div class="student-nav-right">
+                <div class="user-badge">
+                    <div class="avatar student-avatar">
+                        <span>{{ session.get('user_name', 'S')[0] }}</span>
+                    </div>
+                    <div class="user-badge-info">
+                        <span class="user-badge-name">{{ session.get('user_name', 'Student') }}</span>
+                        <span class="user-badge-id">{{ session.get('student_id', '') }}</span>
+                    </div>
+                </div>
+                <a href="{{ url_for('logout') }}" class="btn btn-sm btn-outline" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        </header>
+
+        <main class="main-content student-main">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                <div class="flash flash-{{ category }}">
+                    <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-circle{% elif category == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                    {{ message }}
+                    <button class="flash-close" onclick="this.parentElement.remove()">&times;</button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+    {% else %}
+    <!-- Auth pages (no nav) -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-messages auth-flash">
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">
+            <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-circle{% elif category == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+            {{ message }}
+            <button class="flash-close" onclick="this.parentElement.remove()">&times;</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+    {% endif %}
+
+    {% block content %}{% endblock %}
+
+    {% if session.get('role') == 'admin' %}
+        </main>
+    </div>
+    {% elif session.get('role') == 'student' %}
+        </main>
+        <footer class="app-footer">
+            <p>&copy; 2024 Performance Predictor. For educational guidance purposes only.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Use</a>
+                <a href="#">API Documentation</a>
+            </div>
+        </footer>
+    </div>
+    {% endif %}
+
+    {% block scripts %}{% endblock %}
+    <script>
+        // Auto-dismiss flash messages
+        setTimeout(() => {
+            document.querySelectorAll('.flash').forEach(el => {
+                el.style.opacity = '0';
+                setTimeout(() => el.remove(), 300);
+            });
+        }, 5000);
+    </script>
+</body>
+</html>
