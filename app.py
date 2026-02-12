@@ -172,6 +172,36 @@ def send_otp_email(recipient_email, otp_code):
         server.login(config.SMTP_EMAIL, config.SMTP_PASSWORD)
         server.sendmail(config.SMTP_EMAIL, recipient_email, msg.as_string())
 
+def send_reset_email(recipient_email, token):
+    """Send a password reset link via Gmail SMTP."""
+    reset_link = url_for('reset_password', token=token, _external=True)
+    subject = 'SuccessPredict — Password Reset Request'
+    html_body = f"""
+    <div style="font-family:'Inter',Arial,sans-serif;max-width:480px;margin:auto;
+                padding:32px;background:#f8fafc;border-radius:12px;">
+        <h2 style="color:#1a365d;margin:0 0 8px;">SuccessPredict</h2>
+        <p style="color:#4a5568;font-size:14px;">You requested a password reset. Click the button below to set a new password.</p>
+        <div style="text-align:center;margin:24px 0;">
+            <a href="{reset_link}" style="display:inline-block;font-size:16px;font-weight:600;
+                                          color:#ffffff;background:#2563eb;text-decoration:none;
+                                          padding:12px 28px;border-radius:8px;">Reset Password</a>
+        </div>
+        <p style="color:#718096;font-size:13px;">If you didn't request this, please ignore this email. The link expires in 15 minutes.</p>
+    </div>
+    """
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = subject
+    msg['From'] = config.SMTP_EMAIL
+    msg['To'] = recipient_email
+    msg.attach(MIMEText(f'Reset your password here: {reset_link}', 'plain'))
+    msg.attach(MIMEText(html_body, 'html'))
+
+    with smtplib.SMTP(config.SMTP_SERVER, config.SMTP_PORT) as server:
+        server.ehlo()
+        server.starttls()
+        server.login(config.SMTP_EMAIL, config.SMTP_PASSWORD)
+        server.sendmail(config.SMTP_EMAIL, recipient_email, msg.as_string())
+
 def store_otp(email, otp_code):
     """Store OTP with expiry."""
     _otp_store[email] = {
@@ -403,6 +433,74 @@ def resend_otp():
         flash('Failed to resend code. Please try again.', 'danger')
 
     return redirect(url_for('verify_otp_page'))
+
+# ── Forgot Password Routes ──
+
+@app.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form.get('email',('').strip())
+        db = get_db()
+        user = db.execute('SELECT * FROM users WHERE email = ?', (email,)).fetchone()
+
+        if user:
+            # Generate secure token
+            token = ''.join(random.choices(string.ascii_letters + string.digits, k=32))
+            expiry = time.time() + 900  # 15 minutes
+
+            db.execute('UPDATE users SET reset_token = ?, reset_token_expiry = ? WHERE id = ?',
+                       (token, expiry, user['id']))
+            db.commit()
+
+            try:
+                send_reset_email(email, token)
+                flash('Password reset link sent to your email.', 'info')
+            except Exception as e:
+                print(f"Error sending email: {e}")
+                flash('Error sending email. Please try again later.', 'danger')
+        else:
+            # Security: Don't reveal if email exists, but user asked for "If email does not exist, show error"
+            # So I will follow the user requirement explicitly.
+            flash('Email address not found.', 'danger')
+
+        return redirect(url_for('login'))
+
+    return render_template('forgot_password.html')
+
+@app.route('/reset-password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    db = get_db()
+    user = db.execute('SELECT * FROM users WHERE reset_token = ?', (token,)).fetchone()
+
+    if not user:
+        flash('Invalid or expired reset link.', 'danger')
+        return redirect(url_for('login'))
+
+    if user['reset_token_expiry'] < time.time():
+        flash('Reset link has expired. Please request a new one.', 'warning')
+        return redirect(url_for('forgot_password'))
+
+    if request.method == 'POST':
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+
+        if not password or len(password) < 6:
+            flash('Password must be at least 6 characters.', 'danger')
+            return redirect(url_for('reset_password', token=token))
+
+        if password != confirm_password:
+            flash('Passwords do not match.', 'danger')
+            return redirect(url_for('reset_password', token=token))
+
+        password_hash = generate_password_hash(password)
+        db.execute('UPDATE users SET password_hash = ?, reset_token = NULL, reset_token_expiry = NULL WHERE id = ?',
+                   (password_hash, user['id']))
+        db.commit()
+
+        flash('Your password has been updated. Please log in.', 'success')
+        return redirect(url_for('login'))
+
+    return render_template('reset_password.html', token=token)
 
 # ── Google OAuth Routes ──
 
