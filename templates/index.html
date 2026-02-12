@@ -1,0 +1,976 @@
+{% extends "base.html" %}
+{% block title %}SuccessPredict — Predicting Success, Empowering Futures{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+
+{% block head %}
+<style>
+/* ═══════════════════════════════════════════════════════
+   LANDING PAGE — LEFT HERO OVERRIDE
+   Clean modern SaaS design. Right form panel untouched.
+   ═══════════════════════════════════════════════════════ */
+
+/* Override the hero panel background to a clean gradient */
+.login-hero {
+    background: linear-gradient(155deg, #0a1628 0%, #0d1f3c 30%, #0f2547 55%, #0c1d38 80%, #080f20 100%) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Remove old nebula / vol-light / heavy glow layers */
+.login-hero .nebula,
+.login-hero .vol-light,
+.login-hero .holo-glow,
+.login-hero .holo-flare,
+.login-hero .holo-side,
+.login-hero .holo-sweep,
+.login-hero .holo-scanline,
+.login-hero .light-ray,
+.login-hero .light-beam,
+.login-hero .platform-wrap,
+.login-hero .data-stream-canvas,
+.login-hero .star-field {
+    display: none !important;
+}
+
+/* Subtle star canvas */
+#starCanvasLanding {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Hero content layout — structured grid */
+.login-hero .hero-content {
+    position: relative;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr auto;
+    gap: 0;
+    padding: 48px 52px 40px;
+    height: 100%;
+    width: 100%;
+    align-content: start;
+}
+
+/* ── Brand area ── */
+.login-hero .hero-brand {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
+}
+
+.login-hero .hero-brand-icon {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+}
+
+.login-hero .hero-brand-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.01em;
+}
+
+/* ── Left text column ── */
+.hero-text-col {
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-right: 40px;
+}
+
+.login-hero .hero-headline {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(2rem, 3.2vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: #ffffff;
+    margin-bottom: 18px;
+    letter-spacing: -0.02em;
+    text-shadow: none;
+}
+
+.login-hero .hero-desc {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: rgba(170, 190, 220, 0.75);
+    margin-bottom: 28px;
+    max-width: 380px;
+    font-weight: 400;
+}
+
+/* ── CTA Buttons ── */
+.hero-cta-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 0;
+}
+
+.hero-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.hero-cta-btn--primary {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: #fff;
+    box-shadow: 0 4px 18px rgba(59, 130, 246, 0.35);
+}
+
+.hero-cta-btn--primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(59, 130, 246, 0.45);
+}
+
+.hero-cta-btn--secondary {
+    background: transparent;
+    color: rgba(200, 215, 245, 0.85);
+    border: 1.5px solid rgba(100, 150, 220, 0.25);
+}
+
+.hero-cta-btn--secondary:hover {
+    background: rgba(255,255,255,0.04);
+    border-color: rgba(100, 150, 220, 0.45);
+    transform: translateY(-2px);
+}
+
+/* ── Right dashboard column ── */
+.hero-dashboard-col {
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 900px;
+}
+
+/* ── Floating Dashboard Panel ── */
+.dash-float {
+    width: 100%;
+    max-width: 340px;
+    transform: rotateY(-8deg) rotateX(3deg);
+    animation: dashFloat 5s ease-in-out infinite;
+}
+
+@keyframes dashFloat {
+    0%, 100% { transform: rotateY(-8deg) rotateX(3deg) translateY(0); }
+    50% { transform: rotateY(-8deg) rotateX(3deg) translateY(-8px); }
+}
+
+.dash-card {
+    background: linear-gradient(145deg, rgba(12, 24, 58, 0.92), rgba(8, 18, 45, 0.95));
+    border: 1px solid rgba(60, 120, 220, 0.18);
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow:
+        0 8px 40px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(60, 120, 220, 0.08),
+        0 0 20px rgba(40, 80, 180, 0.06);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle grid overlay */
+.dash-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(60,120,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(60,120,255,0.02) 1px, transparent 1px);
+    background-size: 18px 18px;
+    border-radius: 16px;
+    pointer-events: none;
+}
+
+.dash-hdr {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(60, 120, 220, 0.08);
+}
+
+.dash-hdr-title {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba(200, 215, 240, 0.85);
+    letter-spacing: 0.03em;
+}
+
+.dash-hdr-status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.65rem;
+    color: rgba(74, 222, 128, 0.85);
+}
+
+.dash-hdr-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #4ade80;
+    animation: dotPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* Dashboard widgets */
+.dash-wgt {
+    background: rgba(10, 22, 55, 0.5);
+    border: 1px solid rgba(50, 100, 200, 0.08);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 12px;
+}
+
+.dash-wgt:last-child {
+    margin-bottom: 0;
+}
+
+.dash-wgt-lbl {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: rgba(160, 180, 215, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+}
+
+.dash-wgt-hdr {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.dash-badge-live {
+    font-size: 0.55rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border-radius: 5px;
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, 0.2);
+}
+
+/* SVG chart */
+.dash-line-svg {
+    width: 100%;
+    height: 45px;
+    display: block;
+}
+
+/* Bottom row: bars + accuracy */
+.dash-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+/* Bar chart */
+.dash-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+    height: 55px;
+}
+
+.dash-bar-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.dash-bar {
+    width: 100%;
+    max-width: 20px;
+    border-radius: 3px 3px 1px 1px;
+    min-height: 5px;
+}
+
+.dash-bar--1 { height: 32px; background: linear-gradient(to top, #3b82f6, #60a5fa); }
+.dash-bar--2 { height: 42px; background: linear-gradient(to top, #6366f1, #818cf8); }
+.dash-bar--3 { height: 25px; background: linear-gradient(to top, #8b5cf6, #a78bfa); }
+.dash-bar--4 { height: 48px; background: linear-gradient(to top, #ec4899, #f472b6); }
+.dash-bar--5 { height: 52px; background: linear-gradient(to top, #f59e0b, #fbbf24); }
+.dash-bar--6 { height: 30px; background: linear-gradient(to top, #14b8a6, #2dd4bf); }
+
+.dash-bar-lbl {
+    font-size: 0.5rem;
+    color: rgba(140, 160, 200, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+/* Accuracy ring */
+.dash-acc {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dash-acc-ring-wrap {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+}
+
+.dash-acc-ring {
+    width: 50px;
+    height: 50px;
+    transform: rotate(-90deg);
+}
+
+.dash-acc-ring-bg {
+    fill: none;
+    stroke: rgba(40, 60, 120, 0.35);
+    stroke-width: 4;
+}
+
+.dash-acc-ring-fill {
+    fill: none;
+    stroke: url(#accGrad);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 138;
+    stroke-dashoffset: 2.76;
+}
+
+.dash-acc-ring-txt {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #60a5fa;
+}
+
+.dash-acc-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.dash-acc-item-val {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+}
+
+.dash-acc-item-lbl {
+    font-size: 0.5rem;
+    color: rgba(140, 160, 200, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ── Platform bar ── */
+.dash-platform {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.dash-platform-bar {
+    width: 60%;
+    height: 6px;
+    background: linear-gradient(90deg,
+        rgba(60, 130, 255, 0.05),
+        rgba(60, 130, 255, 0.2),
+        rgba(60, 130, 255, 0.05));
+    border-radius: 3px;
+    box-shadow: 0 0 12px rgba(60, 130, 255, 0.1);
+}
+
+/* ── Stat Cards Row ── */
+.hero-stats-row {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 16px;
+    margin-top: 36px;
+    align-self: end;
+}
+
+.hero-stat-card-v2 {
+    padding: 20px 24px;
+    background: rgba(12, 24, 55, 0.5);
+    border: 1px solid rgba(60, 120, 220, 0.12);
+    border-radius: 14px;
+    backdrop-filter: blur(8px);
+    min-width: 155px;
+    transition: all 0.3s ease;
+}
+
+.hero-stat-card-v2:hover {
+    border-color: rgba(60, 120, 220, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.hero-stat-icon {
+    width: 30px;
+    height: 30px;
+    background: rgba(59, 130, 246, 0.12);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    color: #60a5fa;
+    font-size: 0.75rem;
+}
+
+.hero-stat-val {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1;
+    margin-bottom: 5px;
+    letter-spacing: -0.02em;
+}
+
+.hero-stat-lbl {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: rgba(140, 165, 210, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+
+/* ── Soft ambient diagonal line ── */
+.hero-diag-line {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.hero-diag-line--1 {
+    top: 0;
+    left: 15%;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, rgba(60,120,220,0.06) 40%, rgba(60,120,220,0.06) 60%, transparent);
+}
+
+.hero-diag-line--2 {
+    top: 0;
+    right: 30%;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, rgba(60,120,220,0.04) 30%, rgba(60,120,220,0.04) 70%, transparent);
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+    .login-hero .hero-content {
+        grid-template-columns: 1fr;
+        padding: 36px 28px 30px;
+    }
+    .hero-dashboard-col {
+        grid-column: 1;
+        margin-top: 24px;
+    }
+    .hero-stats-row {
+        grid-column: 1;
+    }
+    .hero-text-col {
+        padding-right: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .hero-stats-row {
+        flex-direction: column;
+    }
+    .hero-cta-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .dash-float {
+        transform: rotateY(-4deg) rotateX(2deg);
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-wrapper">
+    <!-- ───── Left Hero Panel ───── -->
+    <div class="login-hero">
+        <!-- Subtle star particles -->
+        <canvas id="starCanvasLanding"></canvas>
+
+        <!-- Soft ambient lines -->
+        <div class="hero-diag-line hero-diag-line--1"></div>
+        <div class="hero-diag-line hero-diag-line--2"></div>
+
+        <!-- Hidden legacy elements (kept for base.html compatibility) -->
+        <div class="star-field" style="display:none"></div>
+        <div class="nebula nebula--1" style="display:none"></div>
+        <div class="nebula nebula--2" style="display:none"></div>
+        <canvas id="particleCanvas" class="hero-particles" style="display:none"></canvas>
+
+        <!-- Content -->
+        <div class="hero-content">
+            <!-- Brand -->
+            <div class="hero-brand">
+                <div class="hero-brand-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 17L9 11L13 15L21 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M17 7H21V11" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="hero-brand-text">SuccessPredict</span>
+            </div>
+
+            <!-- Left text column -->
+            <div class="hero-text-col">
+                <h1 class="hero-headline">Predicting Success,<br>Empowering Futures.</h1>
+
+                <p class="hero-desc">
+                    Join thousands of students using AI-driven predictions
+                    to track academic performance and get personalized
+                    improvement plans.
+                </p>
+
+                <div class="hero-cta-row">
+                    <a href="{{ url_for('login') }}" class="hero-cta-btn hero-cta-btn--primary">
+                        <i class="fas fa-rocket"></i> Get Started
+                    </a>
+                    <a href="#" class="hero-cta-btn hero-cta-btn--secondary">
+                        <i class="fas fa-play-circle"></i> Watch Demo
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right dashboard column -->
+            <div class="hero-dashboard-col">
+                <div class="dash-float">
+                    <div class="dash-card">
+                        <!-- Header -->
+                        <div class="dash-hdr">
+                            <span class="dash-hdr-title">Analytics Dashboard</span>
+                            <div class="dash-hdr-status">
+                                <span class="dash-hdr-dot"></span>
+                                Connected
+                            </div>
+                        </div>
+
+                        <!-- Line chart widget -->
+                        <div class="dash-wgt">
+                            <div class="dash-wgt-hdr">
+                                <span class="dash-wgt-lbl">Student Performance Trends</span>
+                                <span class="dash-badge-live">Live</span>
+                            </div>
+                            <svg class="dash-line-svg" viewBox="0 0 300 55" preserveAspectRatio="none">
+                                <defs>
+                                    <linearGradient id="lnGrad" x1="0" y1="0" x2="1" y2="0">
+                                        <stop offset="0%" stop-color="#3b82f6"/>
+                                        <stop offset="100%" stop-color="#60a5fa"/>
+                                    </linearGradient>
+                                    <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="rgba(59,130,246,0.25)"/>
+                                        <stop offset="100%" stop-color="rgba(59,130,246,0)"/>
+                                    </linearGradient>
+                                    <linearGradient id="accGrad" x1="0" y1="0" x2="1" y2="1">
+                                        <stop offset="0%" stop-color="#3b82f6"/>
+                                        <stop offset="100%" stop-color="#60a5fa"/>
+                                    </linearGradient>
+                                </defs>
+                                <!-- Grid -->
+                                <line x1="0" y1="18" x2="300" y2="18" stroke="rgba(60,120,255,0.04)" stroke-width="0.5"/>
+                                <line x1="0" y1="36" x2="300" y2="36" stroke="rgba(60,120,255,0.04)" stroke-width="0.5"/>
+                                <!-- Area -->
+                                <path d="M0,45 C20,40 50,38 80,30 C110,22 140,28 170,20 C200,14 230,16 260,10 C280,7 295,8 300,6 L300,55 L0,55 Z"
+                                      fill="url(#areaGrad)" opacity="0.7"/>
+                                <!-- Line -->
+                                <path d="M0,45 C20,40 50,38 80,30 C110,22 140,28 170,20 C200,14 230,16 260,10 C280,7 295,8 300,6"
+                                      fill="none" stroke="url(#lnGrad)" stroke-width="2" stroke-linecap="round"/>
+                                <!-- Pulse dot -->
+                                <circle cx="296" cy="6" r="3" fill="#60a5fa">
+                                    <animate attributeName="r" values="2.5;4;2.5" dur="2.5s" repeatCount="indefinite"/>
+                                    <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>
+                                </circle>
+                            </svg>
+                        </div>
+
+                        <!-- Bottom: bar chart + accuracy -->
+                        <div class="dash-bottom">
+                            <div class="dash-wgt">
+                                <span class="dash-wgt-lbl">Subject Grades</span>
+                                <div class="dash-bars">
+                                    <div class="dash-bar-col"><div class="dash-bar dash-bar--1"></div><span class="dash-bar-lbl">CS</span></div>
+                                    <div class="dash-bar-col"><div class="dash-bar dash-bar--2"></div><span class="dash-bar-lbl">ML</span></div>
+                                    <div class="dash-bar-col"><div class="dash-bar dash-bar--3"></div><span class="dash-bar-lbl">UE</span></div>
+                                    <div class="dash-bar-col"><div class="dash-bar dash-bar--4"></div><span class="dash-bar-lbl">DB</span></div>
+                                    <div class="dash-bar-col"><div class="dash-bar dash-bar--5"></div><span class="dash-bar-lbl">AI</span></div>
+                                    <div class="dash-bar-col"><div class="dash-bar dash-bar--6"></div><span class="dash-bar-lbl">OS</span></div>
+                                </div>
+                            </div>
+                            <div class="dash-wgt">
+                                <span class="dash-wgt-lbl">Accuracy</span>
+                                <div class="dash-acc">
+                                    <div class="dash-acc-ring-wrap">
+                                        <svg class="dash-acc-ring" viewBox="0 0 50 50">
+                                            <circle class="dash-acc-ring-bg" cx="25" cy="25" r="22"/>
+                                            <circle class="dash-acc-ring-fill" cx="25" cy="25" r="22"/>
+                                        </svg>
+                                        <span class="dash-acc-ring-txt">98%</span>
+                                    </div>
+                                    <div class="dash-acc-meta">
+                                        <div>
+                                            <span class="dash-acc-item-val">4.2k</span>
+                                            <span class="dash-acc-item-lbl">Users</span>
+                                        </div>
+                                        <div>
+                                            <span class="dash-acc-item-val">92%</span>
+                                            <span class="dash-acc-item-lbl">Pass</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Soft platform indicator -->
+                    <div class="dash-platform">
+                        <div class="dash-platform-bar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stat Cards -->
+            <div class="hero-stats-row">
+                <div class="hero-stat-card-v2">
+                    <div class="hero-stat-icon"><i class="fas fa-bullseye"></i></div>
+                    <span class="hero-stat-val">98%</span>
+                    <span class="hero-stat-lbl">Accuracy Rate</span>
+                </div>
+                <div class="hero-stat-card-v2">
+                    <div class="hero-stat-icon"><i class="fas fa-users"></i></div>
+                    <span class="hero-stat-val">15k+</span>
+                    <span class="hero-stat-lbl">Active Students</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ───── Right Form Panel (UNCHANGED) ───── -->
+    <div class="login-form-panel">
+        <div class="login-card-perspective" id="cardPerspective">
+            <div class="login-card">
+
+                <!-- Combined Tabs (Login / Register toggle) -->
+                <div class="card-tabs" id="authTabs">
+                    <button type="button" class="card-tab active" onclick="showPanel('login')">Login</button>
+                    <button type="button" class="card-tab" onclick="showPanel('register')">Register</button>
+                </div>
+
+                <!-- Sliding wrapper: overflow hidden, translateX to switch -->
+                <div class="slide-viewport">
+                    <div class="slide-track" id="slideTrack">
+
+                        <!-- ──── PANEL 1: LOGIN ──── -->
+                        <div class="slide-panel" id="panelLogin">
+                            <div class="card-header-row">
+                                <h2 class="card-title">Welcome Back</h2>
+                                <p class="card-subtitle">Please enter your credentials to access dashboard.</p>
+                            </div>
+
+                            <label class="field-label">Login as</label>
+                            <div class="role-toggle" id="roleToggle">
+                                <button type="button" class="role-pill active" data-role="student" onclick="pickRole(this)">
+                                    <i class="fas fa-user-graduate"></i> Student
+                                </button>
+                                <button type="button" class="role-pill" data-role="admin" onclick="pickRole(this)">
+                                    <i class="fas fa-user-shield"></i> Admin
+                                </button>
+                            </div>
+
+                            <form method="POST" action="{{ url_for('login') }}" class="login-form" id="loginForm">
+                                <input type="hidden" name="role" id="roleInput" value="student">
+
+                                <div class="field-group">
+                                    <label class="field-label">Student / Admin ID</label>
+                                    <div class="field-input">
+                                        <i class="fas fa-id-badge"></i>
+                                        <input type="text" name="student_id" placeholder="e.g. STU-8829-21">
+                                    </div>
+                                </div>
+
+                                <div class="field-group">
+                                    <label class="field-label">Email Address</label>
+                                    <div class="field-input">
+                                        <i class="fas fa-envelope"></i>
+                                        <input type="email" name="email" placeholder="name@institution.edu" required>
+                                    </div>
+                                </div>
+
+                                <div class="field-group">
+                                    <label class="field-label">
+                                        Password
+                                        <a href="#" class="field-link">Forgot password?</a>
+                                    </label>
+                                    <div class="field-input">
+                                        <i class="fas fa-lock"></i>
+                                        <input type="password" name="password" id="pwdInput" placeholder="••••••••" required>
+                                        <button type="button" class="pwd-eye" onclick="togglePwd()">
+                                            <i class="fas fa-eye" id="pwdIcon"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="submit-btn">Sign In To Dashboard</button>
+                            </form>
+
+                            <div class="sso-divider"><span>Or sign in with SSO</span></div>
+                            <div class="sso-row">
+                                <a href="{{ url_for('google_login') }}" class="sso-btn">
+                                    <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#4285F4" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#34A853" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59A14.5 14.5 0 019.5 24c0-1.59.28-3.14.76-4.59l-7.98-6.19A23.99 23.99 0 000 24c0 3.77.87 7.34 2.44 10.51l8.09-5.92z"/><path fill="#EA4335" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                                    Google
+                                </a>
+                                <a href="#" class="sso-btn">
+                                    <svg width="18" height="18" viewBox="0 0 23 23"><path fill="#f35325" d="M1 1h10v10H1z"/><path fill="#81bc06" d="M12 1h10v10H12z"/><path fill="#05a6f0" d="M1 12h10v10H1z"/><path fill="#ffba08" d="M12 12h10v10H12z"/></svg>
+                                    Microsoft
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- ──── PANEL 2: REGISTER ──── -->
+                        <div class="slide-panel" id="panelRegister">
+                            <div class="card-header-row">
+                                <h2 class="card-title">Create Account</h2>
+                                <p class="card-subtitle">Fill in your details to register as a student.</p>
+                            </div>
+
+                            <form method="POST" action="{{ url_for('register') }}" class="login-form" id="registerForm">
+                                <div class="field-group">
+                                    <label class="field-label">Full Name</label>
+                                    <div class="field-input">
+                                        <i class="fas fa-user"></i>
+                                        <input type="text" name="name" placeholder="Alex Johnson" required>
+                                    </div>
+                                </div>
+
+                                <div class="field-group">
+                                    <label class="field-label">Email Address</label>
+                                    <div class="field-input">
+                                        <i class="fas fa-envelope"></i>
+                                        <input type="email" name="email" placeholder="name@institution.edu" required>
+                                    </div>
+                                </div>
+
+                                <div class="field-group">
+                                    <label class="field-label">Mobile Number</label>
+                                    <div class="field-input">
+                                        <i class="fas fa-phone"></i>
+                                        <input type="tel" name="mobile" placeholder="10-digit mobile number" required
+                                               pattern="[0-9]{10}" maxlength="10" inputmode="numeric">
+                                    </div>
+                                </div>
+
+                                <div class="field-group">
+                                    <label class="field-label">Password</label>
+                                    <div class="field-input">
+                                        <i class="fas fa-lock"></i>
+                                        <input type="password" name="password" id="regPwdInput" placeholder="Min. 6 characters" required minlength="6">
+                                        <button type="button" class="pwd-eye" onclick="toggleRegPwd()">
+                                            <i class="fas fa-eye" id="regPwdIcon"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="field-group">
+                                    <label class="field-label">Class / Section</label>
+                                    <div class="field-input">
+                                        <i class="fas fa-chalkboard"></i>
+                                        <select name="class_name" class="slide-select">
+                                            <option value="Computer Science 101">Computer Science 101</option>
+                                            <option value="Advanced Math">Advanced Math</option>
+                                            <option value="Database Systems">Database Systems</option>
+                                            <option value="ML Fundamentals">ML Fundamentals</option>
+                                            <option value="UI/UX Design">UI/UX Design</option>
+                                            <option value="Statistical Analysis">Statistical Analysis</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="submit-btn">Create Account</button>
+                            </form>
+
+                            <div class="sso-divider"><span>Or continue with</span></div>
+                            <div class="sso-row">
+                                <a href="{{ url_for('google_login') }}" class="sso-btn" style="flex:1">
+                                    <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#4285F4" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#34A853" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59A14.5 14.5 0 019.5 24c0-1.59.28-3.14.76-4.59l-7.98-6.19A23.99 23.99 0 000 24c0 3.77.87 7.34 2.44 10.51l8.09-5.92z"/><path fill="#EA4335" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                                    Continue with Google
+                                </a>
+                            </div>
+                        </div>
+
+                    </div><!-- /slide-track -->
+                </div><!-- /slide-viewport -->
+
+            </div><!-- /login-card -->
+        </div>
+    </div>
+</div>
+
+<script>
+/* ── Slide panel toggle ── */
+function showPanel(panel) {
+    const track  = document.getElementById('slideTrack');
+    const tabs   = document.querySelectorAll('#authTabs .card-tab');
+    const isReg  = panel === 'register';
+
+    tabs.forEach(t => t.classList.remove('active'));
+    tabs[isReg ? 1 : 0].classList.add('active');
+
+    track.style.transform = isReg ? 'translateX(-50%)' : 'translateX(0)';
+
+    const activePanel = document.getElementById(isReg ? 'panelRegister' : 'panelLogin');
+    requestAnimationFrame(() => {
+        const viewport = document.querySelector('.slide-viewport');
+        viewport.style.height = activePanel.scrollHeight + 'px';
+    });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const viewport = document.querySelector('.slide-viewport');
+    const loginPanel = document.getElementById('panelLogin');
+    if (viewport && loginPanel) {
+        viewport.style.height = loginPanel.scrollHeight + 'px';
+    }
+});
+
+/* ── Role toggle with 360° Y-axis rotation ── */
+let isRotating = false;
+function pickRole(btn) {
+    const card     = document.querySelector('.login-card');
+    const roleBtns = document.querySelectorAll('.role-pill');
+    if (isRotating) return;
+    roleBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('roleInput').value = btn.dataset.role;
+    isRotating = true;
+    card.classList.add('spin-y');
+    card.addEventListener('animationend', function handler() {
+        card.classList.remove('spin-y');
+        isRotating = false;
+        card.removeEventListener('animationend', handler);
+    });
+}
+
+/* ── Password visibility (Login) ── */
+function togglePwd() {
+    const inp  = document.getElementById('pwdInput');
+    const icon = document.getElementById('pwdIcon');
+    if (inp.type === 'password') {
+        inp.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        inp.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+
+/* ── Password visibility (Register) ── */
+function toggleRegPwd() {
+    const inp  = document.getElementById('regPwdInput');
+    const icon = document.getElementById('regPwdIcon');
+    if (inp.type === 'password') {
+        inp.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        inp.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+
+/* ── Subtle star particles ── */
+(function() {
+    const canvas = document.getElementById('starCanvasLanding');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    const STAR_COUNT = 120;
+
+    function resize() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+    }
+
+    function initStars() {
+        stars = [];
+        for (let i = 0; i < STAR_COUNT; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                r: Math.random() * 1.2 + 0.2,
+                alpha: Math.random() * 0.5 + 0.15,
+                twinkle: Math.random() * 0.012 + 0.003,
+                offset: Math.random() * Math.PI * 2
+            });
+        }
+    }
+
+    function draw(time) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(s => {
+            const a = s.alpha * (0.5 + 0.5 * Math.sin(time * s.twinkle + s.offset));
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(180, 210, 255, ${a})`;
+            ctx.fill();
+        });
+        requestAnimationFrame(draw);
+    }
+
+    resize();
+    initStars();
+    requestAnimationFrame(draw);
+    window.addEventListener('resize', () => { resize(); initStars(); });
+})();
+</script>
+{% endblock %}

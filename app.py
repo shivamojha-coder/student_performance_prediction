@@ -21,12 +21,17 @@ from flask import (
 from werkzeug.security import generate_password_hash, check_password_hash
 import joblib
 import numpy as np
+import requests as http_requests
 
 import config
 
 app = Flask(__name__)
 app.secret_key = config.SECRET_KEY
 app.config['DATABASE'] = config.DATABASE
+app.config['SESSION_COOKIE_HTTPONLY'] = getattr(config, 'SESSION_COOKIE_HTTPONLY', True)
+app.config['SESSION_COOKIE_SAMESITE'] = getattr(config, 'SESSION_COOKIE_SAMESITE', 'Lax')
+from datetime import timedelta
+app.permanent_session_lifetime = timedelta(seconds=getattr(config, 'PERMANENT_SESSION_LIFETIME', 1800))
 
 # ─── Database helpers ────────────────────────────────────────────────
 
@@ -55,9 +60,9 @@ def init_db():
     admin_hash = generate_password_hash('admin123')
     try:
         db.execute(
-            'INSERT INTO users (name, email, password_hash, role, class_name, student_id) '
-            'VALUES (?, ?, ?, ?, ?, ?)',
-            ('Dr. Julian Vance', 'admin@edupredict.com', admin_hash, 'admin', 'All', 'ADM-0001')
+            'INSERT INTO users (name, email, mobile, password_hash, role, class_name, student_id, is_verified) '
+            'VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            ('Dr. Julian Vance', 'admin@edupredict.com', '0000000000', admin_hash, 'admin', 'All', 'ADM-0001', 1)
         )
         db.commit()
         print("Admin user created: admin@edupredict.com / admin123")
@@ -187,14 +192,60 @@ def verify_otp(email, user_otp):
     _otp_store.pop(email, None)
     return True
 
+# ─── Google OAuth helpers ────────────────────────────────────────────
+
+def get_google_provider_cfg():
+    """Fetch Google's OpenID Connect discovery document."""
+    return http_requests.get(config.GOOGLE_DISCOVERY_URL, timeout=10).json()
+
+
+def _google_login_user(google_id, name, email, picture):
+    """Find or create a user from Google data and set session. Returns redirect."""
+    db = get_db()
+    user = db.execute('SELECT * FROM users WHERE email = ?', (email,)).fetchone()
+
+    if user:
+        # Existing user — log them in
+        session.permanent = True
+        session['user_id'] = user['id']
+        session['user_name'] = user['name']
+        session['role'] = user['role']
+        session['email'] = user['email']
+        session['class_name'] = user['class_name']
+        session['student_id'] = user['student_id']
+        session['profile_picture'] = picture
+        flash(f'Welcome back, {user["name"]}!', 'success')
+        if user['role'] == 'admin':
+            return redirect(url_for('admin_dashboard'))
+        return redirect(url_for('student_dashboard'))
+    else:
+        # New user — auto-create student account
+        student_id = generate_student_id()
+        random_pw = generate_password_hash(os.urandom(24).hex())
+        cursor = db.execute(
+            'INSERT INTO users (name, email, mobile, password_hash, role, '
+            'class_name, student_id, is_verified) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            (name, email, '', random_pw, 'student',
+             'Computer Science 101', student_id, 1)
+        )
+        db.commit()
+        new_id = cursor.lastrowid
+
+        session.permanent = True
+        session['user_id'] = new_id
+        session['user_name'] = name
+        session['role'] = 'student'
+        session['email'] = email
+        session['class_name'] = 'Computer Science 101'
+        session['student_id'] = student_id
+        session['profile_picture'] = picture
+        flash(f'Welcome, {name}! Your account has been created via Google.', 'success')
+        return redirect(url_for('student_dashboard'))
+
 # ─── Routes ──────────────────────────────────────────────────────────
 
 @app.route('/')
 def index():
-    if 'user_id' in session:
-        if session.get('role') == 'admin':
-            return redirect(url_for('admin_dashboard'))
-        return redirect(url_for('student_dashboard'))
     return redirect(url_for('login'))
 
 # ── Auth ──
@@ -214,6 +265,7 @@ def login():
                 flash(f'This account is registered as {user["role"]}, not {role}.', 'danger')
                 return render_template('login.html')
 
+            session.permanent = True
             session['user_id'] = user['id']
             session['user_name'] = user['name']
             session['role'] = user['role']
@@ -235,11 +287,23 @@ def register():
     if request.method == 'POST':
         name = request.form.get('name', '').strip()
         email = request.form.get('email', '').strip()
+        mobile = request.form.get('mobile', '').strip()
         password = request.form.get('password', '')
         class_name = request.form.get('class_name', 'Computer Science 101')
 
-        if not name or not email or not password:
+        if not name or not email or not mobile or not password:
             flash('All fields are required.', 'danger')
+            return render_template('register.html')
+
+        # Validate mobile number (digits only, 10 digits)
+        import re
+        if not re.match(r'^\d{10}$', mobile):
+            flash('Please enter a valid 10-digit mobile number.', 'danger')
+            return render_template('register.html')
+
+        # Validate email format
+        if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
+            flash('Please enter a valid email address.', 'danger')
             return render_template('register.html')
 
         if len(password) < 6:
@@ -267,6 +331,7 @@ def register():
         session['pending_reg'] = {
             'name': name,
             'email': email,
+            'mobile': mobile,
             'password': password,
             'class_name': class_name,
         }
@@ -291,15 +356,27 @@ def verify_otp_page():
             db = get_db()
             student_id = generate_student_id()
             password_hash = generate_password_hash(pending['password'])
-            db.execute(
-                'INSERT INTO users (name, email, password_hash, role, class_name, student_id) '
-                'VALUES (?, ?, ?, ?, ?, ?)',
-                (pending['name'], email, password_hash, 'student', pending['class_name'], student_id)
+            cursor = db.execute(
+                'INSERT INTO users (name, email, mobile, password_hash, role, class_name, student_id, is_verified) '
+                'VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                (pending['name'], email, pending.get('mobile', ''), password_hash,
+                 'student', pending['class_name'], student_id, 1)
             )
             db.commit()
+            new_user_id = cursor.lastrowid
             session.pop('pending_reg', None)
-            flash('Email verified! Your account has been created. Please log in.', 'success')
-            return redirect(url_for('login'))
+
+            # Auto-login: set session variables and redirect to dashboard
+            session.permanent = True
+            session['user_id'] = new_user_id
+            session['user_name'] = pending['name']
+            session['role'] = 'student'
+            session['email'] = email
+            session['class_name'] = pending['class_name']
+            session['student_id'] = student_id
+
+            flash(f'Welcome, {pending["name"]}! Your account has been created successfully.', 'success')
+            return redirect(url_for('student_dashboard'))
         else:
             flash('Invalid or expired OTP. Please try again.', 'danger')
 
@@ -326,6 +403,96 @@ def resend_otp():
         flash('Failed to resend code. Please try again.', 'danger')
 
     return redirect(url_for('verify_otp_page'))
+
+# ── Google OAuth Routes ──
+
+@app.route('/auth/google')
+def google_login():
+    """Redirect user to Google's OAuth 2.0 consent screen."""
+    try:
+        google_cfg = get_google_provider_cfg()
+        authorization_endpoint = google_cfg['authorization_endpoint']
+    except Exception:
+        flash('Unable to reach Google. Please try again later.', 'danger')
+        return redirect(url_for('login'))
+
+    # Generate a random state token for CSRF protection
+    state = os.urandom(16).hex()
+    session['oauth_state'] = state
+
+    callback_url = url_for('google_callback', _external=True)
+    params = {
+        'client_id': config.GOOGLE_CLIENT_ID,
+        'redirect_uri': callback_url,
+        'scope': 'openid email profile',
+        'response_type': 'code',
+        'state': state,
+        'prompt': 'select_account',
+    }
+    auth_url = f"{authorization_endpoint}?{'&'.join(f'{k}={v}' for k, v in params.items())}"
+    return redirect(auth_url)
+
+
+@app.route('/auth/google/callback')
+def google_callback():
+    """Handle the callback from Google after user grants consent."""
+    # Verify state to prevent CSRF
+    if request.args.get('state') != session.pop('oauth_state', None):
+        flash('Authentication failed — invalid state. Please try again.', 'danger')
+        return redirect(url_for('login'))
+
+    code = request.args.get('code')
+    if not code:
+        flash('Google sign-in was cancelled.', 'warning')
+        return redirect(url_for('login'))
+
+    try:
+        google_cfg = get_google_provider_cfg()
+        token_endpoint = google_cfg['token_endpoint']
+
+        # Exchange the authorization code for tokens
+        token_response = http_requests.post(
+            token_endpoint,
+            data={
+                'code': code,
+                'client_id': config.GOOGLE_CLIENT_ID,
+                'client_secret': config.GOOGLE_CLIENT_SECRET,
+                'redirect_uri': url_for('google_callback', _external=True),
+                'grant_type': 'authorization_code',
+            },
+            timeout=10,
+        )
+        token_data = token_response.json()
+
+        if 'error' in token_data:
+            flash('Google authentication failed. Please try again.', 'danger')
+            return redirect(url_for('login'))
+
+        # Use the access token to get user info
+        userinfo_endpoint = google_cfg['userinfo_endpoint']
+        userinfo_response = http_requests.get(
+            userinfo_endpoint,
+            headers={'Authorization': f'Bearer {token_data["access_token"]}'},
+            timeout=10,
+        )
+        userinfo = userinfo_response.json()
+
+        if not userinfo.get('email_verified', False):
+            flash('Google account email is not verified.', 'danger')
+            return redirect(url_for('login'))
+
+        google_id = userinfo['sub']
+        email = userinfo['email']
+        name = userinfo.get('name', email.split('@')[0])
+        picture = userinfo.get('picture', '')
+
+        return _google_login_user(google_id, name, email, picture)
+
+    except Exception as e:
+        print(f'[Google OAuth] Error: {e}')
+        flash('Google sign-in failed. Please try again.', 'danger')
+        return redirect(url_for('login'))
+
 
 @app.route('/logout')
 def logout():
@@ -690,4 +857,7 @@ with app.app_context():
             print("Database tables created.")
 
 if __name__ == '__main__':
-    app.run(debug=config.DEBUG, host='0.0.0.0', port=5000)
+    print("\n\n-------------------------------------------------------------")
+    print("   Project Running! Open this link: http://localhost:5000")
+    print("-------------------------------------------------------------\n\n")
+    app.run(debug=config.DEBUG, host='127.0.0.1', port=5000)

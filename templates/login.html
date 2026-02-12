@@ -3,144 +3,623 @@
 {% block body_class %}auth-page{% endblock %}
 
 {% block content %}
-<div class="auth-container">
-    <!-- Left Panel: Hero -->
-    <div class="auth-hero">
-        <div class="auth-hero-content">
-            <div class="auth-brand">
-                <div class="brand-icon">
-                    <i class="fas fa-chart-line"></i>
+<div class="login-wrapper">
+    <!-- ───── Left Hero Panel ───── -->
+    <div class="login-hero">
+        <!-- Star field dots -->
+        <div class="star-field">
+            <div class="star" style="top:5%;left:12%;animation-delay:0s"></div>
+            <div class="star" style="top:15%;left:78%;animation-delay:1.2s"></div>
+            <div class="star" style="top:28%;left:45%;animation-delay:0.6s"></div>
+            <div class="star" style="top:8%;left:62%;animation-delay:2.1s"></div>
+            <div class="star" style="top:42%;left:8%;animation-delay:0.3s"></div>
+            <div class="star" style="top:55%;left:85%;animation-delay:1.8s"></div>
+            <div class="star" style="top:68%;left:22%;animation-delay:0.9s"></div>
+            <div class="star" style="top:72%;left:55%;animation-delay:2.4s"></div>
+            <div class="star" style="top:88%;left:35%;animation-delay:1.5s"></div>
+            <div class="star" style="top:35%;left:92%;animation-delay:0.4s"></div>
+            <div class="star star--bright" style="top:18%;left:30%;animation-delay:0.7s"></div>
+            <div class="star star--bright" style="top:60%;left:70%;animation-delay:1.9s"></div>
+            <div class="star star--bright" style="top:82%;left:15%;animation-delay:2.6s"></div>
+            <div class="star star--bright" style="top:45%;left:50%;animation-delay:1.1s"></div>
+        </div>
+
+        <!-- Nebula layers for depth -->
+        <div class="nebula nebula--1"></div>
+        <div class="nebula nebula--2"></div>
+
+        <!-- Volumetric light layers -->
+        <div class="vol-light vol-light--top"></div>
+        <div class="vol-light vol-light--mid"></div>
+        <div class="vol-light vol-light--bottom"></div>
+        <div class="vol-light vol-light--core"></div>
+
+        <!-- Subtle ambient particles -->
+        <canvas id="particleCanvas" class="hero-particles"></canvas>
+
+        <!-- Content -->
+        <div class="hero-content">
+            <div class="hero-brand">
+                <div class="hero-brand-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 17L9 11L13 15L21 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M17 7H21V11" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                 </div>
-                <span class="brand-text">SuccessPredict</span>
+                <span class="hero-brand-text">SuccessPredict</span>
             </div>
-            <h1 class="auth-headline">Predicting Success,<br>Empowering Futures.</h1>
-            <p class="auth-subtext">
-                Access our AI-driven student performance platform to
-                visualize academic pathways, identify risks, and unlock
-                your full potential through data-backed insights.
+
+            <h1 class="hero-headline">Predicting Success,<br>Empowering Futures.</h1>
+
+            <p class="hero-desc">
+                Join thousands of students using AI-driven predictions
+                to track academic performance and get personalized
+                improvement plans.
             </p>
-            <div class="auth-stats">
-                <div class="auth-stat">
-                    <span class="stat-number">98%</span>
-                    <span class="stat-label">Accuracy Rate</span>
+
+            <!-- ── Cinematic 3D Scene: Holographic Dashboard + Platform ── -->
+            <div class="scene-3d">
+
+                <!-- Stat cards — horizontal, left of dashboard -->
+                <div class="hero-stats">
+                    <div class="hero-stat-card">
+                        <div class="stat-icon-wrap"><i class="fas fa-bullseye"></i></div>
+                        <span class="hero-stat-num">98%</span>
+                        <span class="hero-stat-label">Accuracy Rate</span>
+                    </div>
+                    <div class="hero-stat-card">
+                        <div class="stat-icon-wrap"><i class="fas fa-users"></i></div>
+                        <span class="hero-stat-num">15k+</span>
+                        <span class="hero-stat-label">Active Students</span>
+                    </div>
                 </div>
-                <div class="auth-stat">
-                    <span class="stat-number">15k+</span>
-                    <span class="stat-label">Active Students</span>
+
+                <!-- Dashboard + Platform wrapper -->
+                <div class="scene-main">
+                    <!-- Data stream particles -->
+                    <canvas id="dataStreamCanvas" class="data-stream-canvas"></canvas>
+
+                    <!-- Multiple light rays emitting upward from platform -->
+                    <div class="light-ray light-ray--1"></div>
+                    <div class="light-ray light-ray--2"></div>
+                    <div class="light-ray light-ray--3"></div>
+                    <div class="light-ray light-ray--4"></div>
+                    <div class="light-ray light-ray--5"></div>
+                    <div class="light-ray light-ray--6"></div>
+                    <div class="light-ray light-ray--7"></div>
+                    <!-- Central beam -->
+                    <div class="light-beam"></div>
+                    <div class="light-beam light-beam--wide"></div>
+                    <div class="light-beam light-beam--ultra"></div>
+
+                <!-- Holographic Analytics Dashboard Panel -->
+                <div class="holo-dashboard">
+                    <!-- Holographic flare effects -->
+                    <div class="holo-flare holo-flare--tl"></div>
+                    <div class="holo-flare holo-flare--br"></div>
+
+                    <!-- Main glass panel -->
+                    <div class="holo-panel">
+                        <!-- Scan line effect -->
+                        <div class="holo-scanline"></div>
+                        <!-- Horizontal sweep line -->
+                        <div class="holo-sweep"></div>
+                        <!-- Top bar with dots -->
+                        <div class="holo-topbar">
+                            <div class="holo-dot holo-dot--red"></div>
+                            <div class="holo-dot holo-dot--yellow"></div>
+                            <div class="holo-dot holo-dot--green"></div>
+                            <div class="holo-topbar-title">Analytics Dashboard</div>
+                            <div class="holo-topbar-status">
+                                <span class="holo-status-dot"></span> Connected
+                            </div>
+                        </div>
+                        <!-- Dashboard content grid -->
+                        <div class="holo-grid">
+                            <!-- Big line chart spanning full width top -->
+                            <div class="holo-widget holo-widget--chart-wide">
+                                <div class="holo-widget-header">
+                                    <div class="holo-widget-label">Student Performance Trends</div>
+                                    <div class="holo-widget-badge">Live</div>
+                                </div>
+                                <svg class="holo-line-chart" viewBox="0 0 200 50" preserveAspectRatio="none">
+                                    <defs>
+                                        <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stop-color="rgba(80,200,255,0.35)"/>
+                                            <stop offset="100%" stop-color="rgba(80,200,255,0)"/>
+                                        </linearGradient>
+                                        <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+                                            <stop offset="0%" stop-color="rgba(60,180,255,0.6)"/>
+                                            <stop offset="50%" stop-color="rgba(100,220,255,1)"/>
+                                            <stop offset="100%" stop-color="rgba(60,180,255,0.6)"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <polygon points="0,45 12,38 28,42 48,28 68,32 88,18 108,22 130,12 155,16 178,8 200,14 200,50 0,50" fill="url(#chartFill)"/>
+                                    <polyline points="0,45 12,38 28,42 48,28 68,32 88,18 108,22 130,12 155,16 178,8 200,14" fill="none" stroke="url(#lineGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <!-- Glow dot at peak -->
+                                    <circle cx="178" cy="8" r="3" fill="rgba(100,220,255,0.9)">
+                                        <animate attributeName="r" values="2.5;4;2.5" dur="2s" repeatCount="indefinite"/>
+                                        <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
+                                    </circle>
+                                </svg>
+                            </div>
+                            <!-- Bar chart -->
+                            <div class="holo-widget holo-widget--bars">
+                                <div class="holo-widget-label">Subject Grades</div>
+                                <div class="holo-bars">
+                                    <div class="holo-bar-col">
+                                        <div class="holo-bar" style="height:55%"></div>
+                                        <span class="holo-bar-label">CS</span>
+                                    </div>
+                                    <div class="holo-bar-col">
+                                        <div class="holo-bar holo-bar--accent" style="height:88%"></div>
+                                        <span class="holo-bar-label">ML</span>
+                                    </div>
+                                    <div class="holo-bar-col">
+                                        <div class="holo-bar" style="height:42%"></div>
+                                        <span class="holo-bar-label">DB</span>
+                                    </div>
+                                    <div class="holo-bar-col">
+                                        <div class="holo-bar holo-bar--accent" style="height:76%"></div>
+                                        <span class="holo-bar-label">UI</span>
+                                    </div>
+                                    <div class="holo-bar-col">
+                                        <div class="holo-bar" style="height:92%"></div>
+                                        <span class="holo-bar-label">AI</span>
+                                    </div>
+                                    <div class="holo-bar-col">
+                                        <div class="holo-bar holo-bar--accent" style="height:60%"></div>
+                                        <span class="holo-bar-label">SE</span>
+                                    </div>
+                                    <div class="holo-bar-col">
+                                        <div class="holo-bar" style="height:70%"></div>
+                                        <span class="holo-bar-label">OS</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Donut + Metrics combined -->
+                            <div class="holo-widget holo-widget--donut-area">
+                                <div class="holo-widget-label">Accuracy</div>
+                                <div class="holo-donut-row">
+                                    <svg class="holo-donut" viewBox="0 0 44 44">
+                                        <circle cx="22" cy="22" r="17" fill="none" stroke="rgba(100,200,255,0.1)" stroke-width="4.5"/>
+                                        <circle cx="22" cy="22" r="17" fill="none" stroke="url(#donutGrad)" stroke-width="4.5"
+                                            stroke-dasharray="88 107" stroke-dashoffset="27" stroke-linecap="round">
+                                            <animate attributeName="stroke-dashoffset" values="107;27" dur="1.5s" fill="freeze" calcMode="spline" keySplines="0.4 0 0.2 1"/>
+                                        </circle>
+                                        <defs>
+                                            <linearGradient id="donutGrad" x1="0" y1="0" x2="1" y2="1">
+                                                <stop offset="0%" stop-color="rgba(60,180,255,0.9)"/>
+                                                <stop offset="100%" stop-color="rgba(120,80,255,0.7)"/>
+                                            </linearGradient>
+                                        </defs>
+                                        <text x="22" y="24" fill="rgba(220,240,255,0.95)" font-size="8" text-anchor="middle" font-weight="800">98%</text>
+                                    </svg>
+                                    <div class="holo-donut-stats">
+                                        <div class="holo-micro-stat">
+                                            <span class="holo-micro-num">4.2k</span>
+                                            <span class="holo-micro-lbl">Users</span>
+                                        </div>
+                                        <div class="holo-micro-stat">
+                                            <span class="holo-micro-num">92%</span>
+                                            <span class="holo-micro-lbl">Pass</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Side mini-panels -->
+                    <div class="holo-side holo-side--left">
+                        <div class="holo-side-title">Progress</div>
+                        <div class="holo-mini-bar"><div class="holo-mini-fill" style="width:70%"></div></div>
+                        <div class="holo-mini-bar"><div class="holo-mini-fill holo-mini-fill--cyan" style="width:50%"></div></div>
+                        <div class="holo-mini-bar"><div class="holo-mini-fill" style="width:85%"></div></div>
+                    </div>
+                    <div class="holo-side holo-side--right">
+                        <div class="holo-side-title">Risk</div>
+                        <svg class="holo-mini-pie" viewBox="0 0 32 32">
+                            <circle cx="16" cy="16" r="13" fill="none" stroke="rgba(100,200,255,0.12)" stroke-width="3"/>
+                            <circle cx="16" cy="16" r="13" fill="none" stroke="rgba(100,200,255,0.6)" stroke-width="3"
+                                stroke-dasharray="55 82" stroke-dashoffset="20" stroke-linecap="round"/>
+                            <circle cx="16" cy="16" r="13" fill="none" stroke="rgba(255,120,200,0.45)" stroke-width="3"
+                                stroke-dasharray="20 82" stroke-dashoffset="-35" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <!-- Glow aura -->
+                    <div class="holo-glow"></div>
                 </div>
+
+                <!-- Real 3D Floating Platform -->
+                <div class="platform-wrap">
+                    <div class="platform-body">
+                        <div class="platform-surface">
+                            <div class="platform-grid-lines"></div>
+                            <div class="platform-reflection"></div>
+                        </div>
+                        <div class="platform-edge"></div>
+                        <div class="platform-edge-bottom"></div>
+                    </div>
+                    <div class="platform-ring"></div>
+                    <div class="platform-ring platform-ring--mid"></div>
+                    <div class="platform-ring platform-ring--outer"></div>
+                    <div class="platform-ring platform-ring--glow"></div>
+                    <div class="platform-underglow"></div>
+                    <div class="platform-underglow platform-underglow--wide"></div>
+                    <div class="platform-underglow platform-underglow--ambient"></div>
+                    <div class="platform-drop-shadow"></div>
+                </div>
+                </div><!-- /scene-main -->
             </div>
         </div>
-        <div class="auth-hero-bg"></div>
     </div>
 
-    <!-- Right Panel: Login Form -->
-    <div class="auth-form-panel">
-        <div class="auth-form-container">
-            <h2 class="auth-form-title">Welcome Back</h2>
-            <p class="auth-form-subtitle">Please enter your credentials to access your dashboard.</p>
+    <!-- ───── Right Form Panel ───── -->
+    <div class="login-form-panel">
+        <div class="login-card-perspective" id="cardPerspective">
+            <div class="login-card">
 
-            <!-- Login/Register Toggle -->
-            <div class="auth-toggle">
-                <a href="{{ url_for('login') }}" class="auth-toggle-btn active">Login</a>
-                <a href="{{ url_for('register') }}" class="auth-toggle-btn">Register</a>
-            </div>
-
-            <!-- Role Selector -->
-            <label class="form-label">Login as</label>
-            <div class="role-selector" id="roleSelector">
-                <button type="button" class="role-btn active" data-role="student" onclick="selectRole(this)">
-                    <i class="fas fa-user-graduate"></i> Student
-                </button>
-                <button type="button" class="role-btn" data-role="admin" onclick="selectRole(this)">
-                    <i class="fas fa-user-shield"></i> Admin
-                </button>
-            </div>
-
-            <form method="POST" action="{{ url_for('login') }}" class="auth-form" id="loginForm">
-                <input type="hidden" name="role" id="roleInput" value="student">
-
-                <div class="form-group">
-                    <label class="form-label">Student / Admin ID</label>
-                    <div class="input-icon-wrap">
-                        <i class="fas fa-id-badge"></i>
-                        <input type="text" name="student_id" placeholder="e.g. STU-8829-21" class="form-input">
-                    </div>
+                <!-- Combined Tabs (Login / Register toggle) -->
+                <div class="card-tabs" id="authTabs">
+                    <button type="button" class="card-tab active" onclick="showPanel('login')">Login</button>
+                    <button type="button" class="card-tab" onclick="showPanel('register')">Register</button>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Email Address</label>
-                    <div class="input-icon-wrap">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" name="email" placeholder="name@institution.edu" class="form-input" required>
-                    </div>
-                </div>
+                <!-- Sliding wrapper: overflow hidden, translateX to switch -->
+                <div class="slide-viewport">
+                    <div class="slide-track" id="slideTrack">
 
-                <div class="form-group">
-                    <label class="form-label">
-                        Password
-                        <a href="#" class="form-link">Forgot password?</a>
-                    </label>
-                    <div class="input-icon-wrap">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" name="password" placeholder="••••••••" class="form-input" required>
-                        <button type="button" class="password-toggle" onclick="togglePassword(this)">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
+                        <!-- ──── PANEL 1: LOGIN ──── -->
+                        <div class="slide-panel" id="panelLogin">
+                            <div class="card-header-row">
+                                <h2 class="card-title">Welcome Back</h2>
+                                <p class="card-subtitle">Please enter your credentials to access dashboard.</p>
+                            </div>
 
-                <div class="form-check-row">
-                    <label class="checkbox-wrap">
-                        <input type="checkbox" name="remember">
-                        <span class="checkmark"></span>
-                        Keep me logged in
-                    </label>
-                </div>
+                            <label class="field-label">Login as</label>
+                            <div class="role-toggle" id="roleToggle">
+                                <button type="button" class="role-pill active" data-role="student" onclick="pickRole(this)">
+                                    <i class="fas fa-user-graduate"></i> Student
+                                </button>
+                                <button type="button" class="role-pill" data-role="admin" onclick="pickRole(this)">
+                                    <i class="fas fa-user-shield"></i> Admin
+                                </button>
+                            </div>
 
-                <button type="submit" class="btn btn-primary btn-block btn-lg">
-                    Sign In to Dashboard
-                </button>
-            </form>
+                            <form method="POST" action="{{ url_for('login') }}" class="login-form" id="loginForm">
+                                <input type="hidden" name="role" id="roleInput" value="student">
 
-            <div class="auth-divider">
-                <span>Or sign in with SSO</span>
-            </div>
+                                <div class="field-group">
+                                    <label class="field-label">Student / Admin ID</label>
+                                    <div class="field-input">
+                                        <i class="fas fa-id-badge"></i>
+                                        <input type="text" name="student_id" placeholder="e.g. STU-8829-21">
+                                    </div>
+                                </div>
 
-            <div class="sso-buttons">
-                <button class="btn btn-sso">
-                    <img src="https://www.google.com/favicon.ico" alt="G" width="18" height="18"> Google
-                </button>
-                <button class="btn btn-sso">
-                    <i class="fab fa-microsoft" style="color:#00a4ef"></i> Microsoft
-                </button>
-            </div>
+                                <div class="field-group">
+                                    <label class="field-label">Email Address</label>
+                                    <div class="field-input">
+                                        <i class="fas fa-envelope"></i>
+                                        <input type="email" name="email" placeholder="name@institution.edu" required>
+                                    </div>
+                                </div>
 
-            <div class="auth-footer-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Help Center</a>
-            </div>
+                                <div class="field-group">
+                                    <label class="field-label">
+                                        Password
+                                        <a href="#" class="field-link">Forgot password?</a>
+                                    </label>
+                                    <div class="field-input">
+                                        <i class="fas fa-lock"></i>
+                                        <input type="password" name="password" id="pwdInput" placeholder="••••••••" required>
+                                        <button type="button" class="pwd-eye" onclick="togglePwd()">
+                                            <i class="fas fa-eye" id="pwdIcon"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="submit-btn">Sign In To Dashboard</button>
+                            </form>
+
+                            <div class="sso-divider"><span>Or sign in with SSO</span></div>
+                            <div class="sso-row">
+                                <a href="{{ url_for('google_login') }}" class="sso-btn">
+                                    <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#4285F4" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#34A853" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59A14.5 14.5 0 019.5 24c0-1.59.28-3.14.76-4.59l-7.98-6.19A23.99 23.99 0 000 24c0 3.77.87 7.34 2.44 10.51l8.09-5.92z"/><path fill="#EA4335" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                                    Google
+                                </a>
+                                <a href="#" class="sso-btn">
+                                    <svg width="18" height="18" viewBox="0 0 23 23"><path fill="#f35325" d="M1 1h10v10H1z"/><path fill="#81bc06" d="M12 1h10v10H12z"/><path fill="#05a6f0" d="M1 12h10v10H1z"/><path fill="#ffba08" d="M12 12h10v10H12z"/></svg>
+                                    Microsoft
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- ──── PANEL 2: REGISTER ──── -->
+                        <div class="slide-panel" id="panelRegister">
+                            <div class="card-header-row">
+                                <h2 class="card-title">Create Account</h2>
+                                <p class="card-subtitle">Fill in your details to register as a student.</p>
+                            </div>
+
+                            <form method="POST" action="{{ url_for('register') }}" class="login-form" id="registerForm">
+                                <div class="field-group">
+                                    <label class="field-label">Full Name</label>
+                                    <div class="field-input">
+                                        <i class="fas fa-user"></i>
+                                        <input type="text" name="name" placeholder="Alex Johnson" required>
+                                    </div>
+                                </div>
+
+                                <div class="field-group">
+                                    <label class="field-label">Email Address</label>
+                                    <div class="field-input">
+                                        <i class="fas fa-envelope"></i>
+                                        <input type="email" name="email" placeholder="name@institution.edu" required>
+                                    </div>
+                                </div>
+
+                                <div class="field-group">
+                                    <label class="field-label">Mobile Number</label>
+                                    <div class="field-input">
+                                        <i class="fas fa-phone"></i>
+                                        <input type="tel" name="mobile" placeholder="10-digit mobile number" required
+                                               pattern="[0-9]{10}" maxlength="10" inputmode="numeric">
+                                    </div>
+                                </div>
+
+                                <div class="field-group">
+                                    <label class="field-label">Password</label>
+                                    <div class="field-input">
+                                        <i class="fas fa-lock"></i>
+                                        <input type="password" name="password" id="regPwdInput" placeholder="Min. 6 characters" required minlength="6">
+                                        <button type="button" class="pwd-eye" onclick="toggleRegPwd()">
+                                            <i class="fas fa-eye" id="regPwdIcon"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="field-group">
+                                    <label class="field-label">Class / Section</label>
+                                    <div class="field-input">
+                                        <i class="fas fa-chalkboard"></i>
+                                        <select name="class_name" class="slide-select">
+                                            <option value="Computer Science 101">Computer Science 101</option>
+                                            <option value="Advanced Math">Advanced Math</option>
+                                            <option value="Database Systems">Database Systems</option>
+                                            <option value="ML Fundamentals">ML Fundamentals</option>
+                                            <option value="UI/UX Design">UI/UX Design</option>
+                                            <option value="Statistical Analysis">Statistical Analysis</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="submit-btn">Create Account</button>
+                            </form>
+
+                            <div class="sso-divider"><span>Or continue with</span></div>
+                            <div class="sso-row">
+                                <a href="{{ url_for('google_login') }}" class="sso-btn" style="flex:1">
+                                    <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#4285F4" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#34A853" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59A14.5 14.5 0 019.5 24c0-1.59.28-3.14.76-4.59l-7.98-6.19A23.99 23.99 0 000 24c0 3.77.87 7.34 2.44 10.51l8.09-5.92z"/><path fill="#EA4335" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                                    Continue with Google
+                                </a>
+                            </div>
+                        </div>
+
+                    </div><!-- /slide-track -->
+                </div><!-- /slide-viewport -->
+
+            </div><!-- /login-card -->
         </div>
     </div>
 </div>
 
 <script>
-function selectRole(btn) {
-    document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('roleInput').value = btn.dataset.role;
+/* ── Slide panel toggle ── */
+function showPanel(panel) {
+    const track  = document.getElementById('slideTrack');
+    const tabs   = document.querySelectorAll('#authTabs .card-tab');
+    const isReg  = panel === 'register';
+
+    tabs.forEach(t => t.classList.remove('active'));
+    tabs[isReg ? 1 : 0].classList.add('active');
+
+    track.style.transform = isReg ? 'translateX(-50%)' : 'translateX(0)';
+
+    /* Dynamically set viewport height to active panel */
+    const activePanel = document.getElementById(isReg ? 'panelRegister' : 'panelLogin');
+    requestAnimationFrame(() => {
+        const viewport = document.querySelector('.slide-viewport');
+        viewport.style.height = activePanel.scrollHeight + 'px';
+    });
 }
 
-function togglePassword(btn) {
-    const input = btn.parentElement.querySelector('input');
-    const icon = btn.querySelector('i');
-    if (input.type === 'password') {
-        input.type = 'text';
+/* Set initial viewport height on load */
+window.addEventListener('DOMContentLoaded', () => {
+    const viewport = document.querySelector('.slide-viewport');
+    const loginPanel = document.getElementById('panelLogin');
+    if (viewport && loginPanel) {
+        viewport.style.height = loginPanel.scrollHeight + 'px';
+    }
+});
+
+/* ── Role toggle with 360° Y-axis rotation ── */
+let isRotating = false;
+function pickRole(btn) {
+    const card     = document.querySelector('.login-card');
+    const roleBtns = document.querySelectorAll('.role-pill');
+    if (isRotating) return;
+    roleBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('roleInput').value = btn.dataset.role;
+    isRotating = true;
+    card.classList.add('spin-y');
+    card.addEventListener('animationend', function handler() {
+        card.classList.remove('spin-y');
+        isRotating = false;
+        card.removeEventListener('animationend', handler);
+    });
+}
+
+/* ── Password visibility (Login) ── */
+function togglePwd() {
+    const inp  = document.getElementById('pwdInput');
+    const icon = document.getElementById('pwdIcon');
+    if (inp.type === 'password') {
+        inp.type = 'text';
         icon.classList.replace('fa-eye', 'fa-eye-slash');
     } else {
-        input.type = 'password';
+        inp.type = 'password';
         icon.classList.replace('fa-eye-slash', 'fa-eye');
     }
 }
+
+/* ── Password visibility (Register) ── */
+function toggleRegPwd() {
+    const inp  = document.getElementById('regPwdInput');
+    const icon = document.getElementById('regPwdIcon');
+    if (inp.type === 'password') {
+        inp.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        inp.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+
+/* ── Subtle ambient particles + floating dust ── */
+(function() {
+    const canvas = document.getElementById('particleCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let W, H;
+    const particles = [];
+    const COUNT = 70;
+
+    function resize() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        W = canvas.width = rect.width;
+        H = canvas.height = rect.height;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    for (let i = 0; i < COUNT; i++) {
+        const isBright = Math.random() > 0.65;
+        const isLarge = Math.random() > 0.92;
+        particles.push({
+            x: Math.random() * W,
+            y: Math.random() * H,
+            r: isLarge ? Math.random() * 3 + 1.5 : (isBright ? Math.random() * 2.2 + 0.8 : Math.random() * 1.4 + 0.3),
+            dx: (Math.random() - 0.5) * 0.2,
+            dy: (Math.random() - 0.5) * 0.14 - 0.05,
+            opacity: isLarge ? Math.random() * 0.4 + 0.2 : (isBright ? Math.random() * 0.3 + 0.15 : Math.random() * 0.12 + 0.04),
+            color: isLarge ? '200,240,255' : (isBright ? '180,220,255' : '140,190,255'),
+            pulse: Math.random() * Math.PI * 2,
+            pulseSpeed: Math.random() * 0.018 + 0.005,
+            hasGlow: isLarge
+        });
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, W, H);
+        particles.forEach(p => {
+            p.pulse += p.pulseSpeed;
+            const op = p.opacity * (0.65 + 0.35 * Math.sin(p.pulse));
+            if (p.hasGlow) {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${p.color},${op * 0.15})`;
+                ctx.fill();
+            }
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${p.color},${op})`;
+            ctx.fill();
+            p.x += p.dx;
+            p.y += p.dy;
+            if (p.x < -5) p.x = W + 5;
+            if (p.x > W + 5) p.x = -5;
+            if (p.y < -5) p.y = H + 5;
+            if (p.y > H + 5) p.y = -5;
+        });
+        requestAnimationFrame(draw);
+    }
+    draw();
+})();
+
+/* ── Data stream particles rising from platform ── */
+(function() {
+    const canvas = document.getElementById('dataStreamCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let W, H;
+    const streams = [];
+    const STREAM_COUNT = 18;
+
+    function resize() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        W = canvas.width = rect.width;
+        H = canvas.height = rect.height;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    function createStream() {
+        return {
+            x: W * 0.15 + Math.random() * W * 0.7,
+            y: H * 0.85 + Math.random() * H * 0.1,
+            targetY: H * 0.1 + Math.random() * H * 0.3,
+            speed: Math.random() * 0.8 + 0.3,
+            size: Math.random() * 2.5 + 0.8,
+            opacity: Math.random() * 0.5 + 0.2,
+            color: Math.random() > 0.5 ? '80,200,255' : '120,160,255',
+            trail: []
+        };
+    }
+
+    for (let i = 0; i < STREAM_COUNT; i++) {
+        const s = createStream();
+        s.y = H * 0.3 + Math.random() * H * 0.5;
+        streams.push(s);
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, W, H);
+        streams.forEach((s, idx) => {
+            s.y -= s.speed;
+            s.trail.push({x: s.x + (Math.random() - 0.5) * 0.5, y: s.y});
+            if (s.trail.length > 8) s.trail.shift();
+
+            // Draw trail
+            for (let t = 0; t < s.trail.length; t++) {
+                const tp = s.trail[t];
+                const tOp = s.opacity * (t / s.trail.length) * 0.5;
+                ctx.beginPath();
+                ctx.arc(tp.x, tp.y, s.size * 0.5, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${s.color},${tOp})`;
+                ctx.fill();
+            }
+
+            // Draw main particle
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${s.color},${s.opacity})`;
+            ctx.fill();
+
+            // Glow
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.size * 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${s.color},${s.opacity * 0.12})`;
+            ctx.fill();
+
+            if (s.y < s.targetY) {
+                streams[idx] = createStream();
+            }
+        });
+        requestAnimationFrame(draw);
+    }
+    draw();
+})();
 </script>
 {% endblock %}

@@ -1,14 +1,17 @@
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS predictions;
+DROP TABLE IF EXISTS otp_logs;
 
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
+    mobile TEXT NOT NULL,
     password_hash TEXT NOT NULL,
     role TEXT NOT NULL DEFAULT 'student',
     class_name TEXT DEFAULT 'Computer Science 101',
     student_id TEXT UNIQUE,
+    is_verified INTEGER DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -27,7 +30,17 @@ CREATE TABLE predictions (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+CREATE TABLE otp_logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT NOT NULL,
+    otp_hash TEXT NOT NULL,
+    purpose TEXT NOT NULL DEFAULT 'registration',
+    is_used INTEGER DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NOT NULL
+);
+
 -- Insert default admin user (password: admin123)
-INSERT INTO users (name, email, password_hash, role, class_name, student_id)
-VALUES ('Dr. Julian Vance', 'admin@edupredict.com',
-        'scrypt:32768:8:1$salt$adminhashedpassword', 'admin', 'All', 'ADM-0001');
+INSERT INTO users (name, email, mobile, password_hash, role, class_name, student_id, is_verified)
+VALUES ('Dr. Julian Vance', 'admin@edupredict.com', '0000000000',
+        'scrypt:32768:8:1$salt$adminhashedpassword', 'admin', 'All', 'ADM-0001', 1);
