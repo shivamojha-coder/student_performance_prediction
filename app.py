@@ -276,7 +276,7 @@ def _google_login_user(google_id, name, email, picture):
 
 @app.route('/')
 def index():
-    return redirect(url_for('login'))
+    return render_template('index.html')
 
 # ── Auth ──
 

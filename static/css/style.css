@@ -1149,7 +1149,7 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: flex-start;
     position: relative;
     overflow: hidden;
-    padding: 52px 64px;
+    padding: 52px 48px;
 }
 
 /* Remove old patterns */
@@ -1272,8 +1272,10 @@ h1, h2, h3, h4, h5, h6 {
 .auth-hero-content {
     position: relative;
     z-index: 2;
-    max-width: 960px;
+    
     width: 100%;
+    margin-right: auto;
+    margin-left: 0;
 }
 
 /* Brand */
@@ -1313,11 +1315,11 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Description */
 .hero-desc, .auth-subtext {
-    font-size: 1.15rem;
-    color: rgba(255,255,255,0.75);
-    line-height: 1.6;
+    font-size: 1.25rem;
+    color: rgba(255,255,255,0.68);
+    line-height: 1.75;
     margin: 0 0 40px 0;
-    max-width: 500px;
+    max-width: 430px;
 }
 
 /* ────────────────────────────────────────────────────────────
@@ -1326,13 +1328,13 @@ h1, h2, h3, h4, h5, h6 {
 .scene-3d {
     position: relative;
     width: 100%;
-    max-width: 960px;
+    max-width: 1000px;
     margin: 0 auto;
     perspective: 1000px;
     padding-bottom: 30px;
     display: flex;
     align-items: flex-start;
-    gap: 120px;
+    gap: 52px;
 }
 
 /* Hide old figure elements */
@@ -1496,7 +1498,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .holo-panel {
     width: 100%;
-    max-width: 680px;
+    max-width: 750px;
     margin: 0 auto;
     background: linear-gradient(155deg,
         rgba(12,35,90,0.78) 0%,
@@ -2074,7 +2076,7 @@ h1, h2, h3, h4, h5, h6 {
 .hero-stats, .auth-stats {
     display: flex;
     flex-direction: row;
-    gap: 32px;
+    gap: 16px;
     z-index: 6;
     flex-shrink: 0;
     align-self: center;

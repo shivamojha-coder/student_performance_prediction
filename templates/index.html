@@ -50,10 +50,12 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto 1fr auto;
     gap: 0;
-    padding: 48px 52px 40px;
+    padding: 48px 32px 40px;
     height: 100%;
     width: 100%;
+    max-width: 100%;
     align-content: start;
+    justify-self: flex-start;
 }
 
 /* ── Brand area ── */
@@ -172,7 +174,7 @@
 /* ── Floating Dashboard Panel ── */
 .dash-float {
     width: 100%;
-    max-width: 340px;
+    max-width: 480px;
     transform: rotateY(-8deg) rotateX(3deg);
     animation: dashFloat 5s ease-in-out infinite;
 }
@@ -728,14 +730,14 @@
                                 </button>
                             </div>
 
-                            <form method="POST" action="{{ url_for('login') }}" class="login-form" id="loginForm">
+                            <form method="POST" action="{{ url_for('login') }}" class="login-form" id="loginForm" autocomplete="off">
                                 <input type="hidden" name="role" id="roleInput" value="student">
 
                                 <div class="field-group">
                                     <label class="field-label">Student / Admin ID</label>
                                     <div class="field-input">
                                         <i class="fas fa-id-badge"></i>
-                                        <input type="text" name="student_id" placeholder="e.g. STU-8829-21">
+                                        <input type="text" name="student_id" placeholder="e.g. STU-8829-21" autocomplete="off">
                                     </div>
                                 </div>
 
@@ -743,18 +745,18 @@
                                     <label class="field-label">Email Address</label>
                                     <div class="field-input">
                                         <i class="fas fa-envelope"></i>
-                                        <input type="email" name="email" placeholder="name@institution.edu" required>
+                                        <input type="email" name="email" placeholder="name@institution.edu" required autocomplete="off">
                                     </div>
                                 </div>
 
                                 <div class="field-group">
                                     <label class="field-label">
                                         Password
-                                        <a href="#" class="field-link">Forgot password?</a>
+                                        <a href="{{ url_for('forgot_password') }}" class="field-link">Forgot password?</a>
                                     </label>
                                     <div class="field-input">
                                         <i class="fas fa-lock"></i>
-                                        <input type="password" name="password" id="pwdInput" placeholder="••••••••" required>
+                                        <input type="password" name="password" id="pwdInput" placeholder="••••••••" required autocomplete="new-password">
                                         <button type="button" class="pwd-eye" onclick="togglePwd()">
                                             <i class="fas fa-eye" id="pwdIcon"></i>
                                         </button>
@@ -784,18 +786,21 @@
                                 <p class="card-subtitle">Fill in your details to register as a student.</p>
                             </div>
 
-                            <form method="POST" action="{{ url_for('register') }}" class="login-form" id="registerForm">
+                            <form method="POST" action="{{ url_for('register') }}" class="login-form" id="registerForm" autocomplete="off">
                                 <div class="field-group">
                                     <label class="field-label">Full Name</label>
                                     <div class="field-input">
                                         <i class="fas fa-user"></i>
-                                        <input type="text" name="name" placeholder="Alex Johnson" required>
+                                        <input type="text" name="name" placeholder="Alex Johnson" required autocomplete="off">
                                     </div>
                                 </div>
 
                                 <div class="field-group">
                                     <label class="field-label">Email Address</label>
                                     <div class="field-input">
+                                        <i class="fas fa-envelope"></i>
+                                        <input type="email" name="email" placeholder="name@institution.edu" required autocomplete="off">
+                                    </div>
                                         <i class="fas fa-envelope"></i>
                                         <input type="email" name="email" placeholder="name@institution.edu" required>
                                     </div>
