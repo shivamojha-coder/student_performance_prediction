@@ -4,8 +4,10 @@ scikit-learn
 pandas
 numpy
 joblib
+matplotlib
 fpdf2
 google-auth
 google-auth-oauthlib
 google-auth-httplib2
 requests
+seaborn

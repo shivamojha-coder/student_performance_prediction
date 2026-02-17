@@ -1,119 +1,178 @@
-"""
-Train student performance prediction model.
-Uses existing dataset if available, otherwise uses generated data.
-Trains a RandomForestRegressor pipeline and saves to model/student_model.pkl.
-"""
 import pandas as pd
-import numpy as np
-import os
 import joblib
-from sklearn.model_selection import train_test_split, GridSearchCV
+import os
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import r2_score, mean_absolute_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+import numpy as np
+import matplotlib.pyplot as plt
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Use generated dataset with all features (5 input columns)
-dataset_path = os.path.join(BASE_DIR, 'student_data.csv')
+# Ensure ml/models directory exists
+if not os.path.exists('ml/models'):
+    os.makedirs('ml/models')
+
+# Load Dataset
+# Try to find the dataset
+dataset_path = 'ml/data/student_performance_dataset.csv'
 if not os.path.exists(dataset_path):
-    dataset_path = os.path.join(BASE_DIR, 'ml', 'data', 'student_performance_dataset.csv')
+    # Fallback to root if not found, or use absolute path if needed
+    # But user specifically asked for this path.
+    pass
 
-print(f"Loading dataset: {dataset_path}")
 df = pd.read_csv(dataset_path)
+print("\n" + "="*80)
+print("DATA INFO")
+print("="*80 + "\n")
+df.info()
 
-print(f"Dataset shape: {df.shape}")
-print(f"Columns: {list(df.columns)}")
+print("\n" + "="*80)
+print("DATA DESCRIBE")
+print("="*80 + "\n")
+print(df.describe())
 
-# Determine feature/target columns based on available data
-if 'Internal_Marks' in df.columns:
-    # Generated dataset
-    feature_cols = ['Attendance_Rate', 'Study_Hours_per_Week', 'Past_Exam_Scores',
-                    'Assignments_Completed', 'Internal_Marks']
-    # Compute assignment ratio if total available
-    if 'Total_Assignments' in df.columns:
-        df['Assignment_Ratio'] = df['Assignments_Completed'] / df['Total_Assignments'] * 100
-        feature_cols.append('Assignment_Ratio')
-else:
-    # Original dataset columns
-    feature_cols = ['Attendance_Rate', 'Study_Hours_per_Week', 'Past_Exam_Scores']
+print("\n" + "="*80)
+print("MISSING VALUES")
+print("="*80 + "\n")
+print(df.isnull().sum())
 
-target_col = 'Final_Exam_Score'
+#  REMOVE UNWANTED COLUMNS
+print("\n" + "="*80)
+print("REMOVING UNWANTED COLUMNS")
+print("="*80 + "\n")
+# Drop columns if they exist
+cols_to_drop = ['Student_ID', 'Pass_Fail']
+existing_cols_to_drop = [col for col in cols_to_drop if col in df.columns]
+if existing_cols_to_drop:
+    df = df.drop(columns=existing_cols_to_drop)
+    print(f"Dropped: {existing_cols_to_drop}")
 
-# Clean data
-df = df.dropna(subset=feature_cols + [target_col])
+print("Dataset after Removing Unwanted Columns: ")
+print(df.head())
 
-X = df[feature_cols].values
-y = df[target_col].values
+# CREATE TARGET COLUMN
+print("\n" + "="*80)
+print("CREATING TARGET COLUMN (performance_level)")
+print("="*80 + "\n")
+def score_to_level(score):
+    if score <= 40:
+        return 'low'
+    elif score <= 70:
+        return 'avg'
+    else:
+        return 'good'  
+df['performance_level'] = df['Final_Exam_Score'].apply(score_to_level)
+print(df['performance_level'].value_counts())
 
-print(f"\nFeatures: {feature_cols}")
-print(f"Target: {target_col}")
-print(f"Samples: {len(X)}")
 
-# Split
+
+#  SPLIT FEATURES AND TARGET
+print("\n" + "="*80)
+print("SPLITTING FEATURES AND TARGET")
+print("="*80 + "\n")
+
+X = df.drop(columns=['performance_level', 'Final_Exam_Score'])
+y = df['Final_Exam_Score']
+print("Features:", X.columns.to_list())
+print("Target:", y.name)
+
+# ===============================
+# 7. ENCODE CATEGORICAL FEATURES
+print("\n" + "="*80)
+print("ENCODING CATEGORICAL FEATURES")
+print("="*80 + "\n")
+
+# Use a dictionary to store encoders for training phase if we wanted to
+# But adhering to user script logic
+# Using 'object' instead of 'str' for compatibility
+for col in X.select_dtypes(include=["object"]).columns:
+    le = LabelEncoder()
+    X[col] = le.fit_transform(X[col])
+    print(f"Encoded: {col}")
+
+
+# ===============================
+# 8. SPLIT DATA INTO TRAINING AND TESTING SETS
+print("\n" + "="*80)
+print("SPLITTING DATA INTO TRAINING AND TESTING SETS")
+print("="*80 + "\n")
+
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+print(f"Training set size: {X_train.shape[0]} samples")
+print(f"Testing set size: {X_test.shape[0]} samples")
 
-# Build pipeline
-pipeline = Pipeline([
-    ('scaler', StandardScaler()),
-    ('model', RandomForestRegressor(random_state=42))
-])
+# ===============================
+# 9. TRAIN RANDOM FOREST CLASSIFIER
+print("\n" + "="*80)
+print("\n" + "="*80)
+print("TRAINING RANDOM FOREST REGRESSOR")
+print("="*80 + "\n")
 
-# Hyperparameter tuning
-param_grid = {
-    'model__n_estimators': [100, 200],
-    'model__max_depth': [10, 20, None],
-    'model__min_samples_split': [2, 5],
-}
+model = RandomForestRegressor(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+print("Random Forest model training complete.")
 
-print("\nTraining with GridSearchCV...")
-grid = GridSearchCV(pipeline, param_grid, cv=5, scoring='r2', n_jobs=-1, verbose=0)
-grid.fit(X_train, y_train)
+# Check Feature Importance
+importances = model.feature_importances_
+feature_names = X.columns
+feature_importance_df = pd.DataFrame({'Feature': feature_names, 'Importance': importances})
+feature_importance_df = feature_importance_df.sort_values(by='Importance', ascending=False)
 
-best_model = grid.best_estimator_
-print(f"Best params: {grid.best_params_}")
+print("\n" + "="*80)
+print("FEATURE IMPORTANCE")
+print("="*80 + "\n")
+print(feature_importance_df)
 
-# Evaluate
-y_pred = best_model.predict(X_test)
-r2 = r2_score(y_test, y_pred)
+
+
+# Combine X and y for correlation
+df_corr = X.copy()
+df_corr['target'] = y
+correlation = df_corr.corr()['target'].sort_values(ascending=False)
+
+print("Feature Correlation with Target:")
+print(correlation)
+print("-" * 40)
+
+# 10.2 Training vs Testing Accuracy (R^2 Score)
+train_score = model.score(X_train, y_train)
+test_score = model.score(X_test, y_test)
+
+print(f"Training R^2 Score: {train_score:.4f}")
+print(f"Testing R^2 Score:  {test_score:.4f}")
+
+# 10.3 Output Regression Metrics
+y_pred = model.predict(X_test)
+rmse = np.sqrt(mean_squared_error(y_test, y_pred))
 mae = mean_absolute_error(y_test, y_pred)
 
-print(f"\n{'='*40}")
-print(f"Model Evaluation Results:")
-print(f"  R² Score: {r2:.4f}")
-print(f"  MAE:      {mae:.4f}")
-print(f"{'='*40}")
+print(f"RMSE: {rmse:.4f}")
+print(f"MAE:  {mae:.4f}")
+print("-" * 40)
 
-# Save model and metadata
-model_dir = os.path.join(BASE_DIR, 'model')
-os.makedirs(model_dir, exist_ok=True)
 
-model_artifact = {
-    'pipeline': best_model,
-    'feature_cols': feature_cols,
-    'r2_score': r2,
-    'mae': mae,
-    'best_params': grid.best_params_
-}
 
-model_path = os.path.join(model_dir, 'student_model.pkl')
-joblib.dump(model_artifact, model_path)
-print(f"\nModel saved to: {model_path}")
 
-# Performance label logic
-def get_performance_label(score):
-    if score >= 75:
-        return 'Good'
-    elif score >= 50:
-        return 'Average'
-    else:
-        return 'Poor'
+# ===============================
+# 11. SAVE MODEL AND ENCODERS
+# ===============================
+if not os.path.exists('ml/models'):
+    os.makedirs('ml/models')
 
-# Test label distribution
-labels = [get_performance_label(s) for s in y_pred]
-from collections import Counter
-label_counts = Counter(labels)
-print(f"\nPredicted label distribution:")
-for label, count in sorted(label_counts.items()):
-    print(f"  {label}: {count}")
+# Save Model
+joblib.dump(model, 'ml/models/student_model.pkl')
+print("\nModel saved to ml/models/student_model.pkl")
+
+# Save feature encoders (one LabelEncoder per categorical feature)
+feature_encoders = {}
+X_final = df.drop(columns=['performance_level', 'Final_Exam_Score'])
+for col in X_final.select_dtypes(include=["object"]).columns:
+    le_col = LabelEncoder()
+    X_final[col] = le_col.fit_transform(X_final[col])
+    feature_encoders[col] = le_col
+    
+joblib.dump(feature_encoders, 'ml/models/feature_encoders.pkl')
+print("Feature Encoders saved to ml/models/feature_encoders.pkl")
+
+
