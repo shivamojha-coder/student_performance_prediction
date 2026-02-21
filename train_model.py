@@ -8,20 +8,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-# Ensure ml/models directory exists
-if not os.path.exists('ml/models'):
-    os.makedirs('ml/models')
-
-# Load Dataset
-# Try to find the dataset
-dataset_path = 'ml/data/student_performance_dataset.csv'
-if not os.path.exists(dataset_path):
-    # Fallback to root if not found, or use absolute path if needed
-    # But user specifically asked for this path.
-    pass
-
-df = pd.read_csv(dataset_path)
+df = pd.read_csv('ml/data/student_performance_dataset.csv')
 print("\n" + "="*80)
 print("DATA INFO")
 print("="*80 + "\n")
@@ -41,38 +28,21 @@ print(df.isnull().sum())
 print("\n" + "="*80)
 print("REMOVING UNWANTED COLUMNS")
 print("="*80 + "\n")
+
 # Drop columns if they exist
 cols_to_drop = ['Student_ID', 'Pass_Fail']
-existing_cols_to_drop = [col for col in cols_to_drop if col in df.columns]
-if existing_cols_to_drop:
-    df = df.drop(columns=existing_cols_to_drop)
-    print(f"Dropped: {existing_cols_to_drop}")
+df = df.drop(columns=cols_to_drop, errors='ignore')
+print(f"Dropped columns: {cols_to_drop}")
 
 print("Dataset after Removing Unwanted Columns: ")
 print(df.head())
-
-# CREATE TARGET COLUMN
-print("\n" + "="*80)
-print("CREATING TARGET COLUMN (performance_level)")
-print("="*80 + "\n")
-def score_to_level(score):
-    if score <= 40:
-        return 'low'
-    elif score <= 70:
-        return 'avg'
-    else:
-        return 'good'  
-df['performance_level'] = df['Final_Exam_Score'].apply(score_to_level)
-print(df['performance_level'].value_counts())
-
-
 
 #  SPLIT FEATURES AND TARGET
 print("\n" + "="*80)
 print("SPLITTING FEATURES AND TARGET")
 print("="*80 + "\n")
 
-X = df.drop(columns=['performance_level', 'Final_Exam_Score'])
+X = df.drop(columns=['Final_Exam_Score'])
 y = df['Final_Exam_Score']
 print("Features:", X.columns.to_list())
 print("Target:", y.name)
@@ -83,12 +53,12 @@ print("\n" + "="*80)
 print("ENCODING CATEGORICAL FEATURES")
 print("="*80 + "\n")
 
-# Use a dictionary to store encoders for training phase if we wanted to
-# But adhering to user script logic
-# Using 'object' instead of 'str' for compatibility
+# Store encoders in a dictionary for later use in predictions
+feature_encoders = {}
 for col in X.select_dtypes(include=["object"]).columns:
     le = LabelEncoder()
     X[col] = le.fit_transform(X[col])
+    feature_encoders[col] = le  # Store encoder for each column
     print(f"Encoded: {col}")
 
 
@@ -164,14 +134,7 @@ if not os.path.exists('ml/models'):
 joblib.dump(model, 'ml/models/student_model.pkl')
 print("\nModel saved to ml/models/student_model.pkl")
 
-# Save feature encoders (one LabelEncoder per categorical feature)
-feature_encoders = {}
-X_final = df.drop(columns=['performance_level', 'Final_Exam_Score'])
-for col in X_final.select_dtypes(include=["object"]).columns:
-    le_col = LabelEncoder()
-    X_final[col] = le_col.fit_transform(X_final[col])
-    feature_encoders[col] = le_col
-    
+# Save the feature encoders that were used during training
 joblib.dump(feature_encoders, 'ml/models/feature_encoders.pkl')
 print("Feature Encoders saved to ml/models/feature_encoders.pkl")
 
