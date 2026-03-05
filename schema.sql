@@ -10,6 +10,7 @@ CREATE TABLE users (
     password_hash TEXT NOT NULL,
     role TEXT NOT NULL DEFAULT 'student',
     class_name TEXT DEFAULT 'Computer Science 101',
+    section TEXT DEFAULT 'A',
     student_id TEXT UNIQUE,
     is_verified INTEGER DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -24,6 +25,7 @@ CREATE TABLE predictions (
     assignments REAL NOT NULL,
     internal_marks REAL NOT NULL,
     class_name TEXT NOT NULL,
+    section TEXT NOT NULL DEFAULT 'A',
     predicted_score REAL NOT NULL,
     performance_label TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

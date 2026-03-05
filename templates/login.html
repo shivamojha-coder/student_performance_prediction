@@ -286,14 +286,14 @@
                                 </button>
                             </div>
 
-                            <form method="POST" action="{{ url_for('login') }}" class="login-form" id="loginForm">
+                            <form method="POST" action="{{ url_for('login') }}" class="login-form" id="loginForm" autocomplete="off">
                                 <input type="hidden" name="role" id="roleInput" value="student">
 
                                 <div class="field-group">
                                     <label class="field-label">Student / Admin ID</label>
                                     <div class="field-input">
                                         <i class="fas fa-id-badge"></i>
-                                        <input type="text" name="student_id" placeholder="e.g. STU-8829-21">
+                                        <input type="text" name="student_id" placeholder="e.g. STU-8829-21" autocomplete="off" data-no-autofill="true">
                                     </div>
                                 </div>
 
@@ -301,7 +301,7 @@
                                     <label class="field-label">Email Address</label>
                                     <div class="field-input">
                                         <i class="fas fa-envelope"></i>
-                                        <input type="email" name="email" placeholder="name@institution.edu" required>
+                                        <input type="email" name="email" placeholder="name@institution.edu" required autocomplete="off" data-no-autofill="true">
                                     </div>
                                 </div>
 
@@ -312,7 +312,7 @@
                                     </label>
                                     <div class="field-input">
                                         <i class="fas fa-lock"></i>
-                                        <input type="password" name="password" id="pwdInput" placeholder="••••••••" required>
+                                        <input type="password" name="password" id="pwdInput" placeholder="••••••••" required autocomplete="new-password" data-no-autofill="true">
                                         <button type="button" class="pwd-eye" onclick="togglePwd()">
                                             <i class="fas fa-eye" id="pwdIcon"></i>
                                         </button>
@@ -342,12 +342,12 @@
                                 <p class="card-subtitle">Fill in your details to register as a student.</p>
                             </div>
 
-                            <form method="POST" action="{{ url_for('register') }}" class="login-form" id="registerForm">
+                            <form method="POST" action="{{ url_for('register') }}" class="login-form" id="registerForm" autocomplete="off">
                                 <div class="field-group">
                                     <label class="field-label">Full Name</label>
                                     <div class="field-input">
                                         <i class="fas fa-user"></i>
-                                        <input type="text" name="name" placeholder="Alex Johnson" required>
+                                        <input type="text" name="name" placeholder="Alex Johnson" required autocomplete="off" data-no-autofill="true">
                                     </div>
                                 </div>
 
@@ -355,7 +355,7 @@
                                     <label class="field-label">Email Address</label>
                                     <div class="field-input">
                                         <i class="fas fa-envelope"></i>
-                                        <input type="email" name="email" placeholder="name@institution.edu" required>
+                                        <input type="email" name="email" placeholder="name@institution.edu" required autocomplete="off" data-no-autofill="true">
                                     </div>
                                 </div>
 
@@ -364,7 +364,7 @@
                                     <div class="field-input">
                                         <i class="fas fa-phone"></i>
                                         <input type="tel" name="mobile" placeholder="10-digit mobile number" required
-                                               pattern="[0-9]{10}" maxlength="10" inputmode="numeric">
+                                               pattern="[0-9]{10}" maxlength="10" inputmode="numeric" autocomplete="off">
                                     </div>
                                 </div>
 
@@ -372,7 +372,7 @@
                                     <label class="field-label">Password</label>
                                     <div class="field-input">
                                         <i class="fas fa-lock"></i>
-                                        <input type="password" name="password" id="regPwdInput" placeholder="Min. 6 characters" required minlength="6">
+                                        <input type="password" name="password" id="regPwdInput" placeholder="Min. 6 characters" required minlength="6" autocomplete="new-password" data-no-autofill="true">
                                         <button type="button" class="pwd-eye" onclick="toggleRegPwd()">
                                             <i class="fas fa-eye" id="regPwdIcon"></i>
                                         </button>
@@ -442,7 +442,28 @@ function showPanel(panel) {
 window.addEventListener('DOMContentLoaded', () => {
     const viewport = document.querySelector('.slide-viewport');
     const loginPanel = document.getElementById('panelLogin');
-    if (viewport && loginPanel) {
+    const registerPanel = document.getElementById('panelRegister');
+    const track = document.getElementById('slideTrack');
+    const tabs = document.querySelectorAll('#authTabs .card-tab');
+    
+    // Check if tab=register is in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const tab = urlParams.get('tab');
+    
+    if (tab === 'register') {
+        // Disable transition for instant switch
+        track.style.transition = 'none';
+        track.style.transform = 'translateX(-50%)';
+        tabs.forEach(t => t.classList.remove('active'));
+        tabs[1].classList.add('active');
+        if (viewport && registerPanel) {
+            viewport.style.height = registerPanel.scrollHeight + 'px';
+        }
+        // Re-enable transition after a frame
+        requestAnimationFrame(() => {
+            track.style.transition = '';
+        });
+    } else if (viewport && loginPanel) {
         viewport.style.height = loginPanel.scrollHeight + 'px';
     }
 });
@@ -625,5 +646,36 @@ function toggleRegPwd() {
     }
     draw();
 })();
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const loginGuardedInputs = document.querySelectorAll('#loginForm input[data-no-autofill="true"]');
+    const registerGuardedInputs = document.querySelectorAll('#registerForm input[data-no-autofill="true"]');
+
+    loginGuardedInputs.forEach(function(input) {
+        input.value = '';
+        input.setAttribute('readonly', 'readonly');
+
+        const unlock = function() {
+            input.removeAttribute('readonly');
+        };
+
+        input.addEventListener('focus', unlock, { once: true });
+        input.addEventListener('pointerdown', unlock, { once: true });
+    });
+
+    registerGuardedInputs.forEach(function(input) {
+        input.value = '';
+    });
+
+    setTimeout(function() {
+        loginGuardedInputs.forEach(function(input) {
+            input.value = '';
+        });
+        registerGuardedInputs.forEach(function(input) {
+            input.value = '';
+        });
+    }, 150);
+});
 </script>
 {% endblock %}

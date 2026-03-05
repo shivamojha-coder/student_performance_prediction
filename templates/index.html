@@ -2,563 +2,46 @@
 {% block title %}SuccessPredict — Predicting Success, Empowering Futures{% endblock %}
 {% block body_class %}auth-page{% endblock %}
 
-{% block head %}
-<style>
-/* ═══════════════════════════════════════════════════════
-   LANDING PAGE — LEFT HERO OVERRIDE
-   Clean modern SaaS design. Right form panel untouched.
-   ═══════════════════════════════════════════════════════ */
-
-/* Override the hero panel background to a clean gradient */
-.login-hero {
-    background: linear-gradient(155deg, #0a1628 0%, #0d1f3c 30%, #0f2547 55%, #0c1d38 80%, #080f20 100%) !important;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Remove old nebula / vol-light / heavy glow layers */
-.login-hero .nebula,
-.login-hero .vol-light,
-.login-hero .holo-glow,
-.login-hero .holo-flare,
-.login-hero .holo-side,
-.login-hero .holo-sweep,
-.login-hero .holo-scanline,
-.login-hero .light-ray,
-.login-hero .light-beam,
-.login-hero .platform-wrap,
-.login-hero .data-stream-canvas,
-.login-hero .star-field {
-    display: none !important;
-}
-
-/* Subtle star canvas */
-#starCanvasLanding {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
-}
-
-/* Hero content layout — structured grid */
-.login-hero .hero-content {
-    position: relative;
-    z-index: 10;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr auto;
-    gap: 0;
-    padding: 48px 32px 40px;
-    height: 100%;
-    width: 100%;
-    max-width: 100%;
-    align-content: start;
-    justify-self: flex-start;
-}
-
-/* ── Brand area ── */
-.login-hero .hero-brand {
-    grid-column: 1 / -1;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 40px;
-}
-
-.login-hero .hero-brand-icon {
-    width: 44px;
-    height: 44px;
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
-}
-
-.login-hero .hero-brand-text {
-    font-family: 'Inter', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #ffffff;
-    letter-spacing: 0.01em;
-}
-
-/* ── Left text column ── */
-.hero-text-col {
-    grid-column: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-right: 40px;
-}
-
-.login-hero .hero-headline {
-    font-family: 'Inter', sans-serif;
-    font-size: clamp(2rem, 3.2vw, 2.8rem);
-    font-weight: 800;
-    line-height: 1.15;
-    color: #ffffff;
-    margin-bottom: 18px;
-    letter-spacing: -0.02em;
-    text-shadow: none;
-}
-
-.login-hero .hero-desc {
-    font-size: 0.92rem;
-    line-height: 1.65;
-    color: rgba(170, 190, 220, 0.75);
-    margin-bottom: 28px;
-    max-width: 380px;
-    font-weight: 400;
-}
-
-/* ── CTA Buttons ── */
-.hero-cta-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 0;
-}
-
-.hero-cta-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 28px;
-    border: none;
-    border-radius: 10px;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.88rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-.hero-cta-btn--primary {
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-    color: #fff;
-    box-shadow: 0 4px 18px rgba(59, 130, 246, 0.35);
-}
-
-.hero-cta-btn--primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(59, 130, 246, 0.45);
-}
-
-.hero-cta-btn--secondary {
-    background: transparent;
-    color: rgba(200, 215, 245, 0.85);
-    border: 1.5px solid rgba(100, 150, 220, 0.25);
-}
-
-.hero-cta-btn--secondary:hover {
-    background: rgba(255,255,255,0.04);
-    border-color: rgba(100, 150, 220, 0.45);
-    transform: translateY(-2px);
-}
-
-/* ── Right dashboard column ── */
-.hero-dashboard-col {
-    grid-column: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    perspective: 900px;
-}
-
-/* ── Floating Dashboard Panel ── */
-.dash-float {
-    width: 100%;
-    max-width: 480px;
-    transform: rotateY(-8deg) rotateX(3deg);
-    animation: dashFloat 5s ease-in-out infinite;
-}
-
-@keyframes dashFloat {
-    0%, 100% { transform: rotateY(-8deg) rotateX(3deg) translateY(0); }
-    50% { transform: rotateY(-8deg) rotateX(3deg) translateY(-8px); }
-}
-
-.dash-card {
-    background: linear-gradient(145deg, rgba(12, 24, 58, 0.92), rgba(8, 18, 45, 0.95));
-    border: 1px solid rgba(60, 120, 220, 0.18);
-    border-radius: 16px;
-    padding: 22px;
-    box-shadow:
-        0 8px 40px rgba(0, 0, 0, 0.35),
-        0 0 0 1px rgba(60, 120, 220, 0.08),
-        0 0 20px rgba(40, 80, 180, 0.06);
-    position: relative;
-    overflow: hidden;
-}
-
-/* Subtle grid overlay */
-.dash-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-        linear-gradient(rgba(60,120,255,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(60,120,255,0.02) 1px, transparent 1px);
-    background-size: 18px 18px;
-    border-radius: 16px;
-    pointer-events: none;
-}
-
-.dash-hdr {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 18px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid rgba(60, 120, 220, 0.08);
-}
-
-.dash-hdr-title {
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: rgba(200, 215, 240, 0.85);
-    letter-spacing: 0.03em;
-}
-
-.dash-hdr-status {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.65rem;
-    color: rgba(74, 222, 128, 0.85);
-}
-
-.dash-hdr-dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: #4ade80;
-    animation: dotPulse 2.5s ease-in-out infinite;
-}
-
-@keyframes dotPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-}
-
-/* Dashboard widgets */
-.dash-wgt {
-    background: rgba(10, 22, 55, 0.5);
-    border: 1px solid rgba(50, 100, 200, 0.08);
-    border-radius: 10px;
-    padding: 14px;
-    margin-bottom: 12px;
-}
-
-.dash-wgt:last-child {
-    margin-bottom: 0;
-}
-
-.dash-wgt-lbl {
-    font-size: 0.65rem;
-    font-weight: 600;
-    color: rgba(160, 180, 215, 0.7);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 10px;
-}
-
-.dash-wgt-hdr {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.dash-badge-live {
-    font-size: 0.55rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 2px 8px;
-    border-radius: 5px;
-    background: rgba(74, 222, 128, 0.15);
-    color: #4ade80;
-    border: 1px solid rgba(74, 222, 128, 0.2);
-}
-
-/* SVG chart */
-.dash-line-svg {
-    width: 100%;
-    height: 45px;
-    display: block;
-}
-
-/* Bottom row: bars + accuracy */
-.dash-bottom {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-/* Bar chart */
-.dash-bars {
-    display: flex;
-    align-items: flex-end;
-    gap: 5px;
-    height: 55px;
-}
-
-.dash-bar-col {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-}
-
-.dash-bar {
-    width: 100%;
-    max-width: 20px;
-    border-radius: 3px 3px 1px 1px;
-    min-height: 5px;
-}
-
-.dash-bar--1 { height: 32px; background: linear-gradient(to top, #3b82f6, #60a5fa); }
-.dash-bar--2 { height: 42px; background: linear-gradient(to top, #6366f1, #818cf8); }
-.dash-bar--3 { height: 25px; background: linear-gradient(to top, #8b5cf6, #a78bfa); }
-.dash-bar--4 { height: 48px; background: linear-gradient(to top, #ec4899, #f472b6); }
-.dash-bar--5 { height: 52px; background: linear-gradient(to top, #f59e0b, #fbbf24); }
-.dash-bar--6 { height: 30px; background: linear-gradient(to top, #14b8a6, #2dd4bf); }
-
-.dash-bar-lbl {
-    font-size: 0.5rem;
-    color: rgba(140, 160, 200, 0.5);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-}
-
-/* Accuracy ring */
-.dash-acc {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.dash-acc-ring-wrap {
-    position: relative;
-    width: 50px;
-    height: 50px;
-    flex-shrink: 0;
-}
-
-.dash-acc-ring {
-    width: 50px;
-    height: 50px;
-    transform: rotate(-90deg);
-}
-
-.dash-acc-ring-bg {
-    fill: none;
-    stroke: rgba(40, 60, 120, 0.35);
-    stroke-width: 4;
-}
-
-.dash-acc-ring-fill {
-    fill: none;
-    stroke: url(#accGrad);
-    stroke-width: 4;
-    stroke-linecap: round;
-    stroke-dasharray: 138;
-    stroke-dashoffset: 2.76;
-}
-
-.dash-acc-ring-txt {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #60a5fa;
-}
-
-.dash-acc-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.dash-acc-item-val {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #fff;
-    line-height: 1;
-}
-
-.dash-acc-item-lbl {
-    font-size: 0.5rem;
-    color: rgba(140, 160, 200, 0.5);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-/* ── Platform bar ── */
-.dash-platform {
-    margin-top: 16px;
-    display: flex;
-    justify-content: center;
-}
-
-.dash-platform-bar {
-    width: 60%;
-    height: 6px;
-    background: linear-gradient(90deg,
-        rgba(60, 130, 255, 0.05),
-        rgba(60, 130, 255, 0.2),
-        rgba(60, 130, 255, 0.05));
-    border-radius: 3px;
-    box-shadow: 0 0 12px rgba(60, 130, 255, 0.1);
-}
-
-/* ── Stat Cards Row ── */
-.hero-stats-row {
-    grid-column: 1 / -1;
-    display: flex;
-    gap: 16px;
-    margin-top: 36px;
-    align-self: end;
-}
-
-.hero-stat-card-v2 {
-    padding: 20px 24px;
-    background: rgba(12, 24, 55, 0.5);
-    border: 1px solid rgba(60, 120, 220, 0.12);
-    border-radius: 14px;
-    backdrop-filter: blur(8px);
-    min-width: 155px;
-    transition: all 0.3s ease;
-}
-
-.hero-stat-card-v2:hover {
-    border-color: rgba(60, 120, 220, 0.25);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-}
-
-.hero-stat-icon {
-    width: 30px;
-    height: 30px;
-    background: rgba(59, 130, 246, 0.12);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 12px;
-    color: #60a5fa;
-    font-size: 0.75rem;
-}
-
-.hero-stat-val {
-    display: block;
-    font-family: 'Inter', sans-serif;
-    font-size: 1.7rem;
-    font-weight: 800;
-    color: #ffffff;
-    line-height: 1;
-    margin-bottom: 5px;
-    letter-spacing: -0.02em;
-}
-
-.hero-stat-lbl {
-    display: block;
-    font-size: 0.68rem;
-    font-weight: 500;
-    color: rgba(140, 165, 210, 0.6);
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-}
-
-/* ── Soft ambient diagonal line ── */
-.hero-diag-line {
-    position: absolute;
-    z-index: 2;
-    pointer-events: none;
-}
-
-.hero-diag-line--1 {
-    top: 0;
-    left: 15%;
-    width: 1px;
-    height: 100%;
-    background: linear-gradient(to bottom, transparent, rgba(60,120,220,0.06) 40%, rgba(60,120,220,0.06) 60%, transparent);
-}
-
-.hero-diag-line--2 {
-    top: 0;
-    right: 30%;
-    width: 1px;
-    height: 100%;
-    background: linear-gradient(to bottom, transparent, rgba(60,120,220,0.04) 30%, rgba(60,120,220,0.04) 70%, transparent);
-}
-
-/* ── Responsive ── */
-@media (max-width: 900px) {
-    .login-hero .hero-content {
-        grid-template-columns: 1fr;
-        padding: 36px 28px 30px;
-    }
-    .hero-dashboard-col {
-        grid-column: 1;
-        margin-top: 24px;
-    }
-    .hero-stats-row {
-        grid-column: 1;
-    }
-    .hero-text-col {
-        padding-right: 0;
-    }
-}
-
-@media (max-width: 600px) {
-    .hero-stats-row {
-        flex-direction: column;
-    }
-    .hero-cta-row {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .dash-float {
-        transform: rotateY(-4deg) rotateX(2deg);
-    }
-}
-</style>
-{% endblock %}
-
 {% block content %}
 <div class="login-wrapper">
     <!-- ───── Left Hero Panel ───── -->
     <div class="login-hero">
-        <!-- Subtle star particles -->
-        <canvas id="starCanvasLanding"></canvas>
+        <!-- Star field dots -->
+        <div class="star-field">
+            <div class="star" style="top:5%;left:12%;animation-delay:0s"></div>
+            <div class="star" style="top:15%;left:78%;animation-delay:1.2s"></div>
+            <div class="star" style="top:28%;left:45%;animation-delay:0.6s"></div>
+            <div class="star" style="top:8%;left:62%;animation-delay:2.1s"></div>
+            <div class="star" style="top:42%;left:8%;animation-delay:0.3s"></div>
+            <div class="star" style="top:55%;left:85%;animation-delay:1.8s"></div>
+            <div class="star" style="top:68%;left:22%;animation-delay:0.9s"></div>
+            <div class="star" style="top:72%;left:55%;animation-delay:2.4s"></div>
+            <div class="star" style="top:88%;left:35%;animation-delay:1.5s"></div>
+            <div class="star" style="top:35%;left:92%;animation-delay:0.4s"></div>
+            <div class="star star--bright" style="top:18%;left:30%;animation-delay:0.7s"></div>
+            <div class="star star--bright" style="top:60%;left:70%;animation-delay:1.9s"></div>
+            <div class="star star--bright" style="top:82%;left:15%;animation-delay:2.6s"></div>
+            <div class="star star--bright" style="top:45%;left:50%;animation-delay:1.1s"></div>
+        </div>
 
-        <!-- Soft ambient lines -->
-        <div class="hero-diag-line hero-diag-line--1"></div>
-        <div class="hero-diag-line hero-diag-line--2"></div>
+        <!-- Nebula layers for depth -->
+        <div class="nebula nebula--1"></div>
+        <div class="nebula nebula--2"></div>
 
-        <!-- Hidden legacy elements (kept for base.html compatibility) -->
-        <div class="star-field" style="display:none"></div>
-        <div class="nebula nebula--1" style="display:none"></div>
-        <div class="nebula nebula--2" style="display:none"></div>
-        <canvas id="particleCanvas" class="hero-particles" style="display:none"></canvas>
+        <!-- Volumetric light layers -->
+        <div class="vol-light vol-light--top"></div>
+        <div class="vol-light vol-light--mid"></div>
+        <div class="vol-light vol-light--bottom"></div>
+        <div class="vol-light vol-light--core"></div>
+
+        <!-- Subtle ambient particles -->
+        <canvas id="particleCanvas" class="hero-particles"></canvas>
 
         <!-- Content -->
         <div class="hero-content">
-            <!-- Brand -->
             <div class="hero-brand">
                 <div class="hero-brand-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
                         <path d="M3 17L9 11L13 15L21 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                         <path d="M17 7H21V11" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -566,139 +49,212 @@
                 <span class="hero-brand-text">SuccessPredict</span>
             </div>
 
-            <!-- Left text column -->
-            <div class="hero-text-col">
-                <h1 class="hero-headline">Predicting Success,<br>Empowering Futures.</h1>
+            <h1 class="hero-headline">Predicting Success,<br>Empowering Futures.</h1>
 
-                <p class="hero-desc">
-                    Join thousands of students using AI-driven predictions
-                    to track academic performance and get personalized
-                    improvement plans.
-                </p>
+            <p class="hero-desc">
+                Join thousands of students using AI-driven predictions
+                to track academic performance and get personalized
+                improvement plans.
+            </p>
 
-                <div class="hero-cta-row">
-                    <a href="{{ url_for('login') }}" class="hero-cta-btn hero-cta-btn--primary">
-                        <i class="fas fa-rocket"></i> Get Started
-                    </a>
-                    <a href="#" class="hero-cta-btn hero-cta-btn--secondary">
-                        <i class="fas fa-play-circle"></i> Watch Demo
-                    </a>
+            <!-- ── Cinematic 3D Scene: Holographic Dashboard + Platform ── -->
+            <div class="scene-3d">
+
+                <!-- Stat cards — horizontal, left of dashboard -->
+                <div class="hero-stats">
+                    <div class="hero-stat-card">
+                        <div class="stat-icon-wrap"><i class="fas fa-bullseye"></i></div>
+                        <span class="hero-stat-num">98%</span>
+                        <span class="hero-stat-label">Accuracy Rate</span>
+                    </div>
+                    <div class="hero-stat-card">
+                        <div class="stat-icon-wrap"><i class="fas fa-users"></i></div>
+                        <span class="hero-stat-num">15k+</span>
+                        <span class="hero-stat-label">Active Students</span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Right dashboard column -->
-            <div class="hero-dashboard-col">
-                <div class="dash-float">
-                    <div class="dash-card">
-                        <!-- Header -->
-                        <div class="dash-hdr">
-                            <span class="dash-hdr-title">Analytics Dashboard</span>
-                            <div class="dash-hdr-status">
-                                <span class="dash-hdr-dot"></span>
-                                Connected
+                <!-- Dashboard + Platform wrapper -->
+                <div class="scene-main">
+                    <!-- Data stream particles -->
+                    <canvas id="dataStreamCanvas" class="data-stream-canvas"></canvas>
+
+                    <!-- Multiple light rays emitting upward from platform -->
+                    <div class="light-ray light-ray--1"></div>
+                    <div class="light-ray light-ray--2"></div>
+                    <div class="light-ray light-ray--3"></div>
+                    <div class="light-ray light-ray--4"></div>
+                    <div class="light-ray light-ray--5"></div>
+                    <div class="light-ray light-ray--6"></div>
+                    <div class="light-ray light-ray--7"></div>
+                    <!-- Central beam -->
+                    <div class="light-beam"></div>
+                    <div class="light-beam light-beam--wide"></div>
+                    <div class="light-beam light-beam--ultra"></div>
+
+                <!-- Holographic Analytics Dashboard Panel -->
+                <div class="holo-dashboard">
+                    <!-- Holographic flare effects -->
+                    <div class="holo-flare holo-flare--tl"></div>
+                    <div class="holo-flare holo-flare--br"></div>
+
+                    <!-- Main glass panel -->
+                    <div class="holo-panel">
+                        <!-- Scan line effect -->
+                        <div class="holo-scanline"></div>
+                        <!-- Horizontal sweep line -->
+                        <div class="holo-sweep"></div>
+                        <!-- Top bar with dots -->
+                        <div class="holo-topbar">
+                            <div class="holo-dot holo-dot--red"></div>
+                            <div class="holo-dot holo-dot--yellow"></div>
+                            <div class="holo-dot holo-dot--green"></div>
+                            <div class="holo-topbar-title">Analytics Dashboard</div>
+                            <div class="holo-topbar-status">
+                                <span class="holo-status-dot"></span> Connected
                             </div>
                         </div>
-
-                        <!-- Line chart widget -->
-                        <div class="dash-wgt">
-                            <div class="dash-wgt-hdr">
-                                <span class="dash-wgt-lbl">Student Performance Trends</span>
-                                <span class="dash-badge-live">Live</span>
+                        <!-- Dashboard content grid -->
+                        <div class="holo-grid">
+                            <!-- Big line chart spanning full width top -->
+                            <div class="holo-widget holo-widget--chart-wide">
+                                <div class="holo-widget-header">
+                                    <div class="holo-widget-label">Student Performance Trends</div>
+                                    <div class="holo-widget-badge">Live</div>
+                                </div>
+                                <svg class="holo-line-chart" viewBox="0 0 200 50" preserveAspectRatio="none">
+                                    <defs>
+                                        <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stop-color="rgba(80,200,255,0.35)"/>
+                                            <stop offset="100%" stop-color="rgba(80,200,255,0)"/>
+                                        </linearGradient>
+                                        <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+                                            <stop offset="0%" stop-color="rgba(60,180,255,0.6)"/>
+                                            <stop offset="50%" stop-color="rgba(100,220,255,1)"/>
+                                            <stop offset="100%" stop-color="rgba(60,180,255,0.6)"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <polygon points="0,45 12,38 28,42 48,28 68,32 88,18 108,22 130,12 155,16 178,8 200,14 200,50 0,50" fill="url(#chartFill)"/>
+                                    <polyline points="0,45 12,38 28,42 48,28 68,32 88,18 108,22 130,12 155,16 178,8 200,14" fill="none" stroke="url(#lineGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <!-- Glow dot at peak -->
+                                    <circle cx="178" cy="8" r="3" fill="rgba(100,220,255,0.9)">
+                                        <animate attributeName="r" values="2.5;4;2.5" dur="2s" repeatCount="indefinite"/>
+                                        <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
+                                    </circle>
+                                </svg>
                             </div>
-                            <svg class="dash-line-svg" viewBox="0 0 300 55" preserveAspectRatio="none">
-                                <defs>
-                                    <linearGradient id="lnGrad" x1="0" y1="0" x2="1" y2="0">
-                                        <stop offset="0%" stop-color="#3b82f6"/>
-                                        <stop offset="100%" stop-color="#60a5fa"/>
-                                    </linearGradient>
-                                    <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stop-color="rgba(59,130,246,0.25)"/>
-                                        <stop offset="100%" stop-color="rgba(59,130,246,0)"/>
-                                    </linearGradient>
-                                    <linearGradient id="accGrad" x1="0" y1="0" x2="1" y2="1">
-                                        <stop offset="0%" stop-color="#3b82f6"/>
-                                        <stop offset="100%" stop-color="#60a5fa"/>
-                                    </linearGradient>
-                                </defs>
-                                <!-- Grid -->
-                                <line x1="0" y1="18" x2="300" y2="18" stroke="rgba(60,120,255,0.04)" stroke-width="0.5"/>
-                                <line x1="0" y1="36" x2="300" y2="36" stroke="rgba(60,120,255,0.04)" stroke-width="0.5"/>
-                                <!-- Area -->
-                                <path d="M0,45 C20,40 50,38 80,30 C110,22 140,28 170,20 C200,14 230,16 260,10 C280,7 295,8 300,6 L300,55 L0,55 Z"
-                                      fill="url(#areaGrad)" opacity="0.7"/>
-                                <!-- Line -->
-                                <path d="M0,45 C20,40 50,38 80,30 C110,22 140,28 170,20 C200,14 230,16 260,10 C280,7 295,8 300,6"
-                                      fill="none" stroke="url(#lnGrad)" stroke-width="2" stroke-linecap="round"/>
-                                <!-- Pulse dot -->
-                                <circle cx="296" cy="6" r="3" fill="#60a5fa">
-                                    <animate attributeName="r" values="2.5;4;2.5" dur="2.5s" repeatCount="indefinite"/>
-                                    <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>
-                                </circle>
-                            </svg>
-                        </div>
-
-                        <!-- Bottom: bar chart + accuracy -->
-                        <div class="dash-bottom">
-                            <div class="dash-wgt">
-                                <span class="dash-wgt-lbl">Subject Grades</span>
-                                <div class="dash-bars">
-                                    <div class="dash-bar-col"><div class="dash-bar dash-bar--1"></div><span class="dash-bar-lbl">CS</span></div>
-                                    <div class="dash-bar-col"><div class="dash-bar dash-bar--2"></div><span class="dash-bar-lbl">ML</span></div>
-                                    <div class="dash-bar-col"><div class="dash-bar dash-bar--3"></div><span class="dash-bar-lbl">UE</span></div>
-                                    <div class="dash-bar-col"><div class="dash-bar dash-bar--4"></div><span class="dash-bar-lbl">DB</span></div>
-                                    <div class="dash-bar-col"><div class="dash-bar dash-bar--5"></div><span class="dash-bar-lbl">AI</span></div>
-                                    <div class="dash-bar-col"><div class="dash-bar dash-bar--6"></div><span class="dash-bar-lbl">OS</span></div>
+                            <!-- Bar chart -->
+                            <div class="holo-widget holo-widget--bars">
+                                <div class="holo-widget-label">Subject Grades</div>
+                                <div class="holo-bars">
+                                    <div class="holo-bar-col">
+                                        <div class="holo-bar" style="height:55%"></div>
+                                        <span class="holo-bar-label">CS</span>
+                                    </div>
+                                    <div class="holo-bar-col">
+                                        <div class="holo-bar holo-bar--accent" style="height:88%"></div>
+                                        <span class="holo-bar-label">ML</span>
+                                    </div>
+                                    <div class="holo-bar-col">
+                                        <div class="holo-bar" style="height:42%"></div>
+                                        <span class="holo-bar-label">DB</span>
+                                    </div>
+                                    <div class="holo-bar-col">
+                                        <div class="holo-bar holo-bar--accent" style="height:76%"></div>
+                                        <span class="holo-bar-label">UI</span>
+                                    </div>
+                                    <div class="holo-bar-col">
+                                        <div class="holo-bar" style="height:92%"></div>
+                                        <span class="holo-bar-label">AI</span>
+                                    </div>
+                                    <div class="holo-bar-col">
+                                        <div class="holo-bar holo-bar--accent" style="height:60%"></div>
+                                        <span class="holo-bar-label">SE</span>
+                                    </div>
+                                    <div class="holo-bar-col">
+                                        <div class="holo-bar" style="height:70%"></div>
+                                        <span class="holo-bar-label">OS</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="dash-wgt">
-                                <span class="dash-wgt-lbl">Accuracy</span>
-                                <div class="dash-acc">
-                                    <div class="dash-acc-ring-wrap">
-                                        <svg class="dash-acc-ring" viewBox="0 0 50 50">
-                                            <circle class="dash-acc-ring-bg" cx="25" cy="25" r="22"/>
-                                            <circle class="dash-acc-ring-fill" cx="25" cy="25" r="22"/>
-                                        </svg>
-                                        <span class="dash-acc-ring-txt">98%</span>
-                                    </div>
-                                    <div class="dash-acc-meta">
-                                        <div>
-                                            <span class="dash-acc-item-val">4.2k</span>
-                                            <span class="dash-acc-item-lbl">Users</span>
+                            <!-- Donut + Metrics combined -->
+                            <div class="holo-widget holo-widget--donut-area">
+                                <div class="holo-widget-label">Accuracy</div>
+                                <div class="holo-donut-row">
+                                    <svg class="holo-donut" viewBox="0 0 44 44">
+                                        <circle cx="22" cy="22" r="17" fill="none" stroke="rgba(100,200,255,0.1)" stroke-width="4.5"/>
+                                        <circle cx="22" cy="22" r="17" fill="none" stroke="url(#donutGrad)" stroke-width="4.5"
+                                            stroke-dasharray="88 107" stroke-dashoffset="27" stroke-linecap="round">
+                                            <animate attributeName="stroke-dashoffset" values="107;27" dur="1.5s" fill="freeze" calcMode="spline" keySplines="0.4 0 0.2 1"/>
+                                        </circle>
+                                        <defs>
+                                            <linearGradient id="donutGrad" x1="0" y1="0" x2="1" y2="1">
+                                                <stop offset="0%" stop-color="rgba(60,180,255,0.9)"/>
+                                                <stop offset="100%" stop-color="rgba(120,80,255,0.7)"/>
+                                            </linearGradient>
+                                        </defs>
+                                        <text x="22" y="24" fill="rgba(220,240,255,0.95)" font-size="8" text-anchor="middle" font-weight="800">98%</text>
+                                    </svg>
+                                    <div class="holo-donut-stats">
+                                        <div class="holo-micro-stat">
+                                            <span class="holo-micro-num">4.2k</span>
+                                            <span class="holo-micro-lbl">Users</span>
                                         </div>
-                                        <div>
-                                            <span class="dash-acc-item-val">92%</span>
-                                            <span class="dash-acc-item-lbl">Pass</span>
+                                        <div class="holo-micro-stat">
+                                            <span class="holo-micro-num">92%</span>
+                                            <span class="holo-micro-lbl">Pass</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Soft platform indicator -->
-                    <div class="dash-platform">
-                        <div class="dash-platform-bar"></div>
+                    <!-- Side mini-panels -->
+                    <div class="holo-side holo-side--left">
+                        <div class="holo-side-title">Progress</div>
+                        <div class="holo-mini-bar"><div class="holo-mini-fill" style="width:70%"></div></div>
+                        <div class="holo-mini-bar"><div class="holo-mini-fill holo-mini-fill--cyan" style="width:50%"></div></div>
+                        <div class="holo-mini-bar"><div class="holo-mini-fill" style="width:85%"></div></div>
                     </div>
+                    <div class="holo-side holo-side--right">
+                        <div class="holo-side-title">Risk</div>
+                        <svg class="holo-mini-pie" viewBox="0 0 32 32">
+                            <circle cx="16" cy="16" r="13" fill="none" stroke="rgba(100,200,255,0.12)" stroke-width="3"/>
+                            <circle cx="16" cy="16" r="13" fill="none" stroke="rgba(100,200,255,0.6)" stroke-width="3"
+                                stroke-dasharray="55 82" stroke-dashoffset="20" stroke-linecap="round"/>
+                            <circle cx="16" cy="16" r="13" fill="none" stroke="rgba(255,120,200,0.45)" stroke-width="3"
+                                stroke-dasharray="20 82" stroke-dashoffset="-35" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <!-- Glow aura -->
+                    <div class="holo-glow"></div>
                 </div>
-            </div>
 
-            <!-- Stat Cards -->
-            <div class="hero-stats-row">
-                <div class="hero-stat-card-v2">
-                    <div class="hero-stat-icon"><i class="fas fa-bullseye"></i></div>
-                    <span class="hero-stat-val">98%</span>
-                    <span class="hero-stat-lbl">Accuracy Rate</span>
+                <!-- Real 3D Floating Platform -->
+                <div class="platform-wrap">
+                    <div class="platform-body">
+                        <div class="platform-surface">
+                            <div class="platform-grid-lines"></div>
+                            <div class="platform-reflection"></div>
+                        </div>
+                        <div class="platform-edge"></div>
+                        <div class="platform-edge-bottom"></div>
+                    </div>
+                    <div class="platform-ring"></div>
+                    <div class="platform-ring platform-ring--mid"></div>
+                    <div class="platform-ring platform-ring--outer"></div>
+                    <div class="platform-ring platform-ring--glow"></div>
+                    <div class="platform-underglow"></div>
+                    <div class="platform-underglow platform-underglow--wide"></div>
+                    <div class="platform-underglow platform-underglow--ambient"></div>
+                    <div class="platform-drop-shadow"></div>
                 </div>
-                <div class="hero-stat-card-v2">
-                    <div class="hero-stat-icon"><i class="fas fa-users"></i></div>
-                    <span class="hero-stat-val">15k+</span>
-                    <span class="hero-stat-lbl">Active Students</span>
-                </div>
+                </div><!-- /scene-main -->
             </div>
         </div>
     </div>
 
-    <!-- ───── Right Form Panel (UNCHANGED) ───── -->
+    <!-- ───── Right Form Panel ───── -->
     <div class="login-form-panel">
         <div class="login-card-perspective" id="cardPerspective">
             <div class="login-card">
@@ -737,7 +293,7 @@
                                     <label class="field-label">Student / Admin ID</label>
                                     <div class="field-input">
                                         <i class="fas fa-id-badge"></i>
-                                        <input type="text" name="student_id" placeholder="e.g. STU-8829-21" autocomplete="off">
+                                        <input type="text" name="student_id" placeholder="e.g. STU-8829-21" autocomplete="off" data-no-autofill="true">
                                     </div>
                                 </div>
 
@@ -745,7 +301,7 @@
                                     <label class="field-label">Email Address</label>
                                     <div class="field-input">
                                         <i class="fas fa-envelope"></i>
-                                        <input type="email" name="email" placeholder="name@institution.edu" required autocomplete="off">
+                                        <input type="email" name="email" placeholder="name@institution.edu" required autocomplete="off" data-no-autofill="true">
                                     </div>
                                 </div>
 
@@ -756,7 +312,7 @@
                                     </label>
                                     <div class="field-input">
                                         <i class="fas fa-lock"></i>
-                                        <input type="password" name="password" id="pwdInput" placeholder="••••••••" required autocomplete="new-password">
+                                        <input type="password" name="password" id="pwdInput" placeholder="••••••••" required autocomplete="new-password" data-no-autofill="true">
                                         <button type="button" class="pwd-eye" onclick="togglePwd()">
                                             <i class="fas fa-eye" id="pwdIcon"></i>
                                         </button>
@@ -791,7 +347,7 @@
                                     <label class="field-label">Full Name</label>
                                     <div class="field-input">
                                         <i class="fas fa-user"></i>
-                                        <input type="text" name="name" placeholder="Alex Johnson" required autocomplete="off">
+                                        <input type="text" name="name" placeholder="Alex Johnson" required autocomplete="off" data-no-autofill="true">
                                     </div>
                                 </div>
 
@@ -799,10 +355,7 @@
                                     <label class="field-label">Email Address</label>
                                     <div class="field-input">
                                         <i class="fas fa-envelope"></i>
-                                        <input type="email" name="email" placeholder="name@institution.edu" required autocomplete="off">
-                                    </div>
-                                        <i class="fas fa-envelope"></i>
-                                        <input type="email" name="email" placeholder="name@institution.edu" required>
+                                        <input type="email" name="email" placeholder="name@institution.edu" required autocomplete="off" data-no-autofill="true">
                                     </div>
                                 </div>
 
@@ -819,7 +372,7 @@
                                     <label class="field-label">Password</label>
                                     <div class="field-input">
                                         <i class="fas fa-lock"></i>
-                                        <input type="password" name="password" id="regPwdInput" placeholder="Min. 6 characters" required minlength="6">
+                                        <input type="password" name="password" id="regPwdInput" placeholder="Min. 6 characters" required minlength="6" autocomplete="new-password" data-no-autofill="true">
                                         <button type="button" class="pwd-eye" onclick="toggleRegPwd()">
                                             <i class="fas fa-eye" id="regPwdIcon"></i>
                                         </button>
@@ -827,16 +380,27 @@
                                 </div>
 
                                 <div class="field-group">
-                                    <label class="field-label">Class / Section</label>
+                                    <label class="field-label">Class</label>
                                     <div class="field-input">
                                         <i class="fas fa-chalkboard"></i>
                                         <select name="class_name" class="slide-select">
-                                            <option value="Computer Science 101">Computer Science 101</option>
-                                            <option value="Advanced Math">Advanced Math</option>
-                                            <option value="Database Systems">Database Systems</option>
-                                            <option value="ML Fundamentals">ML Fundamentals</option>
-                                            <option value="UI/UX Design">UI/UX Design</option>
-                                            <option value="Statistical Analysis">Statistical Analysis</option>
+                                            <option value="CSE Core">CSE Core</option>
+                                            <option value="CSE AIML">CSE AIML</option>
+                                            <option value="CSE Cyber Security">CSE Cyber Security</option>
+                                            <option value="CSE Data Science">CSE Data Science</option>
+                                            <option value="CSE IoT">CSE IoT</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="field-group">
+                                    <label class="field-label">Section</label>
+                                    <div class="field-input">
+                                        <i class="fas fa-layer-group"></i>
+                                        <select name="section" class="slide-select">
+                                            <option value="A">Section A</option>
+                                            <option value="B">Section B</option>
+                                            <option value="C">Section C</option>
                                         </select>
                                     </div>
                                 </div>
@@ -849,6 +413,10 @@
                                 <a href="{{ url_for('google_login') }}" class="sso-btn" style="flex:1">
                                     <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#4285F4" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#34A853" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59A14.5 14.5 0 019.5 24c0-1.59.28-3.14.76-4.59l-7.98-6.19A23.99 23.99 0 000 24c0 3.77.87 7.34 2.44 10.51l8.09-5.92z"/><path fill="#EA4335" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
                                     Continue with Google
+                                </a>
+                                <a href="#" class="sso-btn" style="flex:1">
+                                    <svg width="18" height="18" viewBox="0 0 23 23"><path fill="#f35325" d="M1 1h10v10H1z"/><path fill="#81bc06" d="M12 1h10v10H12z"/><path fill="#05a6f0" d="M1 12h10v10H1z"/><path fill="#ffba08" d="M12 12h10v10H12z"/></svg>
+                                    Continue with Microsoft
                                 </a>
                             </div>
                         </div>
@@ -873,6 +441,7 @@ function showPanel(panel) {
 
     track.style.transform = isReg ? 'translateX(-50%)' : 'translateX(0)';
 
+    /* Dynamically set viewport height to active panel */
     const activePanel = document.getElementById(isReg ? 'panelRegister' : 'panelLogin');
     requestAnimationFrame(() => {
         const viewport = document.querySelector('.slide-viewport');
@@ -880,6 +449,7 @@ function showPanel(panel) {
     });
 }
 
+/* Set initial viewport height on load */
 window.addEventListener('DOMContentLoaded', () => {
     const viewport = document.querySelector('.slide-viewport');
     const loginPanel = document.getElementById('panelLogin');
@@ -932,50 +502,170 @@ function toggleRegPwd() {
     }
 }
 
-/* ── Subtle star particles ── */
+/* ── Subtle ambient particles + floating dust ── */
 (function() {
-    const canvas = document.getElementById('starCanvasLanding');
+    const canvas = document.getElementById('particleCanvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    let stars = [];
-    const STAR_COUNT = 120;
+    let W, H;
+    const particles = [];
+    const COUNT = 70;
 
     function resize() {
         const rect = canvas.parentElement.getBoundingClientRect();
-        canvas.width = rect.width;
-        canvas.height = rect.height;
+        W = canvas.width = rect.width;
+        H = canvas.height = rect.height;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    for (let i = 0; i < COUNT; i++) {
+        const isBright = Math.random() > 0.65;
+        const isLarge = Math.random() > 0.92;
+        particles.push({
+            x: Math.random() * W,
+            y: Math.random() * H,
+            r: isLarge ? Math.random() * 3 + 1.5 : (isBright ? Math.random() * 2.2 + 0.8 : Math.random() * 1.4 + 0.3),
+            dx: (Math.random() - 0.5) * 0.2,
+            dy: (Math.random() - 0.5) * 0.14 - 0.05,
+            opacity: isLarge ? Math.random() * 0.4 + 0.2 : (isBright ? Math.random() * 0.3 + 0.15 : Math.random() * 0.12 + 0.04),
+            color: isLarge ? '200,240,255' : (isBright ? '180,220,255' : '140,190,255'),
+            pulse: Math.random() * Math.PI * 2,
+            pulseSpeed: Math.random() * 0.018 + 0.005,
+            hasGlow: isLarge
+        });
     }
 
-    function initStars() {
-        stars = [];
-        for (let i = 0; i < STAR_COUNT; i++) {
-            stars.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                r: Math.random() * 1.2 + 0.2,
-                alpha: Math.random() * 0.5 + 0.15,
-                twinkle: Math.random() * 0.012 + 0.003,
-                offset: Math.random() * Math.PI * 2
-            });
-        }
-    }
-
-    function draw(time) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        stars.forEach(s => {
-            const a = s.alpha * (0.5 + 0.5 * Math.sin(time * s.twinkle + s.offset));
+    function draw() {
+        ctx.clearRect(0, 0, W, H);
+        particles.forEach(p => {
+            p.pulse += p.pulseSpeed;
+            const op = p.opacity * (0.65 + 0.35 * Math.sin(p.pulse));
+            if (p.hasGlow) {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${p.color},${op * 0.15})`;
+                ctx.fill();
+            }
             ctx.beginPath();
-            ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(180, 210, 255, ${a})`;
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${p.color},${op})`;
             ctx.fill();
+            p.x += p.dx;
+            p.y += p.dy;
+            if (p.x < -5) p.x = W + 5;
+            if (p.x > W + 5) p.x = -5;
+            if (p.y < -5) p.y = H + 5;
+            if (p.y > H + 5) p.y = -5;
         });
         requestAnimationFrame(draw);
     }
-
-    resize();
-    initStars();
-    requestAnimationFrame(draw);
-    window.addEventListener('resize', () => { resize(); initStars(); });
+    draw();
 })();
+
+/* ── Data stream particles rising from platform ── */
+(function() {
+    const canvas = document.getElementById('dataStreamCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let W, H;
+    const streams = [];
+    const STREAM_COUNT = 18;
+
+    function resize() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        W = canvas.width = rect.width;
+        H = canvas.height = rect.height;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    function createStream() {
+        return {
+            x: W * 0.15 + Math.random() * W * 0.7,
+            y: H * 0.85 + Math.random() * H * 0.1,
+            targetY: H * 0.1 + Math.random() * H * 0.3,
+            speed: Math.random() * 0.8 + 0.3,
+            size: Math.random() * 2.5 + 0.8,
+            opacity: Math.random() * 0.5 + 0.2,
+            color: Math.random() > 0.5 ? '80,200,255' : '120,160,255',
+            trail: []
+        };
+    }
+
+    for (let i = 0; i < STREAM_COUNT; i++) {
+        const s = createStream();
+        s.y = H * 0.3 + Math.random() * H * 0.5;
+        streams.push(s);
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, W, H);
+        streams.forEach((s, idx) => {
+            s.y -= s.speed;
+            s.trail.push({x: s.x + (Math.random() - 0.5) * 0.5, y: s.y});
+            if (s.trail.length > 8) s.trail.shift();
+
+            // Draw trail
+            for (let t = 0; t < s.trail.length; t++) {
+                const tp = s.trail[t];
+                const tOp = s.opacity * (t / s.trail.length) * 0.5;
+                ctx.beginPath();
+                ctx.arc(tp.x, tp.y, s.size * 0.5, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${s.color},${tOp})`;
+                ctx.fill();
+            }
+
+            // Draw main particle
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${s.color},${s.opacity})`;
+            ctx.fill();
+
+            // Glow
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.size * 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${s.color},${s.opacity * 0.12})`;
+            ctx.fill();
+
+            if (s.y < s.targetY) {
+                streams[idx] = createStream();
+            }
+        });
+        requestAnimationFrame(draw);
+    }
+    draw();
+})();
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const loginGuardedInputs = document.querySelectorAll('#loginForm input[data-no-autofill="true"]');
+    const registerGuardedInputs = document.querySelectorAll('#registerForm input[data-no-autofill="true"]');
+
+    loginGuardedInputs.forEach(function(input) {
+        input.value = '';
+        input.setAttribute('readonly', 'readonly');
+
+        const unlock = function() {
+            input.removeAttribute('readonly');
+        };
+
+        input.addEventListener('focus', unlock, { once: true });
+        input.addEventListener('pointerdown', unlock, { once: true });
+    });
+
+    registerGuardedInputs.forEach(function(input) {
+        input.value = '';
+    });
+
+    setTimeout(function() {
+        loginGuardedInputs.forEach(function(input) {
+            input.value = '';
+        });
+        registerGuardedInputs.forEach(function(input) {
+            input.value = '';
+        });
+    }, 150);
+});
 </script>
 {% endblock %}

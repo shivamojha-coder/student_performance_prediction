@@ -13,64 +13,70 @@
         <form method="POST" action="{{ url_for('student_predict') }}" class="prediction-form" id="predictionForm">
             <div class="form-row">
                 <div class="form-group flex-1">
-                    <label class="form-label"><i class="fas fa-graduation-cap"></i> Current Class / Section</label>
-                    <select name="class_name" class="form-input form-select">
-                        <option value="Computer Science 101" {% if session.get('class_name')=='Computer Science 101' %}selected{% endif %}>Computer Science - Section A</option>
-                        <option value="Advanced Math" {% if session.get('class_name')=='Advanced Math' %}selected{% endif %}>Advanced Math</option>
-                        <option value="Database Systems" {% if session.get('class_name')=='Database Systems' %}selected{% endif %}>Database Systems</option>
-                        <option value="ML Fundamentals" {% if session.get('class_name')=='ML Fundamentals' %}selected{% endif %}>ML Fundamentals</option>
-                        <option value="UI/UX Design" {% if session.get('class_name')=='UI/UX Design' %}selected{% endif %}>UI/UX Design</option>
-                        <option value="Statistical Analysis" {% if session.get('class_name')=='Statistical Analysis' %}selected{% endif %}>Statistical Analysis</option>
-                    </select>
+                    <label class="form-label"><i class="fas fa-graduation-cap"></i> Current Class</label>
+                    <input type="text" class="form-input" value="{{ user_info.class_name }}" readonly disabled style="background: var(--dark-50); cursor: not-allowed;">
                 </div>
                 <div class="form-group flex-1">
-                    <label class="form-label"><i class="fas fa-book"></i> Subject Focus</label>
-                    <select name="subject_focus" class="form-input form-select">
-                        <option value="Machine Learning Fundamentals">Machine Learning Fundamentals</option>
-                        <option value="Data Structures">Data Structures</option>
-                        <option value="Calculus III">Calculus III</option>
-                        <option value="Database Design">Database Design</option>
-                    </select>
+                    <label class="form-label"><i class="fas fa-layer-group"></i> Section</label>
+                    <input type="text" class="form-input" value="Section {{ user_info.section }}" readonly disabled style="background: var(--dark-50); cursor: not-allowed;">
                 </div>
             </div>
 
             <div class="form-section">
-                <h3 class="form-section-title">Engagement & Dedication</h3>
+                <h3 class="form-section-title">Academic & Personal Profile</h3>
                 <div class="form-row">
                     <div class="form-group flex-1">
-                        <label class="form-label">
-                            Attendance (%)
-                            <span class="form-hint">Required: 75%</span>
-                        </label>
+                        <label class="form-label">Attendance (%)</label>
                         <input type="number" name="attendance" placeholder="e.g. 85" class="form-input"
                                min="0" max="100" step="0.1" required>
                     </div>
                     <div class="form-group flex-1">
-                        <label class="form-label">Daily Study Hours</label>
-                        <input type="number" name="study_hours" placeholder="e.g. 4.5" class="form-input"
-                               min="0" max="24" step="0.5" required>
+                        <label class="form-label">Weekly Study Hours</label>
+                        <input type="number" name="study_hours" placeholder="e.g. 30" class="form-input"
+                               min="0" max="168" step="1" required>
+                    </div>
+                </div>
+                <div class="form-row mt-15">
+                    <div class="form-group flex-1">
+                        <label class="form-label">Previous Exam Score (0-100)</label>
+                        <input type="number" name="previous_marks" placeholder="e.g. 75" class="form-input"
+                               min="0" max="100" step="0.1" required>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label class="form-label">Gender</label>
+                        <select name="gender" class="form-input" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
                     </div>
                 </div>
             </div>
 
             <div class="form-section">
-                <h3 class="form-section-title">Current Standing</h3>
+                <h3 class="form-section-title">Environmental Factors</h3>
                 <div class="form-row form-row-3">
                     <div class="form-group">
-                        <label class="form-label">Previous Semester GPA</label>
-                        <input type="number" name="previous_marks" placeholder="0.00 - 4.00" class="form-input"
-                               min="0" max="100" step="0.1" required>
-                        <span class="form-hint-below">Out of 100 or scale</span>
+                        <label class="form-label">Extracurriculars</label>
+                        <select name="extracurricular" class="form-input" required>
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Internal Marks (Avg)</label>
-                        <input type="number" name="internal_marks" placeholder="Out of 30" class="form-input"
-                               min="0" max="30" step="0.1" required>
+                        <label class="form-label">Internet Access</label>
+                        <select name="internet_access" class="form-input" required>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Assignment Completion</label>
-                        <input type="number" name="assignments" placeholder="Completed / Total" class="form-input"
-                               min="0" max="20" step="1" required>
+                        <label class="form-label">Parental Education</label>
+                        <select name="parental_education" class="form-input" required>
+                            <option value="High School">High School</option>
+                            <option value="Bachelors">Bachelors</option>
+                            <option value="Masters">Masters</option>
+                            <option value="PhD">PhD</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -107,7 +113,7 @@
                 <div class="history-item">
                     <div class="history-date">{{ pred.created_at[:10] if pred.created_at else 'N/A' }}</div>
                     <div class="history-details">
-                        <span class="history-class">{{ pred.class_name }}</span>
+                        <span class="history-class">{{ pred.class_name }} ({{ pred.section }})</span>
                         <div class="history-scores">
                             <div class="history-metric">
                                 <span class="metric-label">Predicted</span>

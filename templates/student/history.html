@@ -20,7 +20,6 @@
                         <th>Attendance</th>
                         <th>Study Hours</th>
                         <th>Prev. Marks</th>
-                        <th>Internal</th>
                         <th>Predicted Score</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -31,11 +30,10 @@
                     <tr>
                         <td class="text-muted">{{ loop.index }}</td>
                         <td>{{ pred.created_at[:10] if pred.created_at else 'N/A' }}</td>
-                        <td><span class="text-bold">{{ pred.class_name }}</span></td>
+                        <td><span class="text-bold">{{ pred.class_name }} (Section {{ pred.section }})</span></td>
                         <td>{{ pred.attendance|round(1) }}%</td>
                         <td>{{ pred.study_hours|round(1) }}h</td>
                         <td>{{ pred.previous_marks|round(1) }}</td>
-                        <td>{{ pred.internal_marks|round(1) }}/30</td>
                         <td>
                             <span class="score-highlight score-{{ pred.performance_label|lower }}">
                                 {{ pred.predicted_score }}%

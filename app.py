@@ -99,20 +99,42 @@ def admin_required(f):
 
 # ─── ML helper ───────────────────────────────────────────────────────
 
-def predict_score(attendance, study_hours, previous_marks, assignments, internal_marks):
-    """Load model and predict score."""
+def predict_score(attendance, study_hours, previous_marks, gender, extracurricular, internet_access, parental_education):
+    """Load model and predict score using 7 features."""
     model_artifact = joblib.load(config.MODEL_PATH)
-    pipeline = model_artifact['pipeline']
-    feature_cols = model_artifact['feature_cols']
+    encoders = joblib.load('ml/models/feature_encoders.pkl')
+    
+    # Handle different model formats
+    if isinstance(model_artifact, dict):
+        pipeline = model_artifact.get('pipeline', model_artifact.get('model'))
+    elif isinstance(model_artifact, list):
+        pipeline = model_artifact[0]
+    else:
+        pipeline = model_artifact
 
-    # Build feature vector matching training features
-    features = [attendance, study_hours, previous_marks]
-    if 'Assignments_Completed' in feature_cols or 'Internal_Marks' in feature_cols:
-        features.append(assignments)
-        features.append(internal_marks)
-    if 'Assignment_Ratio' in feature_cols:
-        ratio = (assignments / 15) * 100  # Assume ~15 total assignments
-        features.append(ratio)
+    # Encode categorical features
+    # Order: Gender, Study_Hours_per_Week, Attendance_Rate, Past_Exam_Scores, 
+    #        Parental_Education_Level, Internet_Access_at_Home, Extracurricular_Activities
+    
+    try:
+        e_gender = encoders['Gender'].transform([gender])[0]
+        e_ed = encoders['Parental_Education_Level'].transform([parental_education])[0]
+        e_internet = encoders['Internet_Access_at_Home'].transform([internet_access])[0]
+        e_extra = encoders['Extracurricular_Activities'].transform([extracurricular])[0]
+    except Exception as e:
+        # Fallback if encoding fails
+        print(f"Encoding error: {e}")
+        e_gender, e_ed, e_internet, e_extra = 0, 0, 1, 0
+
+    features = [
+        e_gender,
+        study_hours,
+        attendance,
+        previous_marks,
+        e_ed,
+        e_internet,
+        e_extra
+    ]
 
     X = np.array(features).reshape(1, -1)
     score = float(pipeline.predict(X)[0])
@@ -301,6 +323,7 @@ def login():
             session['role'] = user['role']
             session['email'] = user['email']
             session['class_name'] = user['class_name']
+            session['section'] = user['section']
             session['student_id'] = user['student_id']
 
             flash(f'Welcome back, {user["name"]}!', 'success')
@@ -319,32 +342,33 @@ def register():
         email = request.form.get('email', '').strip()
         mobile = request.form.get('mobile', '').strip()
         password = request.form.get('password', '')
-        class_name = request.form.get('class_name', 'Computer Science 101')
+        class_name = request.form.get('class_name', 'CSE Core')
+        section = request.form.get('section', 'A')
 
         if not name or not email or not mobile or not password:
             flash('All fields are required.', 'danger')
-            return render_template('register.html')
+            return redirect(url_for('login', tab='register'))
 
         # Validate mobile number (digits only, 10 digits)
         import re
         if not re.match(r'^\d{10}$', mobile):
             flash('Please enter a valid 10-digit mobile number.', 'danger')
-            return render_template('register.html')
+            return redirect(url_for('login', tab='register'))
 
         # Validate email format
         if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
             flash('Please enter a valid email address.', 'danger')
-            return render_template('register.html')
+            return redirect(url_for('login', tab='register'))
 
         if len(password) < 6:
             flash('Password must be at least 6 characters.', 'danger')
-            return render_template('register.html')
+            return redirect(url_for('login', tab='register'))
 
         db = get_db()
         existing = db.execute('SELECT id FROM users WHERE email = ?', (email,)).fetchone()
         if existing:
             flash('Email already registered.', 'danger')
-            return render_template('register.html')
+            return redirect(url_for('login', tab='register'))
 
         # Generate & send OTP
         otp_code = generate_otp()
@@ -353,7 +377,7 @@ def register():
         except Exception as e:
             print(f'[OTP] Email send error: {e}')
             flash('Failed to send verification email. Please try again.', 'danger')
-            return render_template('register.html')
+            return redirect(url_for('login', tab='register'))
 
         store_otp(email, otp_code)
 
@@ -364,11 +388,12 @@ def register():
             'mobile': mobile,
             'password': password,
             'class_name': class_name,
+            'section': section,
         }
         flash('A 6-digit verification code has been sent to your email.', 'info')
         return redirect(url_for('verify_otp_page'))
 
-    return render_template('register.html')
+    return redirect(url_for('login', tab='register'))
 
 @app.route('/verify-otp', methods=['GET', 'POST'])
 def verify_otp_page():
@@ -387,10 +412,10 @@ def verify_otp_page():
             student_id = generate_student_id()
             password_hash = generate_password_hash(pending['password'])
             cursor = db.execute(
-                'INSERT INTO users (name, email, mobile, password_hash, role, class_name, student_id, is_verified) '
-                'VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                'INSERT INTO users (name, email, mobile, password_hash, role, class_name, section, student_id, is_verified) '
+                'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
                 (pending['name'], email, pending.get('mobile', ''), password_hash,
-                 'student', pending['class_name'], student_id, 1)
+                 'student', pending['class_name'], pending.get('section', 'A'), student_id, 1)
             )
             db.commit()
             new_user_id = cursor.lastrowid
@@ -403,6 +428,7 @@ def verify_otp_page():
             session['role'] = 'student'
             session['email'] = email
             session['class_name'] = pending['class_name']
+            session['section'] = pending.get('section', 'A')
             session['student_id'] = student_id
 
             flash(f'Welcome, {pending["name"]}! Your account has been created successfully.', 'success')
@@ -604,11 +630,15 @@ def logout():
 @login_required
 def student_dashboard():
     db = get_db()
+    user_info = db.execute(
+        'SELECT class_name, section FROM users WHERE id = ?',
+        (session['user_id'],)
+    ).fetchone()
     recent = db.execute(
         'SELECT * FROM predictions WHERE user_id = ? ORDER BY created_at DESC LIMIT 5',
         (session['user_id'],)
     ).fetchall()
-    return render_template('student/dashboard.html', recent_predictions=recent)
+    return render_template('student/dashboard.html', recent_predictions=recent, user_info=user_info)
 
 @app.route('/student/predict', methods=['POST'])
 @login_required
@@ -617,28 +647,40 @@ def student_predict():
         attendance = float(request.form.get('attendance', 0))
         study_hours = float(request.form.get('study_hours', 0))
         previous_marks = float(request.form.get('previous_marks', 0))
-        assignments = float(request.form.get('assignments', 0))
-        internal_marks = float(request.form.get('internal_marks', 0))
-        class_name = request.form.get('class_name', session.get('class_name', 'Computer Science 101'))
+        
+        # New categorical features
+        gender = request.form.get('gender', 'Male')
+        extracurricular = request.form.get('extracurricular', 'No')
+        internet_access = request.form.get('internet_access', 'Yes')
+        parental_education = request.form.get('parental_education', 'High School')
+
+        db = get_db()
+        user_info = db.execute('SELECT class_name, section FROM users WHERE id = ?', (session['user_id'],)).fetchone()
+        if not user_info:
+            flash('User profile not found.', 'danger')
+            return redirect(url_for('student_dashboard'))
+            
+        class_name = user_info['class_name']
+        section = user_info['section']
 
         # Validate ranges
         if not (0 <= attendance <= 100):
             flash('Attendance must be between 0 and 100.', 'danger')
             return redirect(url_for('student_dashboard'))
-        if not (0 <= study_hours <= 80):
-            flash('Study hours must be between 0 and 80.', 'danger')
+        if not (0 <= study_hours <= 168):
+            flash('Weekly study hours must be between 0 and 168.', 'danger')
             return redirect(url_for('student_dashboard'))
 
-        score, label = predict_score(attendance, study_hours, previous_marks, assignments, internal_marks)
+        score, label = predict_score(attendance, study_hours, previous_marks, 
+                                     gender, extracurricular, internet_access, parental_education)
 
-        db = get_db()
         cursor = db.execute(
             'INSERT INTO predictions '
             '(user_id, attendance, study_hours, previous_marks, assignments, internal_marks, '
-            'class_name, predicted_score, performance_label) '
-            'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            'class_name, section, predicted_score, performance_label) '
+            'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             (session['user_id'], attendance, study_hours, previous_marks,
-             assignments, internal_marks, class_name, score, label)
+             0, 0, class_name, section, score, label) # assignments/internal set to 0
         )
         db.commit()
         prediction_id = cursor.lastrowid
@@ -679,6 +721,189 @@ def student_history():
         (session['user_id'],)
     ).fetchall()
     return render_template('student/history.html', predictions=predictions)
+
+# ── Goal Setting & Improvement Plan ──
+
+@app.route('/student/goal-setting', methods=['GET', 'POST'])
+@login_required
+def student_goal_setting():
+    db = get_db()
+    user_id = session['user_id']
+    
+    # Fetch latest prediction to get current baseline
+    current = db.execute(
+        'SELECT * FROM predictions WHERE user_id = ? ORDER BY created_at DESC LIMIT 1',
+        (user_id,)
+    ).fetchone()
+    
+    # Fetch existing goal
+    goal = db.execute(
+        'SELECT * FROM student_goals WHERE user_id = ? ORDER BY created_at DESC LIMIT 1',
+        (user_id,)
+    ).fetchone()
+
+    if request.method == 'POST':
+        try:
+            target = float(request.form.get('target_percentage', 0))
+            if not current:
+                flash('Please complete at least one prediction first to set a goal baseline.', 'info')
+                return redirect(url_for('student_dashboard'))
+                
+            # Logic: Iterative approach to find requirements
+            # We fix Previous Marks and vary others
+            req_attendance = current['attendance']
+            req_study = current['study_hours']
+            
+            # Categorical features from latest prediction
+            # Note: sqlite3.Row does not support .get(), use bracket notation
+            gender = current['gender'] if 'gender' in current.keys() else 'Male'
+            extra = current['extracurricular'] if 'extracurricular' in current.keys() else 'No'
+            internet = current['internet_access'] if 'internet_access' in current.keys() else 'Yes'
+            par_ed = current['parental_education'] if 'parental_education' in current.keys() else 'High School'
+            
+            # Simple heuristic optimization
+            best_score, _ = predict_score(req_attendance, req_study, current['previous_marks'], 
+                                         gender, extra, internet, par_ed)
+            
+            steps = 0
+            while best_score < target and steps < 100:
+                # Priority: Attendance (if < 95), then Study Hours (if < 60 hrs/week)
+                if req_attendance < 98:
+                    req_attendance += 1
+                elif req_study < 60:
+                    req_study += 2
+                else:
+                    break # Reached maximums
+                
+                best_score, _ = predict_score(req_attendance, req_study, current['previous_marks'],
+                                             gender, extra, internet, par_ed)
+                steps += 1
+            
+            # Save or update goal
+            cursor = db.execute(
+                'INSERT INTO student_goals (user_id, target_percentage, current_percentage, required_attendance, required_study_hours, required_assignments) '
+                'VALUES (?, ?, ?, ?, ?, ?)',
+                (user_id, target, current['predicted_score'], round(req_attendance, 1), round(req_study, 1), 0)
+            )
+            db.commit()
+            
+            flash(f'Goal updated for {target}%!', 'success')
+            return redirect(url_for('student_goal_setting'))
+            
+        except Exception as e:
+            flash(f'Error calculating goals: {str(e)}', 'danger')
+            return redirect(url_for('student_goal_setting'))
+
+    return render_template('student/goal_setting.html', current=current, goal=goal)
+
+@app.route('/student/improvement-plan')
+@login_required
+def student_improvement_plan():
+    db = get_db()
+    user_id = session['user_id']
+    
+    # Fetch latest prediction
+    latest = db.execute(
+        'SELECT * FROM predictions WHERE user_id = ? ORDER BY created_at DESC LIMIT 1',
+        (user_id,)
+    ).fetchone()
+    
+    if not latest:
+        flash('Please complete a prediction first to generate an improvement plan.', 'info')
+        return redirect(url_for('student_dashboard'))
+        
+    deadlines = db.execute(
+        'SELECT * FROM assignment_deadlines WHERE user_id = ? AND status = "pending" ORDER BY deadline_date',
+        (user_id,)
+    ).fetchall()
+    
+    # Determine weak area
+    weak_area = None
+    tips = []
+    if latest['attendance'] < 80:
+        weak_area = 'Class Attendance'
+        tips = ["Try to attend at least 90% of your lectures.", "Review recorded sessions for any classes you've missed."]
+    elif latest['study_hours'] < 20:
+        weak_area = 'Weekly Study Discipline'
+        tips = ["Increase your weekly study time to at least 25-30 hours.", "Use the Pomodoro technique (25 min study / 5 min break)."]
+    elif latest['previous_marks'] < 60:
+        weak_area = 'Foundational Concepts'
+        tips = ["Review basics from previous semesters.", "Consult with your professors or peers for clarifications."]
+        
+    return render_template('student/improvement_plan.html', latest=latest, tips=tips, weak_area=weak_area, deadlines=deadlines)
+
+@app.route('/student/profile', methods=['GET', 'POST'])
+@login_required
+def student_profile():
+    db = get_db()
+    user_id = session['user_id']
+    
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        mobile = request.form.get('mobile')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+        
+        try:
+            # Basic validation
+            if new_password and new_password != confirm_password:
+                flash('Passwords do not match!', 'danger')
+                return redirect(url_for('student_profile'))
+            
+            # Check if email is already taken
+            existing = db.execute('SELECT id FROM users WHERE email = ? AND id != ?', (email, user_id)).fetchone()
+            if existing:
+                flash('Email is already in use.', 'danger')
+                return redirect(url_for('student_profile'))
+            
+            if new_password:
+                phash = generate_password_hash(new_password)
+                db.execute(
+                    'UPDATE users SET name = ?, email = ?, mobile = ?, password_hash = ? WHERE id = ?',
+                    (name, email, mobile, phash, user_id)
+                )
+            else:
+                db.execute(
+                    'UPDATE users SET name = ?, email = ?, mobile = ? WHERE id = ?',
+                    (name, email, mobile, user_id)
+                )
+            db.commit()
+            
+            session['user_name'] = name
+            session['email'] = email
+            
+            flash('Profile updated successfully!', 'success')
+            return redirect(url_for('student_profile'))
+        except Exception as e:
+            flash(f'Update failed: {str(e)}', 'danger')
+            return redirect(url_for('student_profile'))
+
+    user = db.execute('SELECT * FROM users WHERE id = ?', (user_id,)).fetchone()
+    return render_template('student/profile.html', user=user)
+
+@app.route('/student/add-assignment', methods=['POST'])
+@login_required
+def add_assignment():
+    title = request.form.get('title')
+    deadline = request.form.get('deadline')
+    if title and deadline:
+        db = get_db()
+        db.execute(
+            'INSERT INTO assignment_deadlines (user_id, title, deadline_date) VALUES (?, ?, ?)',
+            (session['user_id'], title, deadline)
+        )
+        db.commit()
+        flash('Assignment added!', 'success')
+    return redirect(url_for('student_improvement_plan'))
+
+@app.route('/student/delete-assignment/<int:id>', methods=['POST'])
+@login_required
+def delete_assignment(id):
+    db = get_db()
+    db.execute('DELETE FROM assignment_deadlines WHERE id = ? AND user_id = ?', (id, session['user_id']))
+    db.commit()
+    return redirect(url_for('student_improvement_plan'))
 
 # ── Admin Routes ──
 
@@ -958,4 +1183,4 @@ if __name__ == '__main__':
     print("\n\n-------------------------------------------------------------")
     print("   Project Running! Open this link: http://localhost:5000")
     print("-------------------------------------------------------------\n\n")
-    app.run(debug=config.DEBUG, host='127.0.0.1', port=5000)
+    app.run(debug=config.DEBUG, host='0.0.0.0', port=5000)

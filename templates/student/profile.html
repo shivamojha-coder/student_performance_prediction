@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}PredictorHub — Manage Profile{% endblock %}
+
+{% block content %}
+<div class="student-main">
+    <div class="page-header">
+        <h1 class="page-title">Account Settings</h1>
+        <p class="page-subtitle">Manage your personal information and account security.</p>
+    </div>
+
+    <div class="profile-card">
+        <div class="profile-hero">
+            <div class="profile-avatar-large">
+                {{ user.name[0] if user else 'S' }}
+            </div>
+            <div class="profile-details-hero">
+                <h2>{{ user.name }}</h2>
+                <p>{{ user.email }}</p>
+                <p class="text-sm mt-5"><i class="fas fa-id-badge"></i> {{ user.student_id }}</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-user-edit"></i> Edit Profile</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('student_profile') }}">
+                    <div class="profile-form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="name" class="form-input" value="{{ user.name }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" name="email" class="form-input" value="{{ user.email }}" required>
+                            <span class="form-hint-below">Used for login and notifications.</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Mobile Number</label>
+                            <input type="text" name="mobile" class="form-input" value="{{ user.mobile }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Class Name</label>
+                            <input type="text" class="form-input disabled" value="{{ user.class_name }} (Section {{ user.section }})" disabled>
+                            <span class="form-hint-below">Contact admin to change class details.</span>
+                        </div>
+                    </div>
+                    
+                    <div class="dropdown-divider mt-24 mb-24"></div>
+                    
+                    <div class="form-row">
+                        <div class="flex-1">
+                            <h3>Account Security</h3>
+                            <p class="text-muted text-sm mt-5">Leave password fields blank if you don't want to change it.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-form-grid mt-20">
+                        <div class="form-group">
+                            <label class="form-label">New Password</label>
+                            <input type="password" name="new_password" class="form-input" placeholder="••••••••">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Confirm Password</label>
+                            <input type="password" name="confirm_password" class="form-input" placeholder="••••••••">
+                        </div>
+                    </div>
+
+                    <div class="mt-32">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.mt-32 { margin-top: 32px; }
+.mt-24 { margin-top: 24px; }
+.mb-24 { margin-bottom: 24px; }
+.disabled { background-color: var(--dark-50); cursor: not-allowed; opacity: 0.8; }
+</style>
+{% endblock %}

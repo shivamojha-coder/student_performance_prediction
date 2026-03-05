@@ -4,7 +4,7 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
 DATABASE = os.path.join(BASE_DIR, 'student_perf.db')
-MODEL_PATH = os.path.join(BASE_DIR, 'model', 'student_model.pkl')
+MODEL_PATH = os.path.join(BASE_DIR, 'ml', 'models', 'student_model.pkl')
 DATASET_PATH = os.path.join(BASE_DIR, 'ml', 'data', 'student_performance_dataset.csv')
 DEBUG = True
 

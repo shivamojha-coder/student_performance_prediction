@@ -6,7 +6,7 @@
     <div class="results-header">
         <div>
             <h1 class="page-title">Prediction Results</h1>
-            <p class="page-subtitle">Analysis completed on {{ prediction.created_at[:10] if prediction.created_at else 'Today' }} for Semester Fall 2023</p>
+            <p class="page-subtitle">Analysis completed on {{ prediction.created_at[:10] if prediction.created_at else 'Today' }} for {{ prediction.class_name }} ({{ prediction.section }})</p>
         </div>
         <div class="results-actions">
             <button class="btn btn-outline" onclick="window.print()">
@@ -74,23 +74,12 @@
                 <div class="metric-row">
                     <span class="metric-name">Weekly Study Hours</span>
                     <div class="metric-bar-wrap">
-                        <div class="metric-bar" style="width: {{ (prediction.study_hours / 40 * 100)|round(0) }}%"></div>
+                        <div class="metric-bar" style="width: {{ (prediction.study_hours / 168 * 100)|round(0) }}%"></div>
                     </div>
                     <span class="metric-val">{{ prediction.study_hours|round(0)|int }} hrs</span>
                 </div>
                 <div class="metric-row">
-                    <span class="metric-name">Assignment Avg</span>
-                    <div class="metric-bar-wrap">
-                        <div class="metric-bar" style="width: {{ (prediction.assignments / 20 * 100)|round(0) }}%"></div>
-                    </div>
-                    <span class="metric-val">{{ prediction.assignments|round(0)|int }}/20</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-name">Internal Marks</span>
-                    <span class="metric-val">{{ prediction.internal_marks|round(1) }}/30</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-name">Previous Marks</span>
+                    <span class="metric-name">Previous Exam Score</span>
                     <span class="metric-val">{{ prediction.previous_marks|round(1) }}</span>
                 </div>
             </div>
@@ -104,11 +93,11 @@
             <div class="card-body">
                 <blockquote class="ai-quote">
                     {% if prediction.performance_label == 'Good' %}
-                    "Based on your current study patterns, you are on track for a high grade. However, increasing your peer-review participation could boost your score further as it correlates highly with top-tier results in this module."
+                    "Based on your current patterns, you are on track for a high grade. Consistently maintaining your attendance and study routine will ensure success."
                     {% elif prediction.performance_label == 'Average' %}
-                    "Your metrics suggest room for improvement. Focusing on consistent attendance and increasing daily study time by even 30 minutes could significantly raise your predicted score in the coming weeks."
+                    "Your metrics suggest room for improvement. Increasing weekly study hours by even a small amount could significantly raise your predicted score."
                     {% else %}
-                    "Your current patterns indicate a risk of falling behind. Immediate action is recommended — set up a structured study plan and consider attending office hours for targeted help in weak areas."
+                    "Your current patterns indicate a risk of falling behind. Focus on improving attendance and setting a dedicated study routine immediately."
                     {% endif %}
                 </blockquote>
             </div>
@@ -121,17 +110,13 @@
             </div>
             <div class="card-body">
                 <ul class="improvement-list">
-                    {% if prediction.study_hours < 15 %}
-                    <li><i class="fas fa-check-circle"></i> Increase weekly study hours by 2h for {{ prediction.class_name }}</li>
+                    {% if prediction.study_hours < 20 %}
+                    <li><i class="fas fa-check-circle"></i> Increase weekly study hours to at least 20h</li>
                     {% endif %}
-                    <li><i class="fas fa-check-circle"></i> Focus on Module 4 ({{ prediction.class_name }}) review sessions</li>
-                    <li><i class="fas fa-check-circle"></i> Submit peer-review forum posts (Min. 3/week)</li>
                     {% if prediction.attendance < 85 %}
                     <li><i class="fas fa-check-circle"></i> Improve attendance rate to at least 85%</li>
                     {% endif %}
-                    {% if prediction.internal_marks < 20 %}
-                    <li><i class="fas fa-check-circle"></i> Target internal assessment improvement in next cycle</li>
-                    {% endif %}
+                    <li><i class="fas fa-check-circle"></i> Review core concepts from previous chapters</li>
                 </ul>
             </div>
         </div>
@@ -141,8 +126,8 @@
         <a href="{{ url_for('student_dashboard') }}" class="btn btn-outline btn-lg">
             <i class="fas fa-redo"></i> Retake Assessment
         </a>
-        <a href="#" class="btn btn-outline btn-lg">
-            <i class="fas fa-question-circle"></i> Speak with Advisor
+        <a href="{{ url_for('student_improvement_plan') }}" class="btn btn-outline btn-lg">
+            <i class="fas fa-calendar-check"></i> View Detailed Plan
         </a>
     </div>
 </div>
@@ -159,20 +144,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Radar Chart
     const radarData = {
-        labels: ['Attendance', 'Study Hours', 'Previous Marks', 'Assignments', 'Internal Marks'],
+        labels: ['Attendance', 'Study Hours', 'Previous Score'],
         you: [
             {{ prediction.attendance }},
-            {{ (prediction.study_hours / 40 * 100)|round(1) }},
-            {{ prediction.previous_marks }},
-            {{ (prediction.assignments / 20 * 100)|round(1) }},
-            {{ (prediction.internal_marks / 30 * 100)|round(1) }}
+            {{ (prediction.study_hours / 168 * 100)|round(1) }},
+            {{ prediction.previous_marks }}
         ],
         classAvg: [
             {{ class_avg.avg_attendance|round(1) if class_avg and class_avg.avg_attendance else 75 }},
-            50,
-            {{ class_avg.avg_marks|round(1) if class_avg and class_avg.avg_marks else 65 }},
-            70,
-            65
+            30,
+            {{ class_avg.avg_marks|round(1) if class_avg and class_avg.avg_marks else 65 }}
         ]
     };
     renderRadarChart('radarChart', radarData);

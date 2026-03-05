@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}PredictorHub — Goal Setting{% endblock %}
+
+{% block content %}
+<div class="student-main">
+    <div class="page-header">
+        <h1 class="page-title">Goal Setting</h1>
+        <p class="page-subtitle">Set your academic targets and find out what it takes to achieve them.</p>
+    </div>
+
+    <div class="form-row">
+        <!-- Goal Input Card -->
+        <div class="card flex-1">
+            <div class="card-header">
+                <h3><i class="fas fa-bullseye"></i> Set New Target</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('student_goal_setting') }}">
+                    <div class="form-group">
+                        <label class="form-label">Target Percentage (%)</label>
+                        <input type="number" name="target_percentage" class="form-input" placeholder="e.g. 90" 
+                               min="0" max="100" step="0.1" value="{{ goal.target_percentage if goal else '' }}" required>
+                        <span class="form-hint-below">We will calculate the metrics you need based on this target.</span>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-calculator"></i> Calculate Requirements
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Current Status Card -->
+        <div class="card flex-1">
+            <div class="card-header">
+                <h3><i class="fas fa-chart-line"></i> Current vs Target</h3>
+            </div>
+            <div class="card-body">
+                {% if current %}
+                <div class="season-stat">
+                    <span class="season-label">Latest Prediction</span>
+                    <div class="progress-bar-wrap">
+                        <div class="progress-bar" style="width: {{ current.predicted_score }}%"></div>
+                    </div>
+                    <span class="season-value text-primary">{{ current.predicted_score }}%</span>
+                </div>
+                {% if goal %}
+                <div class="season-stat mt-20">
+                    <span class="season-label">Goal Target</span>
+                    <div class="progress-bar-wrap">
+                        <div class="progress-bar progress-green" style="width: {{ goal.target_percentage }}%"></div>
+                    </div>
+                    <span class="season-value text-success">{{ goal.target_percentage }}%</span>
+                </div>
+                {% endif %}
+                {% else %}
+                <div class="empty-state-small">
+                    <i class="fas fa-info-circle"></i>
+                    <p>No current prediction found. Submit a forecast first.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if goal %}
+    <div class="form-section mt-20">
+        <h3 class="form-section-title">Requirements to Reach {{ goal.target_percentage }}%</h3>
+        <div class="form-row">
+            <div class="card flex-1">
+                <div class="card-body text-center">
+                    <div class="brand-icon small mx-auto mb-10" style="background: var(--primary-light); color: var(--primary);">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <h4 class="text-muted">Attendance</h4>
+                    <h2 class="page-title">{{ goal.required_attendance }}%</h2>
+                </div>
+            </div>
+            <div class="card flex-1">
+                <div class="card-body text-center">
+                    <div class="brand-icon small mx-auto mb-10" style="background: var(--warning-light); color: var(--warning);">
+                        <i class="fas fa-book-reader"></i>
+                    </div>
+                    <h4 class="text-muted">Study Hours</h4>
+                    <h2 class="page-title">{{ goal.required_study_hours }} <small>hrs/week</small></h2>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-20" style="border-left: 4px solid var(--info);">
+            <div class="card-body">
+                <h4 style="color: var(--info); display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-info-circle"></i> Insight
+                </h4>
+                <p class="mt-10">To reach your goal of <strong>{{ goal.target_percentage }}%</strong>, you need to maintain <strong>{{ goal.required_attendance }}%</strong> attendance and study approximately <strong>{{ goal.required_study_hours }} hours per week</strong>. Keep focusing on your regular studies!</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.mx-auto { margin-left: auto; margin-right: auto; }
+.mb-10 { margin-bottom: 10px; }
+</style>
+{% endblock %}

@@ -92,19 +92,46 @@
             </div>
             <nav class="student-nav">
                 <a href="{{ url_for('student_dashboard') }}" class="{% if request.endpoint == 'student_dashboard' %}active{% endif %}">Dashboard</a>
+                <a href="{{ url_for('student_goal_setting') }}" class="{% if request.endpoint == 'student_goal_setting' %}active{% endif %}">Goal Setting</a>
+                <a href="{{ url_for('student_improvement_plan') }}" class="{% if request.endpoint == 'student_improvement_plan' %}active{% endif %}">Improvement Plan</a>
                 <a href="{{ url_for('student_history') }}" class="{% if request.endpoint == 'student_history' %}active{% endif %}">My Results</a>
             </nav>
             <div class="student-nav-right">
-                <div class="user-badge">
-                    <div class="avatar student-avatar">
-                        <span>{{ session.get('user_name', 'S')[0] }}</span>
-                    </div>
-                    <div class="user-badge-info">
-                        <span class="user-badge-name">{{ session.get('user_name', 'Student') }}</span>
-                        <span class="user-badge-id">{{ session.get('student_id', '') }}</span>
+            <div class="student-nav-right">
+                <div class="profile-dropdown">
+                    <button class="profile-trigger" id="profileTrigger" onclick="toggleDropdown(event)">
+                        <div class="avatar student-avatar">
+                            <span>{{ session.get('user_name', 'S')[0] }}</span>
+                        </div>
+                        <div class="user-badge-info desktop-only">
+                            <span class="user-badge-name">{{ session.get('user_name', 'Student') }}</span>
+                            <span class="user-badge-id">{{ session.get('student_id', '') }}</span>
+                        </div>
+                        <i class="fas fa-chevron-down dropdown-arrow desktop-only"></i>
+                    </button>
+                    
+                    <div class="dropdown-menu" id="profileDropdown">
+                        <div class="dropdown-header">
+                            <p class="dropdown-user-name">{{ session.get('user_name', 'Student') }}</p>
+                            <p class="dropdown-user-email">{{ session.get('email', '') }}</p>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ url_for('student_profile') }}" class="dropdown-item">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Manage Profile</span>
+                        </a>
+                        <a href="{{ url_for('student_goal_setting') }}" class="dropdown-item mobile-only">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Goal Setting</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ url_for('logout') }}" class="dropdown-item logout-item">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Sign Out</span>
+                        </a>
                     </div>
                 </div>
-                <a href="{{ url_for('logout') }}" class="btn btn-sm btn-outline" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
             </div>
         </header>
 
@@ -159,6 +186,25 @@
 
     {% block scripts %}{% endblock %}
     <script>
+        // Profile Dropdown Toggle
+        function toggleDropdown(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('profileDropdown');
+            const trigger = document.getElementById('profileTrigger');
+            dropdown.classList.toggle('show');
+            trigger.classList.toggle('active');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('profileDropdown');
+            const trigger = document.getElementById('profileTrigger');
+            if (!trigger.contains(event.target)) {
+                dropdown.classList.remove('show');
+                trigger.classList.remove('active');
+            }
+        });
+
         // Auto-dismiss flash messages
         setTimeout(() => {
             document.querySelectorAll('.flash').forEach(el => {
