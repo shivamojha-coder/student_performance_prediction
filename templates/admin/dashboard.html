@@ -19,7 +19,7 @@
                 </select>
             </div>
             <button class="btn btn-outline compact"><i class="fas fa-calendar"></i> This Semester</button>
-            <a href="{{ url_for('admin_reports') }}" class="btn btn-primary compact"><i class="fas fa-download"></i> Export Report</a>
+            <a href="{{ url_for('admin.admin_reports') }}" class="btn btn-primary compact"><i class="fas fa-download"></i> Export Report</a>
         </div>
     </div>
 
@@ -132,7 +132,7 @@
     <div class="card full-width">
         <div class="card-header">
             <h3>Recent Prediction Flags</h3>
-            <a href="{{ url_for('admin_students') }}" class="link-btn">View All Students</a>
+            <a href="{{ url_for('admin.admin_students') }}" class="link-btn">View All Students</a>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -220,3 +220,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 {% endblock %}
+

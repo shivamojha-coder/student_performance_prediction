@@ -29,7 +29,7 @@
                     {% for pred in predictions %}
                     <tr>
                         <td class="text-muted">{{ loop.index }}</td>
-                        <td>{{ pred.created_at[:10] if pred.created_at else 'N/A' }}</td>
+                        <td>{{ pred.created_at.strftime('%Y-%m-%d') if pred.created_at else 'N/A' }}</td>
                         <td><span class="text-bold">{{ pred.class_name }} (Section {{ pred.section }})</span></td>
                         <td>{{ pred.attendance|round(1) }}%</td>
                         <td>{{ pred.study_hours|round(1) }}h</td>
@@ -45,7 +45,7 @@
                             </span>
                         </td>
                         <td>
-                            <a href="{{ url_for('student_result', pred_id=pred.id) }}" class="btn btn-sm btn-outline" title="View Details">
+                            <a href="{{ url_for('student.student_result', pred_id=pred.id) }}" class="btn btn-sm btn-outline" title="View Details">
                                 <i class="fas fa-eye"></i>
                             </a>
                         </td>
@@ -62,10 +62,11 @@
         </div>
         <h3>No Predictions Yet</h3>
         <p>Head to the dashboard to submit your first performance forecast.</p>
-        <a href="{{ url_for('student_dashboard') }}" class="btn btn-primary btn-lg">
+        <a href="{{ url_for('student.student_dashboard') }}" class="btn btn-primary btn-lg">
             <i class="fas fa-bolt"></i> Make Your First Prediction
         </a>
     </div>
     {% endif %}
 </div>
 {% endblock %}
+

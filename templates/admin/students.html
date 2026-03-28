@@ -13,7 +13,7 @@
     <div class="card full-width">
         <div class="card-header">
             <div class="search-filter-row">
-                <form method="GET" action="{{ url_for('admin_students') }}" class="search-form">
+                <form method="GET" action="{{ url_for('admin.admin_students') }}" class="search-form">
                     <div class="search-box">
                         <i class="fas fa-search"></i>
                         <input type="text" name="search" placeholder="Search by name, email, or ID..." value="{{ search }}" class="search-input">
@@ -76,7 +76,7 @@
                                 <span class="badge badge-neutral">No Data</span>
                                 {% endif %}
                             </td>
-                            <td class="text-muted">{{ student.created_at[:10] if student.created_at else 'N/A' }}</td>
+                            <td class="text-muted">{{ student.created_at.strftime('%Y-%m-%d') if student.created_at else 'N/A' }}</td>
                         </tr>
                         {% endfor %}
                         {% if not students %}
@@ -94,3 +94,4 @@
     </div>
 </div>
 {% endblock %}
+

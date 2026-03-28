@@ -6,7 +6,7 @@
     <div class="results-header">
         <div>
             <h1 class="page-title">Prediction Results</h1>
-            <p class="page-subtitle">Analysis completed on {{ prediction.created_at[:10] if prediction.created_at else 'Today' }} for {{ prediction.class_name }} ({{ prediction.section }})</p>
+            <p class="page-subtitle">Analysis completed on {{ prediction.created_at.strftime('%Y-%m-%d') if prediction.created_at else 'Today' }} for {{ prediction.class_name }} ({{ prediction.section }})</p>
         </div>
         <div class="results-actions">
             <button class="btn btn-outline" onclick="window.print()">
@@ -123,10 +123,10 @@
     </div>
 
     <div class="results-actions-bottom">
-        <a href="{{ url_for('student_dashboard') }}" class="btn btn-outline btn-lg">
+        <a href="{{ url_for('student.student_dashboard') }}" class="btn btn-outline btn-lg">
             <i class="fas fa-redo"></i> Retake Assessment
         </a>
-        <a href="{{ url_for('student_improvement_plan') }}" class="btn btn-outline btn-lg">
+        <a href="{{ url_for('student.student_improvement_plan') }}" class="btn btn-outline btn-lg">
             <i class="fas fa-calendar-check"></i> View Detailed Plan
         </a>
     </div>
@@ -160,3 +160,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 {% endblock %}
+

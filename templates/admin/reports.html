@@ -17,7 +17,7 @@
             </div>
             <h3>CSV Export</h3>
             <p>Download all student prediction data as a CSV spreadsheet for analysis in Excel or Google Sheets.</p>
-            <form method="GET" action="{{ url_for('export_csv') }}" class="report-form">
+            <form method="GET" action="{{ url_for('admin.export_csv') }}" class="report-form">
                 <div class="form-group">
                     <label class="form-label">Filter by Class</label>
                     <select name="class" class="form-input form-select">
@@ -39,7 +39,7 @@
             </div>
             <h3>PDF Report</h3>
             <p>Generate a formatted PDF report with student performance summaries suitable for print or presentation.</p>
-            <form method="GET" action="{{ url_for('export_pdf') }}" class="report-form">
+            <form method="GET" action="{{ url_for('admin.export_pdf') }}" class="report-form">
                 <div class="form-group">
                     <label class="form-label">Filter by Class</label>
                     <select name="class" class="form-input form-select">
@@ -75,10 +75,11 @@
                     <span class="summary-value">—</span>
                 </div>
             </div>
-            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline btn-block">
+            <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-outline btn-block">
                 <i class="fas fa-chart-pie"></i> View Dashboard
             </a>
         </div>
     </div>
 </div>
 {% endblock %}
+

@@ -8,7 +8,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=3">
+    <style>
+        spline-viewer::part(logo) { display: none !important; }
+        spline-viewer::part(watermark) { display: none !important; }
+    </style>
+    <script>
+        // Fallback script to remove Spline logo from Shadow DOM if parts are disabled
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.querySelectorAll('spline-viewer').forEach(v => {
+                    if (v.shadowRoot) {
+                        const logo = v.shadowRoot.querySelector('#logo');
+                        if (logo) logo.remove();
+                    }
+                });
+            }, 1000);
+        });
+    </script>
     {% block head %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
@@ -24,15 +41,15 @@
                 <span class="brand-text">EduPredict</span>
             </div>
             <nav class="sidebar-nav">
-                <a href="{{ url_for('admin_dashboard') }}" class="nav-item {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
+                <a href="{{ url_for('admin.admin_dashboard') }}" class="nav-item {% if request.endpoint == 'admin.admin_dashboard' %}active{% endif %}">
                     <i class="fas fa-chart-pie"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="{{ url_for('admin_students') }}" class="nav-item {% if request.endpoint == 'admin_students' %}active{% endif %}">
+                <a href="{{ url_for('admin.admin_students') }}" class="nav-item {% if request.endpoint == 'admin.admin_students' %}active{% endif %}">
                     <i class="fas fa-users"></i>
                     <span>Student Directory</span>
                 </a>
-                <a href="{{ url_for('admin_reports') }}" class="nav-item {% if request.endpoint == 'admin_reports' %}active{% endif %}">
+                <a href="{{ url_for('admin.admin_reports') }}" class="nav-item {% if request.endpoint == 'admin.admin_reports' %}active{% endif %}">
                     <i class="fas fa-file-alt"></i>
                     <span>Reports</span>
                 </a>
@@ -62,7 +79,7 @@
                     </div>
                     <div class="topbar-actions">
                         <button class="icon-btn"><i class="fas fa-bell"></i></button>
-                        <a href="{{ url_for('logout') }}" class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
+                        <a href="{{ url_for('auth.logout') }}" class="icon-btn" title="Logout"><i class="fas fa-sign-out-alt"></i></a>
                     </div>
                 </div>
             </header>
@@ -91,12 +108,11 @@
                 <span class="brand-text">PredictorHub</span>
             </div>
             <nav class="student-nav">
-                <a href="{{ url_for('student_dashboard') }}" class="{% if request.endpoint == 'student_dashboard' %}active{% endif %}">Dashboard</a>
-                <a href="{{ url_for('student_goal_setting') }}" class="{% if request.endpoint == 'student_goal_setting' %}active{% endif %}">Goal Setting</a>
-                <a href="{{ url_for('student_improvement_plan') }}" class="{% if request.endpoint == 'student_improvement_plan' %}active{% endif %}">Improvement Plan</a>
-                <a href="{{ url_for('student_history') }}" class="{% if request.endpoint == 'student_history' %}active{% endif %}">My Results</a>
+                <a href="{{ url_for('student.student_dashboard') }}" class="{% if request.endpoint == 'student.student_dashboard' %}active{% endif %}">Dashboard</a>
+                <a href="{{ url_for('student.student_goal_setting') }}" class="{% if request.endpoint == 'student.student_goal_setting' %}active{% endif %}">Goal Setting</a>
+                <a href="{{ url_for('student.student_improvement_plan') }}" class="{% if request.endpoint == 'student.student_improvement_plan' %}active{% endif %}">Improvement Plan</a>
+                <a href="{{ url_for('student.student_history') }}" class="{% if request.endpoint == 'student.student_history' %}active{% endif %}">My Results</a>
             </nav>
-            <div class="student-nav-right">
             <div class="student-nav-right">
                 <div class="profile-dropdown">
                     <button class="profile-trigger" id="profileTrigger" onclick="toggleDropdown(event)">
@@ -109,29 +125,36 @@
                         </div>
                         <i class="fas fa-chevron-down dropdown-arrow desktop-only"></i>
                     </button>
-                    
+
+                    <div class="profile-preview-image desktop-only">
+                        <img
+                            src="{{ url_for('static', filename='img/Gemini_Generated_Image_p66avzp66avzp66a.png') }}"
+                            alt="Profile preview"
+                            class="profile-preview-image-img"
+                        >
+                    </div>
+
                     <div class="dropdown-menu" id="profileDropdown">
                         <div class="dropdown-header">
                             <p class="dropdown-user-name">{{ session.get('user_name', 'Student') }}</p>
                             <p class="dropdown-user-email">{{ session.get('email', '') }}</p>
                         </div>
                         <div class="dropdown-divider"></div>
-                        <a href="{{ url_for('student_profile') }}" class="dropdown-item">
+                        <a href="{{ url_for('student.student_profile') }}" class="dropdown-item">
                             <i class="fas fa-user-circle"></i>
                             <span>Manage Profile</span>
                         </a>
-                        <a href="{{ url_for('student_goal_setting') }}" class="dropdown-item mobile-only">
+                        <a href="{{ url_for('student.student_goal_setting') }}" class="dropdown-item mobile-only">
                             <i class="fas fa-bullseye"></i>
                             <span>Goal Setting</span>
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a href="{{ url_for('logout') }}" class="dropdown-item logout-item">
+                        <a href="{{ url_for('auth.logout') }}" class="dropdown-item logout-item">
                             <i class="fas fa-sign-out-alt"></i>
                             <span>Sign Out</span>
                         </a>
                     </div>
                 </div>
-            </div>
             </div>
         </header>
 
@@ -199,7 +222,7 @@
         document.addEventListener('click', function(event) {
             const dropdown = document.getElementById('profileDropdown');
             const trigger = document.getElementById('profileTrigger');
-            if (!trigger.contains(event.target)) {
+            if (trigger && !trigger.contains(event.target)) {
                 dropdown.classList.remove('show');
                 trigger.classList.remove('active');
             }
@@ -215,3 +238,4 @@
     </script>
 </body>
 </html>
+

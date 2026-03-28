@@ -43,7 +43,8 @@
                 Enter the 6-digit code sent to <strong>{{ masked_email }}</strong>
             </p>
 
-            <form method="POST" action="{{ url_for('verify_otp_page') }}" class="auth-form" id="otpForm">
+            <form method="POST" action="{{ url_for('auth.verify_otp_page') }}" class="auth-form" id="otpForm">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="otp-input-group">
                     <input type="text" maxlength="1" class="otp-box" data-idx="0" inputmode="numeric" autofocus>
                     <input type="text" maxlength="1" class="otp-box" data-idx="1" inputmode="numeric">
@@ -62,13 +63,14 @@
 
             <div class="otp-resend">
                 <p>Didn't receive the code?</p>
-                <form method="POST" action="{{ url_for('resend_otp') }}" style="display:inline;">
+                <form method="POST" action="{{ url_for('auth.resend_otp') }}" style="display:inline;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button type="submit" class="btn-link" id="resendBtn">Resend Code</button>
                 </form>
             </div>
 
             <p class="auth-switch-text">
-                <a href="{{ url_for('register') }}"><i class="fas fa-arrow-left"></i> Back to Registration</a>
+                <a href="{{ url_for('auth.register') }}"><i class="fas fa-arrow-left"></i> Back to Registration</a>
             </p>
 
             <div class="auth-footer-links">
@@ -142,3 +144,4 @@
 })();
 </script>
 {% endblock %}
+
