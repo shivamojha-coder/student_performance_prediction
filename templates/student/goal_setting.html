@@ -1,105 +1,686 @@
 {% extends "base.html" %}
-{% block title %}PredictorHub — Goal Setting{% endblock %}
+{% block title %}PredictorHub | Goal Setting{% endblock %}
+
+{% block head %}
+<style>
+.student-main {
+    max-width: none !important;
+    width: 100% !important;
+    padding: 20px 14px 24px !important;
+}
+
+.student-topnav .profile-preview-image {
+    display: none !important;
+}
+
+.goal-page {
+    width: 100%;
+}
+
+.goal-header {
+    margin-bottom: 18px;
+}
+
+.goal-header .page-title {
+    font-size: 2rem;
+    letter-spacing: -0.02em;
+}
+
+.goal-top-tiles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.tile {
+    border-radius: 14px;
+    padding: 16px 18px;
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    min-height: 98px;
+}
+
+.tile::after {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    right: -82px;
+    top: -92px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.24), transparent 65%);
+}
+
+.tile.pred { background: linear-gradient(130deg, #3f80f7, #7ca8ff); }
+.tile.target { background: linear-gradient(130deg, #8b67f0, #ae85ff); }
+.tile.gap { background: linear-gradient(130deg, #57bdd3, #7fd5e4); }
+
+.tile-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.tile-label {
+    font-size: 0.86rem;
+    font-weight: 600;
+    opacity: 0.96;
+}
+
+.tile-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, 0.22);
+    font-size: 0.9rem;
+}
+
+.tile-value {
+    margin-top: 8px;
+    font-size: 1.9rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.tile-chip {
+    position: absolute;
+    right: 16px;
+    bottom: 14px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #314a7a;
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+
+.goal-main-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1.45fr 1fr;
+    gap: 16px;
+    align-items: start;
+}
+
+.goal-col {
+    display: grid;
+    gap: 16px;
+}
+
+.goal-card {
+    border-radius: 14px;
+}
+
+.goal-card .card-header {
+    padding: 16px 18px 0;
+}
+
+.goal-card .card-body {
+    padding: 14px 18px 18px;
+}
+
+.goal-card h3 {
+    font-size: 1.05rem;
+}
+
+.section-sub {
+    font-size: 0.78rem;
+    color: var(--dark-400);
+    margin-top: 8px;
+}
+
+.score-slider-wrap {
+    margin: 12px 0 18px;
+}
+
+.slider-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.slider-value {
+    min-width: 58px;
+    padding: 4px 8px;
+    text-align: center;
+    border-radius: 8px;
+    background: #f1f4ff;
+    color: #395bb4;
+    font-weight: 700;
+    font-size: 0.84rem;
+    border: 1px solid #dfe5ff;
+}
+
+.goal-range {
+    width: 100%;
+    height: 7px;
+    border-radius: 10px;
+    appearance: none;
+    background: linear-gradient(to right, #3f80f7 0%, #8b67f0 100%);
+    outline: none;
+}
+
+.goal-range::-webkit-slider-thumb {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    background: #3f80f7;
+    box-shadow: 0 2px 7px rgba(34, 66, 145, 0.3);
+    cursor: pointer;
+}
+
+.analyze-btn {
+    margin-top: 10px;
+    background: linear-gradient(120deg, #2f74f5, #8b67f0);
+    color: #ffffff;
+    border: 0;
+}
+
+.analyze-btn:hover {
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.chart-wrap {
+    height: 270px;
+    margin-top: 4px;
+}
+
+.weekly-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.weekly-table th,
+.weekly-table td {
+    border-bottom: 1px solid #edf1f8;
+    padding: 11px 4px;
+    text-align: left;
+    font-size: 0.85rem;
+}
+
+.weekly-table th {
+    color: var(--dark-400);
+    font-size: 0.74rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: #eaf3ff;
+    color: #3069d2;
+    font-weight: 700;
+    font-size: 0.78rem;
+}
+
+.snapshot-list {
+    display: grid;
+    gap: 12px;
+}
+
+.snapshot-item {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr auto;
+    gap: 12px;
+    align-items: center;
+    font-size: 0.84rem;
+    padding: 3px 0;
+}
+
+.line-track {
+    height: 4px;
+    background: #edf0f7;
+    border-radius: 8px;
+    position: relative;
+}
+
+.line-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.line-fill.blue { background: #3f80f7; }
+.line-fill.violet { background: linear-gradient(90deg, #8b67f0, #3f80f7); }
+
+.snapshot-strong {
+    font-weight: 700;
+    color: #314d90;
+}
+
+.insight-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 16px;
+}
+
+.insight-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.insight-item i {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-size: 0.68rem;
+    margin-top: 2px;
+}
+
+.ic-green { background: #29b888; }
+.ic-orange { background: #f0a34e; }
+.ic-purple { background: #8672f3; }
+
+.insight-title {
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.insight-text {
+    color: var(--dark-500);
+    font-size: 0.83rem;
+}
+
+.tips-list {
+    display: grid;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tips-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.tips-list i {
+    color: #3578f5;
+    margin-top: 3px;
+}
+
+.final-advice {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--dark-600);
+}
+
+.empty-goal {
+    margin-top: 10px;
+}
+
+@media (max-width: 1220px) {
+    .goal-main-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 840px) {
+    .goal-top-tiles {
+        grid-template-columns: 1fr;
+    }
+
+    .goal-header .page-title {
+        font-size: 1.65rem;
+    }
+
+    .goal-card .card-header {
+        padding: 14px 14px 0;
+    }
+
+    .goal-card .card-body {
+        padding: 12px 14px 14px;
+    }
+}
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="student-main">
-    <div class="page-header">
+<div class="goal-page">
+    <div class="page-header goal-header">
         <h1 class="page-title">Goal Setting</h1>
-        <p class="page-subtitle">Set your academic targets and find out what it takes to achieve them.</p>
     </div>
 
-    <div class="form-row">
-        <!-- Goal Input Card -->
-        <div class="card flex-1">
-            <div class="card-header">
-                <h3><i class="fas fa-bullseye"></i> Set New Target</h3>
+    {% if current and goal_analysis %}
+    <section class="goal-top-tiles">
+        <article class="tile pred">
+            <div class="tile-head">
+                <span class="tile-label">Predicted Score</span>
+                <span class="tile-icon"><i class="fas fa-chart-column"></i></span>
             </div>
-            <div class="card-body">
-                <form method="POST" action="{{ url_for('student_goal_setting') }}">
-                    <div class="form-group">
-                        <label class="form-label">Target Percentage (%)</label>
-                        <input type="number" name="target_percentage" class="form-input" placeholder="e.g. 90" 
-                               min="0" max="100" step="0.1" value="{{ goal.target_percentage if goal else '' }}" required>
-                        <span class="form-hint-below">We will calculate the metrics you need based on this target.</span>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">
-                        <i class="fas fa-calculator"></i> Calculate Requirements
-                    </button>
-                </form>
+            <div class="tile-value">{{ goal_analysis.predicted_score }}%</div>
+            <span class="tile-chip">{{ goal_analysis.predicted_score }}%</span>
+        </article>
+
+        <article class="tile target">
+            <div class="tile-head">
+                <span class="tile-label">Target Score</span>
+                <span class="tile-icon"><i class="fas fa-trophy"></i></span>
             </div>
+            <div class="tile-value">{{ goal_analysis.goal_score }}%</div>
+        </article>
+
+        <article class="tile gap">
+            <div class="tile-head">
+                <span class="tile-label">Gap</span>
+                <span class="tile-icon"><i class="fas fa-arrow-trend-up"></i></span>
+            </div>
+            <div class="tile-value">+{{ goal_analysis.gap }}%</div>
+        </article>
+    </section>
+
+    <section class="goal-main-grid">
+        <div class="goal-col">
+            <article class="card goal-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-flag"></i> Set Your Goal</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('student.student_goal_setting') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="form-group">
+                            <label class="form-label">Target Score</label>
+                            <div class="score-slider-wrap">
+                                <div class="slider-row">
+                                    <input
+                                        type="range"
+                                        id="targetSlider"
+                                        class="goal-range"
+                                        min="0"
+                                        max="100"
+                                        step="1"
+                                        value="{{ goal_analysis.goal_score|round|int }}"
+                                    >
+                                    <span class="slider-value" id="targetValue">{{ goal_analysis.goal_score|round|int }}%</span>
+                                </div>
+                            </div>
+                            <input type="hidden" id="targetPercentageInput" name="target_percentage" value="{{ goal_analysis.goal_score|round|int }}">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Days Left Until Exam</label>
+                            <input
+                                type="number"
+                                name="days_left"
+                                class="form-input"
+                                min="1"
+                                max="365"
+                                value="{{ days_left_default }}"
+                                required
+                            >
+                        </div>
+                        <button type="submit" class="btn btn-block analyze-btn">
+                            <i class="fas fa-magnifying-glass"></i> Analyze My Goal
+                        </button>
+                    </form>
+                </div>
+            </article>
+
+            <article class="card goal-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-book-open"></i> Daily Study Plan</h3>
+                </div>
+                <div class="card-body">
+                    <p><strong>Study Hours:</strong> {{ goal_analysis.daily_hours_min }}-{{ goal_analysis.daily_hours_max }} hrs/day</p>
+                    <p class="section-sub">Time Distribution:</p>
+                    <ul class="tips-list">
+                        <li><i class="fas fa-check"></i><span>{{ goal_analysis.time_distribution.weak_areas }}</span></li>
+                        <li><i class="fas fa-check"></i><span>{{ goal_analysis.time_distribution.practice }}</span></li>
+                        <li><i class="fas fa-check"></i><span>{{ goal_analysis.time_distribution.revision }}</span></li>
+                    </ul>
+                    <p class="section-sub">
+                        Requirements: {{ goal_analysis.required_attendance }}% Attendance, {{ goal_analysis.required_study_hours }} hrs Study/week.
+                    </p>
+                </div>
+            </article>
         </div>
 
-        <!-- Current Status Card -->
-        <div class="card flex-1">
-            <div class="card-header">
-                <h3><i class="fas fa-chart-line"></i> Current vs Target</h3>
-            </div>
-            <div class="card-body">
-                {% if current %}
-                <div class="season-stat">
-                    <span class="season-label">Latest Prediction</span>
-                    <div class="progress-bar-wrap">
-                        <div class="progress-bar" style="width: {{ current.predicted_score }}%"></div>
+        <div class="goal-col">
+            <article class="card goal-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-line"></i> Progress Overview</h3>
+                </div>
+                <div class="card-body">
+                    <div class="chart-wrap">
+                        <canvas id="goalProgressChart"></canvas>
                     </div>
-                    <span class="season-value text-primary">{{ current.predicted_score }}%</span>
                 </div>
-                {% if goal %}
-                <div class="season-stat mt-20">
-                    <span class="season-label">Goal Target</span>
-                    <div class="progress-bar-wrap">
-                        <div class="progress-bar progress-green" style="width: {{ goal.target_percentage }}%"></div>
-                    </div>
-                    <span class="season-value text-success">{{ goal.target_percentage }}%</span>
-                </div>
-                {% endif %}
-                {% else %}
-                <div class="empty-state-small">
-                    <i class="fas fa-info-circle"></i>
-                    <p>No current prediction found. Submit a forecast first.</p>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-    </div>
+            </article>
 
-    {% if goal %}
-    <div class="form-section mt-20">
-        <h3 class="form-section-title">Requirements to Reach {{ goal.target_percentage }}%</h3>
-        <div class="form-row">
-            <div class="card flex-1">
-                <div class="card-body text-center">
-                    <div class="brand-icon small mx-auto mb-10" style="background: var(--primary-light); color: var(--primary);">
-                        <i class="fas fa-user-check"></i>
-                    </div>
-                    <h4 class="text-muted">Attendance</h4>
-                    <h2 class="page-title">{{ goal.required_attendance }}%</h2>
+            <article class="card goal-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-bullseye"></i> Weekly Targets</h3>
                 </div>
-            </div>
-            <div class="card flex-1">
-                <div class="card-body text-center">
-                    <div class="brand-icon small mx-auto mb-10" style="background: var(--warning-light); color: var(--warning);">
-                        <i class="fas fa-book-reader"></i>
-                    </div>
-                    <h4 class="text-muted">Study Hours</h4>
-                    <h2 class="page-title">{{ goal.required_study_hours }} <small>hrs/week</small></h2>
+                <div class="card-body">
+                    <table class="weekly-table">
+                        <thead>
+                            <tr>
+                                <th>Week</th>
+                                <th>Improvement</th>
+                                <th>Target by Week End</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in goal_analysis.weekly_targets %}
+                            <tr>
+                                <td>Week {{ row.week }}</td>
+                                <td><span class="pill">+{{ row.improvement }}%</span></td>
+                                <td><strong>{{ row.expected_score }}%</strong></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
-            </div>
+            </article>
         </div>
-        
-        <div class="card mt-20" style="border-left: 4px solid var(--info);">
-            <div class="card-body">
-                <h4 style="color: var(--info); display: flex; align-items: center; gap: 8px;">
-                    <i class="fas fa-info-circle"></i> Insight
-                </h4>
-                <p class="mt-10">To reach your goal of <strong>{{ goal.target_percentage }}%</strong>, you need to maintain <strong>{{ goal.required_attendance }}%</strong> attendance and study approximately <strong>{{ goal.required_study_hours }} hours per week</strong>. Keep focusing on your regular studies!</p>
-            </div>
+
+        <div class="goal-col">
+            <article class="card goal-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-line"></i> Current Snapshot</h3>
+                </div>
+                <div class="card-body">
+                    <div class="snapshot-list">
+                        <div class="snapshot-item">
+                            <span>Predicted Final Score</span>
+                            <div class="line-track"><div class="line-fill blue" style="width: {{ goal_analysis.predicted_score }}%"></div></div>
+                            <strong class="snapshot-strong">{{ goal_analysis.predicted_score }}%</strong>
+                        </div>
+                        <div class="snapshot-item">
+                            <span>Target Score</span>
+                            <div class="line-track"><div class="line-fill violet" style="width: {{ goal_analysis.goal_score }}%"></div></div>
+                            <strong class="snapshot-strong">{{ goal_analysis.goal_score }}%</strong>
+                        </div>
+                        <div class="snapshot-item">
+                            <span>Current Study Hours / Week</span>
+                            <span></span>
+                            <strong>{{ current.study_hours }} hrs</strong>
+                        </div>
+                        <div class="snapshot-item">
+                            <span>Current Attendance</span>
+                            <span></span>
+                            <strong>{{ current.attendance }}%</strong>
+                        </div>
+                        <div class="snapshot-item">
+                            <span>Past Exam Score</span>
+                            <span></span>
+                            <strong>{{ current.previous_marks }}%</strong>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card goal-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-file-waveform"></i> Goal Insights Report</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="insight-list">
+                        <li class="insight-item">
+                            <i class="ic-green fas fa-check"></i>
+                            <div>
+                                <div class="insight-title">Goal Analysis</div>
+                                <div class="insight-text">{{ goal_analysis.feasibility }}</div>
+                            </div>
+                        </li>
+                        <li class="insight-item">
+                            <i class="ic-orange fas fa-bolt"></i>
+                            <div>
+                                <div class="insight-title">Performance Gap</div>
+                                <div class="insight-text">+{{ goal_analysis.gap }}% improvement required</div>
+                            </div>
+                        </li>
+                        <li class="insight-item">
+                            <i class="ic-purple fas fa-clock"></i>
+                            <div>
+                                <div class="insight-title">Recommended Study Hours</div>
+                                <div class="insight-text">{{ goal_analysis.daily_hours_min }}-{{ goal_analysis.daily_hours_max }} hrs/day</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card goal-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-rocket"></i> Final Advice</h3>
+                </div>
+                <div class="card-body">
+                    <p class="final-advice">{{ goal_analysis.final_advice }}</p>
+                </div>
+            </article>
+        </div>
+    </section>
+    {% else %}
+    <div class="card empty-goal">
+        <div class="card-body">
+            <h3>No baseline data yet</h3>
+            <p class="section-sub">Please submit at least one prediction from your dashboard to generate goal analytics.</p>
+            <a href="{{ url_for('student.student_dashboard') }}" class="btn btn-primary" style="margin-top: 12px;">
+                <i class="fas fa-bolt"></i> Go to Dashboard
+            </a>
         </div>
     </div>
     {% endif %}
 </div>
+{% endblock %}
 
-<style>
-.mx-auto { margin-left: auto; margin-right: auto; }
-.mb-10 { margin-bottom: 10px; }
-</style>
+{% block scripts %}
+{% if current and goal_analysis %}
+<script>
+(function () {
+    const slider = document.getElementById("targetSlider");
+    const sliderValue = document.getElementById("targetValue");
+    const targetInput = document.getElementById("targetPercentageInput");
+
+    function syncTarget() {
+        if (!slider || !sliderValue || !targetInput) return;
+        const value = parseInt(slider.value, 10);
+        sliderValue.textContent = value + "%";
+        targetInput.value = value;
+    }
+
+    if (slider) {
+        slider.addEventListener("input", syncTarget);
+        syncTarget();
+    }
+
+    const ctx = document.getElementById("goalProgressChart");
+    if (!ctx) return;
+
+    const labels = [{% for row in goal_analysis.weekly_targets %}"Week {{ row.week }}"{% if not loop.last %}, {% endif %}{% endfor %}];
+    const projected = [{% for row in goal_analysis.weekly_targets %}{{ row.expected_score }}{% if not loop.last %}, {% endif %}{% endfor %}];
+    const startScore = {{ goal_analysis.predicted_score }};
+    const targetScore = {{ goal_analysis.goal_score }};
+
+    const targetPath = labels.map(function (_, idx) {
+        const ratio = (idx + 1) / labels.length;
+        return +(startScore + (targetScore - startScore) * ratio).toFixed(1);
+    });
+    const minAxis = Math.max(0, Math.floor(Math.min(startScore, targetScore) - 10));
+    const maxAxis = Math.min(100, Math.ceil(Math.max(startScore, targetScore) + 10));
+
+    new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "Current Path",
+                    data: projected,
+                    borderColor: "#3f80f7",
+                    backgroundColor: "rgba(63, 128, 247, 0.14)",
+                    borderWidth: 2.5,
+                    fill: false,
+                    tension: 0.3,
+                    pointRadius: 4,
+                    pointBackgroundColor: "#3f80f7"
+                },
+                {
+                    label: "Target Path",
+                    data: targetPath,
+                    borderColor: "#f0a34e",
+                    borderDash: [6, 6],
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.3,
+                    pointRadius: 3,
+                    pointBackgroundColor: "#f0a34e"
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: "#1f2a44",
+                    titleColor: "#ffffff",
+                    bodyColor: "#dbe7ff",
+                    padding: 10
+                }
+            },
+            scales: {
+                x: {
+                    grid: { color: "#edf1f8" },
+                    ticks: { color: "#77839f", font: { size: 11 } }
+                },
+                y: {
+                    min: minAxis,
+                    max: maxAxis,
+                    grid: { color: "#edf1f8" },
+                    ticks: {
+                        color: "#77839f",
+                        callback: function (value) { return value + "%"; },
+                        font: { size: 11 }
+                    }
+                }
+            }
+        }
+    });
+})();
+</script>
+{% endif %}
 {% endblock %}
