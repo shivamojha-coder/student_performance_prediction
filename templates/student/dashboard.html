@@ -20,6 +20,36 @@
     --dash-shadow: 0 20px 50px rgba(26, 33, 38, 0.11);
 }
 
+/* Fixed Robot Position */
+.fixed-robot {
+    position: fixed;
+    bottom: -15px;
+    right: -15px;
+    width: 260px;
+    height: 260px;
+    z-index: 10001;
+    pointer-events: none;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fixed-robot spline-viewer {
+    width: 100%;
+    height: 100%;
+    pointer-events: auto;
+}
+
+spline-viewer::part(logo) { display: none !important; }
+spline-viewer::part(watermark) { display: none !important; }
+
+@media (max-width: 768px) {
+    .fixed-robot {
+        width: 160px;
+        height: 160px;
+        bottom: -10px;
+        right: -10px;
+    }
+}
+
 body {
     background:
         radial-gradient(80rem 50rem at 90% -10%, rgba(15, 139, 141, 0.15), transparent 70%),
@@ -53,18 +83,6 @@ body {
     width: min(1220px, 100% - 2.4rem);
     margin: 1.5rem auto 2.5rem;
     position: relative;
-}
-
-.dashboard-shell::before {
-    content: '';
-    position: absolute;
-    inset: 6rem auto auto 52%;
-    width: 260px;
-    height: 260px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 127, 80, 0.25), transparent 70%);
-    filter: blur(12px);
-    pointer-events: none;
 }
 
 .dash-hero {
@@ -594,6 +612,25 @@ body {
             </article>
         </div>
     </section>
+
+    <!-- Interactive Robot Assistant -->
+    <div class="fixed-robot reveal" style="--d:0.6s">
+        <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.73/build/spline-viewer.js"></script>
+        <spline-viewer id="assistant-robot" url="https://prod.spline.design/vwLo7lG02f3CPBjj/scene.splinecode"></spline-viewer>
+    </div>
+
+    <script>
+        // Fallback script to remove Spline logo from Shadow DOM
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const viewer = document.getElementById('assistant-robot');
+                if (viewer && viewer.shadowRoot) {
+                    const logo = viewer.shadowRoot.querySelector('#logo');
+                    if (logo) logo.remove();
+                }
+            }, 1000);
+        });
+    </script>
 </div>
 
 <script id="trendData" type="application/json">

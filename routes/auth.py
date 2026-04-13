@@ -268,7 +268,10 @@ def google_login():
     try:
         google_cfg = get_google_provider_cfg()
         authorization_endpoint = google_cfg["authorization_endpoint"]
-    except Exception:
+    except Exception as e:
+        import traceback
+        print(f"[GOOGLE AUTH ERROR] Failed to get provider cfg: {e}")
+        traceback.print_exc()
         flash("Unable to reach Google. Please try again later.", "danger")
         return redirect(url_for("auth.login"))
 

@@ -12,7 +12,13 @@ from services.id_service import generate_student_id
 
 def get_google_provider_cfg():
     """Fetch Google's OpenID Connect discovery document."""
-    return http_requests.get(config.GOOGLE_DISCOVERY_URL, timeout=10).json()
+    try:
+        resp = http_requests.get(config.GOOGLE_DISCOVERY_URL, timeout=10)
+        resp.raise_for_status()
+        return resp.json()
+    except Exception as e:
+        print(f"[OAUTH SERVICE ERROR] Failed to fetch Google discovery URL: {e}")
+        raise
 
 
 def get_oauth_redirect_uri(endpoint_name):

@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash
 
 from core.decorators import login_required
 from core.extensions import db
-from models.entities import AssignmentDeadline, Prediction, StudentGoal, User
+from models.entities import Prediction, StudentGoal, User
 from services.goal_service import build_goal_analysis
 from services.ml_service import predict_score
 
@@ -246,56 +246,6 @@ def student_goal_setting():
     )
 
 
-@student_bp.route("/student/improvement-plan")
-@login_required
-def student_improvement_plan():
-    user_id = session["user_id"]
-
-    latest = (
-        Prediction.query.filter_by(user_id=user_id)
-        .order_by(Prediction.created_at.desc(), Prediction.id.desc())
-        .first()
-    )
-    if not latest:
-        flash("Please complete a prediction first to generate an improvement plan.", "info")
-        return redirect(url_for("student.student_dashboard"))
-
-    deadlines = (
-        AssignmentDeadline.query.filter_by(user_id=user_id, status="pending")
-        .order_by(AssignmentDeadline.deadline_date.asc())
-        .all()
-    )
-
-    weak_area = None
-    tips = []
-    if latest.attendance < 80:
-        weak_area = "Class Attendance"
-        tips = [
-            "Try to attend at least 90% of your lectures.",
-            "Review recorded sessions for any classes you've missed.",
-        ]
-    elif latest.study_hours < 20:
-        weak_area = "Weekly Study Discipline"
-        tips = [
-            "Increase your weekly study time to at least 25-30 hours.",
-            "Use the Pomodoro technique (25 min study / 5 min break).",
-        ]
-    elif latest.previous_marks < 60:
-        weak_area = "Foundational Concepts"
-        tips = [
-            "Review basics from previous semesters.",
-            "Consult with your professors or peers for clarifications.",
-        ]
-
-    return render_template(
-        "student/improvement_plan.html",
-        latest=latest,
-        tips=tips,
-        weak_area=weak_area,
-        deadlines=deadlines,
-    )
-
-
 @student_bp.route("/student/profile", methods=["GET", "POST"])
 @login_required
 def student_profile():
@@ -341,22 +291,3 @@ def student_profile():
 
     return render_template("student/profile.html", user=user)
 
-
-@student_bp.route("/student/add-assignment", methods=["POST"])
-@login_required
-def add_assignment():
-    title = request.form.get("title")
-    deadline = request.form.get("deadline")
-    if title and deadline:
-        db.session.add(AssignmentDeadline(user_id=session["user_id"], title=title, deadline_date=deadline))
-        db.session.commit()
-        flash("Assignment added!", "success")
-    return redirect(url_for("student.student_improvement_plan"))
-
-
-@student_bp.route("/student/delete-assignment/<int:id>", methods=["POST"])
-@login_required
-def delete_assignment(id):
-    AssignmentDeadline.query.filter_by(id=id, user_id=session["user_id"]).delete(synchronize_session=False)
-    db.session.commit()
-    return redirect(url_for("student.student_improvement_plan"))

@@ -354,6 +354,68 @@
         padding: 12px 14px 14px;
     }
 }
+    /* Study Plan Enhancements */
+    .study-plan-list {
+        display: grid;
+        gap: 12px;
+        margin-top: 8px;
+    }
+
+    .study-plan-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px;
+        background: #f8faff;
+        border-radius: 12px;
+        border-right: 4px solid transparent;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .study-plan-item:hover {
+        transform: translateX(4px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .study-plan-item.weak { border-right-color: #3f80f7; background: #f0f5ff; }
+    .study-plan-item.practice { border-right-color: #29b888; background: #f0faf6; }
+    .study-plan-item.revision { border-right-color: #f0a34e; background: #fff8f0; }
+
+    .plan-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+    }
+    .study-plan-item.weak .plan-icon { background: #3f80f7; color: white; }
+    .study-plan-item.practice .plan-icon { background: #29b888; color: white; }
+    .study-plan-item.revision .plan-icon { background: #f0a34e; color: white; }
+
+    .plan-info { flex: 1; }
+    .plan-label { 
+        font-weight: 700; 
+        font-size: 0.9rem; 
+        display: block; 
+        color: #1a202c;
+        margin-bottom: 2px; 
+    }
+    .plan-desc { 
+        font-size: 0.78rem; 
+        color: #4a5568; 
+        display: block; 
+        line-height: 1.4; 
+    }
+    .plan-time { 
+        font-weight: 800; 
+        font-size: 0.9rem; 
+        color: #2d3748;
+        padding: 4px 8px;
+        background: rgba(255,255,255,0.6);
+        border-radius: 6px;
+    }
 </style>
 {% endblock %}
 
@@ -442,16 +504,52 @@
                     <h3><i class="fas fa-book-open"></i> Daily Study Plan</h3>
                 </div>
                 <div class="card-body">
-                    <p><strong>Study Hours:</strong> {{ goal_analysis.daily_hours_min }}-{{ goal_analysis.daily_hours_max }} hrs/day</p>
-                    <p class="section-sub">Time Distribution:</p>
-                    <ul class="tips-list">
-                        <li><i class="fas fa-check"></i><span>{{ goal_analysis.time_distribution.weak_areas }}</span></li>
-                        <li><i class="fas fa-check"></i><span>{{ goal_analysis.time_distribution.practice }}</span></li>
-                        <li><i class="fas fa-check"></i><span>{{ goal_analysis.time_distribution.revision }}</span></li>
-                    </ul>
-                    <p class="section-sub">
-                        Requirements: {{ goal_analysis.required_attendance }}% Attendance, {{ goal_analysis.required_study_hours }} hrs Study/week.
-                    </p>
+                    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px;">
+                        <h4 style="margin: 0; font-size: 0.95rem; color: var(--dark-500);">Target Study: <strong>{{ goal_analysis.daily_hours_min }}-{{ goal_analysis.daily_hours_max }} hrs/day</strong></h4>
+                        <span class="badge badge-success" style="font-size: 0.65rem; background: #29b888; color: white;">Expert Plan</span>
+                    </div>
+
+                    <div class="study-plan-list">
+                        <!-- Weak Topics -->
+                        <div class="study-plan-item weak">
+                            <div class="plan-icon"><i class="fas fa-brain"></i></div>
+                            <div class="plan-info">
+                                <span class="plan-label">Focus: Weak Topics (50%)</span>
+                                <span class="plan-desc">Master the concepts and chapters you find most challenging.</span>
+                            </div>
+                            {% set val = (goal_analysis.daily_hours_min * 0.5) %}
+                            <div class="plan-time">{% if val < 1 %}{{ (val * 60)|round|int }}m{% else %}{{ val|round(1) }}h{% endif %}</div>
+                        </div>
+
+                        <!-- Practice -->
+                        <div class="study-plan-item practice">
+                            <div class="plan-icon"><i class="fas fa-edit"></i></div>
+                            <div class="plan-info">
+                                <span class="plan-label">Practice & Solving (30%)</span>
+                                <span class="plan-desc">Apply your core knowledge by solving mock tests and samples.</span>
+                            </div>
+                            {% set val = (goal_analysis.daily_hours_min * 0.3) %}
+                            <div class="plan-time">{% if val < 1 %}{{ (val * 60)|round|int }}m{% else %}{{ val|round(1) }}h{% endif %}</div>
+                        </div>
+
+                        <!-- Revision -->
+                        <div class="study-plan-item revision">
+                            <div class="plan-icon"><i class="fas fa-history"></i></div>
+                            <div class="plan-info">
+                                <span class="plan-label">Daily Revision (20%)</span>
+                                <span class="plan-desc">Briefly review everything you learned today for retention.</span>
+                            </div>
+                            {% set val = (goal_analysis.daily_hours_min * 0.2) %}
+                            <div class="plan-time">{% if val < 1 %}{{ (val * 60)|round|int }}m{% else %}{{ val|round(1) }}h{% endif %}</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 22px; padding: 12px; background: #f1f5f9; border-radius: 10px; border: 1px dashed #cbd5e1;">
+                         <p style="font-size: 0.78rem; color: #475569; margin: 0; line-height: 1.5;">
+                            <i class="fas fa-lightbulb" style="color: #f59e0b; margin-right: 5px;"></i> 
+                            To reach this goal, maintain <strong>{{ goal_analysis.required_attendance }}% attendance</strong> and study for <strong>{{ goal_analysis.required_study_hours }} hrs/week</strong>.
+                         </p>
+                    </div>
                 </div>
             </article>
         </div>

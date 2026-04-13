@@ -5,4 +5,7 @@ WARNING: This is a development server. Do not use it in a production deployment.
 Press CTRL+C to quit
  * Restarting with stat
  * Debugger is active!
- * Debugger PIN: 131-577-541
+ * Debugger PIN: 430-466-827
+127.0.0.1 - - [05/Apr/2026 16:15:40] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [05/Apr/2026 16:15:40] "GET /static/css/style.css?v=3 HTTP/1.1" 200 -
+127.0.0.1 - - [05/Apr/2026 16:15:41] "GET /favicon.ico HTTP/1.1" 404 -
