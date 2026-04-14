@@ -4790,3 +4790,227 @@ spline-viewer::part(logo) {
 @media (max-width: 768px) {
     .desktop-only { display: none !important; }
 }
+
+/* Custom App Footer Styles */
+.app-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    margin-top: 3rem;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.app-footer p {
+    margin: 0;
+    color: #5f6d76;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.footer-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0;
+}
+
+.footer-links a {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 1.2rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 99px;
+    color: #1f2a31;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.footer-links a:hover {
+    background: #0f8b8d;
+    color: white;
+    border-color: #0f8b8d;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(15, 139, 141, 0.2);
+}
+
+/* Student Mobile Navigation */
+.student-mobile-nav {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .student-mobile-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(14px);
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+        z-index: 1000;
+        justify-content: space-around;
+        padding: 8px 0;
+        padding-bottom: calc(8px + env(safe-area-inset-bottom));
+    }
+    
+    .student-mobile-nav a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        color: #5f6d76;
+        text-decoration: none;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 12px;
+        transition: all 0.2s ease;
+    }
+    
+    .student-mobile-nav a i {
+        font-size: 1.2rem;
+    }
+    
+    .student-mobile-nav a.active,
+    .student-mobile-nav a:hover {
+        color: #0f8b8d;
+    }
+
+    .app-footer {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        margin-bottom: 70px;
+    }
+    
+    .footer-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+/* Global Dark Mode */
+html.site-dark-mode,
+body.site-dark-mode {
+    background: #0b1220 !important;
+    color: #e2e8f0 !important;
+}
+
+body.site-dark-mode .app-layout,
+body.site-dark-mode .student-layout,
+body.site-dark-mode .main-content,
+body.site-dark-mode .student-main {
+    background: linear-gradient(180deg, #0b1220 0%, #111827 100%) !important;
+    color: #e2e8f0 !important;
+}
+
+body.site-dark-mode .student-topnav,
+body.site-dark-mode .topbar {
+    background: rgba(15, 23, 42, 0.92) !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.22) !important;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.02) inset !important;
+}
+
+body.site-dark-mode .sidebar {
+    background: #0f172a !important;
+    border-right: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+body.site-dark-mode .brand-text,
+body.site-dark-mode .user-badge-name,
+body.site-dark-mode .user-badge-id,
+body.site-dark-mode .dropdown-user-name,
+body.site-dark-mode .dropdown-user-email,
+body.site-dark-mode .page-title,
+body.site-dark-mode .panel-title,
+body.site-dark-mode .card-header h3 {
+    color: #f1f5f9 !important;
+}
+
+body.site-dark-mode .student-nav a,
+body.site-dark-mode .nav-item,
+body.site-dark-mode .page-subtitle,
+body.site-dark-mode .panel-note,
+body.site-dark-mode .card-subtitle {
+    color: #94a3b8 !important;
+}
+
+body.site-dark-mode .student-nav a:hover,
+body.site-dark-mode .student-nav a.active,
+body.site-dark-mode .nav-item:hover,
+body.site-dark-mode .nav-item.active {
+    color: #f8fafc !important;
+}
+
+body.site-dark-mode .card,
+body.site-dark-mode .panel,
+body.site-dark-mode .stat-card,
+body.site-dark-mode .kpi,
+body.site-dark-mode .history-item,
+body.site-dark-mode .tip-card,
+body.site-dark-mode .report-card,
+body.site-dark-mode .profile-card,
+body.site-dark-mode .goal-card,
+body.site-dark-mode .data-table,
+body.site-dark-mode .chart-card {
+    background: rgba(15, 23, 42, 0.72) !important;
+    border-color: rgba(148, 163, 184, 0.24) !important;
+    color: #e2e8f0 !important;
+    box-shadow: 0 14px 32px rgba(2, 6, 23, 0.45) !important;
+}
+
+body.site-dark-mode .dropdown-menu,
+body.site-dark-mode .flash {
+    background: rgba(15, 23, 42, 0.96) !important;
+    border-color: rgba(148, 163, 184, 0.24) !important;
+    color: #e2e8f0 !important;
+}
+
+body.site-dark-mode .dropdown-item {
+    color: #dbeafe !important;
+}
+
+body.site-dark-mode .dropdown-item:hover {
+    background: rgba(30, 41, 59, 0.75) !important;
+}
+
+body.site-dark-mode input,
+body.site-dark-mode select,
+body.site-dark-mode textarea {
+    background: rgba(15, 23, 42, 0.65) !important;
+    color: #e2e8f0 !important;
+    border-color: rgba(148, 163, 184, 0.24) !important;
+}
+
+body.site-dark-mode input::placeholder,
+body.site-dark-mode textarea::placeholder {
+    color: #94a3b8 !important;
+}
+
+body.site-dark-mode .app-footer,
+body.site-dark-mode .student-mobile-nav {
+    background: #0f172a !important;
+    border-top: 1px solid rgba(148, 163, 184, 0.22) !important;
+}
+
+body.site-dark-mode .app-footer p,
+body.site-dark-mode .app-footer a,
+body.site-dark-mode .student-mobile-nav a {
+    color: #94a3b8 !important;
+}
+
+body.site-dark-mode .student-mobile-nav a.active {
+    color: #22d3ee !important;
+}

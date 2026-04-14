@@ -9,6 +9,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=3">
+    <script>
+        (function () {
+            var key = 'student_dashboard_theme';
+            var dark = false;
+            try {
+                var saved = localStorage.getItem(key);
+                dark = saved ? saved === 'dark' : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            } catch (e) {
+                dark = false;
+            }
+            window.__siteDarkMode = dark;
+            if (dark) {
+                document.documentElement.classList.add('site-dark-mode');
+            } else {
+                document.documentElement.classList.remove('site-dark-mode');
+            }
+        })();
+    </script>
     <style>
 
 
@@ -87,6 +105,11 @@
     {% block head %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
+    <script>
+        if (window.__siteDarkMode) {
+            document.body.classList.add('site-dark-mode');
+        }
+    </script>
 
     {% if session.get('role') in ['admin', 'student'] %}
     <!-- Page Entry Loader -->

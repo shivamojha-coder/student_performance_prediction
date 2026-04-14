@@ -27,11 +27,50 @@ def student_dashboard():
         .order_by(Prediction.created_at.asc(), Prediction.id.asc())
         .all()
     )
+    dashboard_payload = {
+        "userName": session.get("user_name", "Student"),
+        "firstName": session.get("user_name", "Student").split(" ")[0],
+        "className": user_info.class_name if user_info else "Class Not Set",
+        "section": user_info.section if user_info else "A",
+        "stats": {
+            "totalPredictions": len(all_preds),
+            "latestScore": recent[0].predicted_score if recent else "--",
+            "attendance": int(round(recent[0].attendance)) if recent else "--",
+            "studyHours": int(round(recent[0].study_hours)) if recent else "--",
+        },
+        "defaults": {
+            "gender": "Male",
+            "extracurricular": "No",
+            "internet_access": "Yes",
+            "parental_education": "High School",
+        },
+        "formAction": url_for("student.student_predict"),
+        "historyUrl": url_for("student.student_history"),
+        "allPredictions": [
+            {
+                "date": pred.created_at.strftime("%Y-%m-%d") if pred.created_at else "",
+                "score": pred.predicted_score,
+            }
+            for pred in all_preds
+        ],
+        "recentPredictions": [
+            {
+                "id": pred.id,
+                "date": pred.created_at.strftime("%Y-%m-%d") if pred.created_at else "",
+                "score": pred.predicted_score,
+                "label": pred.performance_label,
+                "attendance": pred.attendance,
+                "study_hours": pred.study_hours,
+            }
+            for pred in recent
+        ],
+    }
     return render_template(
         "student/dashboard.html",
         recent_predictions=recent,
         all_predictions=all_preds,
         user_info=user_info,
+        dashboard_payload=dashboard_payload,
     )
 
 
@@ -290,4 +329,3 @@ def student_profile():
             return redirect(url_for("student.student_profile"))
 
     return render_template("student/profile.html", user=user)
-

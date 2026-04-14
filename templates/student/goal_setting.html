@@ -2,588 +2,853 @@
 {% block title %}PredictorHub | Goal Setting{% endblock %}
 
 {% block head %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-.student-main {
+/* ═══════════════════════════════
+   GOAL SETTING — PREMIUM UI
+   PredictorHub Scholastic Glass
+   ═══════════════════════════════ */
+:root {
+    --gs-bg: #faf9f5;
+    --gs-primary: #3f80f7;
+    --gs-primary-dark: #0056c3;
+    --gs-secondary: #8b67f0;
+    --gs-teal: #0f8b8d;
+    --gs-green: #29b888;
+    --gs-orange: #f0a34e;
+    --gs-ink: #1b1c1a;
+    --gs-muted: #5f6d76;
+    --gs-card: rgba(255, 255, 255, 0.82);
+    --gs-border: rgba(0, 0, 0, 0.07);
+    --gs-shadow: 0 8px 32px rgba(0, 0, 0, 0.07);
+    --gs-shadow-hover: 0 16px 48px rgba(63, 128, 247, 0.14);
+    --gs-radius: 20px;
+    --gs-radius-sm: 12px;
+}
+
+/* Layout overrides */
+.student-layout .student-main {
     max-width: none !important;
     width: 100% !important;
-    padding: 20px 14px 24px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.student-main {
+    background:
+        radial-gradient(80rem 50rem at 92% -5%, rgba(15, 139, 141, 0.1), transparent 65%),
+        radial-gradient(60rem 50rem at -5% 80%, rgba(240, 163, 78, 0.1), transparent 65%),
+        var(--gs-bg);
+    min-height: 100vh;
 }
 
-.student-topnav .profile-preview-image {
-    display: none !important;
+.goal-page-wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 28px 28px 60px;
 }
 
-.goal-page {
-    width: 100%;
+/* ── Hero Header ── */
+.goal-hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
 }
 
-.goal-header {
-    margin-bottom: 18px;
+.goal-breadcrumb {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--gs-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
 }
 
-.goal-header .page-title {
-    font-size: 2rem;
+.goal-breadcrumb a {
+    color: var(--gs-primary);
+    text-decoration: none;
+}
+
+.goal-page-title {
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 800;
     letter-spacing: -0.02em;
+    color: var(--gs-ink);
+    margin: 0;
 }
 
-.goal-top-tiles {
+.goal-page-sub {
+    margin-top: 6px;
+    color: var(--gs-muted);
+    font-size: 0.95rem;
+}
+
+/* ── Stat Tiles ── */
+.goal-tiles {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-    margin-bottom: 16px;
+    gap: 18px;
+    margin-bottom: 28px;
 }
 
-.tile {
-    border-radius: 14px;
-    padding: 16px 18px;
-    color: #ffffff;
+.goal-tile {
+    border-radius: var(--gs-radius);
+    padding: 22px 24px;
+    color: #fff;
     position: relative;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.24);
-    min-height: 98px;
+    border: 1px solid rgba(255,255,255,0.2);
+    min-height: 110px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.tile::after {
-    content: "";
+.goal-tile:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+}
+
+.goal-tile::before {
+    content: '';
     position: absolute;
-    width: 180px;
-    height: 180px;
-    right: -82px;
-    top: -92px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.24), transparent 65%);
+    width: 220px;
+    height: 220px;
+    right: -80px;
+    top: -100px;
+    background: radial-gradient(circle, rgba(255,255,255,0.22), transparent 65%);
+    pointer-events: none;
 }
 
-.tile.pred { background: linear-gradient(130deg, #3f80f7, #7ca8ff); }
-.tile.target { background: linear-gradient(130deg, #8b67f0, #ae85ff); }
-.tile.gap { background: linear-gradient(130deg, #57bdd3, #7fd5e4); }
+.goal-tile.tile-blue   { background: linear-gradient(135deg, #3f80f7 0%, #7ca8ff 100%); }
+.goal-tile.tile-purple { background: linear-gradient(135deg, #8b67f0 0%, #b490ff 100%); }
+.goal-tile.tile-teal   { background: linear-gradient(135deg, #0f8b8d 0%, #40b5b7 100%); }
 
 .tile-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
+    gap: 10px;
 }
 
-.tile-label {
-    font-size: 0.86rem;
-    font-weight: 600;
-    opacity: 0.96;
+.tile-label-text {
+    font-size: 0.82rem;
+    font-weight: 700;
+    opacity: 0.92;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 }
 
-.tile-icon {
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
+.tile-icon-box {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
     display: grid;
     place-items: center;
-    background: rgba(255, 255, 255, 0.22);
-    font-size: 0.9rem;
+    background: rgba(255,255,255,0.22);
+    font-size: 0.95rem;
+    flex-shrink: 0;
 }
 
-.tile-value {
-    margin-top: 8px;
-    font-size: 1.9rem;
+.tile-big-val {
+    margin-top: 12px;
+    font-size: 2.2rem;
     font-weight: 800;
     line-height: 1;
+    letter-spacing: -0.02em;
 }
 
-.tile-chip {
-    position: absolute;
-    right: 16px;
-    bottom: 14px;
-    background: rgba(255, 255, 255, 0.9);
-    color: #314a7a;
-    border-radius: 10px;
-    padding: 6px 10px;
-    font-size: 0.88rem;
-    font-weight: 700;
+.tile-sub-label {
+    margin-top: 4px;
+    font-size: 0.78rem;
+    opacity: 0.78;
+    font-weight: 500;
 }
 
-.goal-main-grid {
+/* ── Main Grid ── */
+.goal-grid {
     display: grid;
-    grid-template-columns: 1.05fr 1.45fr 1fr;
-    gap: 16px;
+    grid-template-columns: 320px 1fr 280px;
+    gap: 20px;
     align-items: start;
 }
 
 .goal-col {
     display: grid;
-    gap: 16px;
+    gap: 20px;
 }
 
-.goal-card {
-    border-radius: 14px;
+/* ── Glass Cards ── */
+.gs-card {
+    background: var(--gs-card);
+    border: 1px solid var(--gs-border);
+    border-radius: var(--gs-radius);
+    box-shadow: var(--gs-shadow);
+    backdrop-filter: blur(16px);
+    overflow: hidden;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.goal-card .card-header {
-    padding: 16px 18px 0;
+.gs-card:hover {
+    box-shadow: var(--gs-shadow-hover);
+    transform: translateY(-2px);
 }
 
-.goal-card .card-body {
-    padding: 14px 18px 18px;
+.gs-card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 20px 0;
 }
 
-.goal-card h3 {
-    font-size: 1.05rem;
+.gs-card-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    font-size: 0.85rem;
+    color: #fff;
+    flex-shrink: 0;
 }
 
-.section-sub {
-    font-size: 0.78rem;
-    color: var(--dark-400);
-    margin-top: 8px;
+.gs-card-icon.ic-blue   { background: linear-gradient(135deg, #3f80f7, #7ca8ff); }
+.gs-card-icon.ic-purple { background: linear-gradient(135deg, #8b67f0, #b490ff); }
+.gs-card-icon.ic-teal   { background: linear-gradient(135deg, #0f8b8d, #40b5b7); }
+.gs-card-icon.ic-green  { background: linear-gradient(135deg, #29b888, #52ccaa); }
+.gs-card-icon.ic-orange { background: linear-gradient(135deg, #f0a34e, #f7c27c); }
+
+.gs-card-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gs-ink);
+    letter-spacing: -0.01em;
 }
 
-.score-slider-wrap {
-    margin: 12px 0 18px;
+.gs-card-body {
+    padding: 16px 20px 20px;
+}
+
+/* ── Goal Form Card ── */
+.goal-form-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--gs-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.slider-container {
+    margin-bottom: 20px;
 }
 
 .slider-row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    margin-top: 8px;
 }
 
-.slider-value {
-    min-width: 58px;
-    padding: 4px 8px;
-    text-align: center;
-    border-radius: 8px;
-    background: #f1f4ff;
-    color: #395bb4;
-    font-weight: 700;
-    font-size: 0.84rem;
-    border: 1px solid #dfe5ff;
-}
-
-.goal-range {
+.goal-slider {
     width: 100%;
-    height: 7px;
-    border-radius: 10px;
+    height: 8px;
+    border-radius: 99px;
     appearance: none;
-    background: linear-gradient(to right, #3f80f7 0%, #8b67f0 100%);
     outline: none;
+    background: linear-gradient(90deg, var(--gs-primary) 0%, var(--gs-secondary) 100%);
+    cursor: pointer;
+    border: none;
 }
 
-.goal-range::-webkit-slider-thumb {
+.goal-slider::-webkit-slider-thumb {
     appearance: none;
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    border: 2px solid #ffffff;
-    background: #3f80f7;
-    box-shadow: 0 2px 7px rgba(34, 66, 145, 0.3);
+    background: #fff;
+    border: 3px solid var(--gs-primary);
+    box-shadow: 0 3px 8px rgba(63, 128, 247, 0.35);
     cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+.goal-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+}
+
+.slider-val-pill {
+    min-width: 58px;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background: #eef2ff;
+    color: #3f5bd4;
+    font-weight: 800;
+    font-size: 0.85rem;
+    border: 1px solid #d4dcff;
+    flex-shrink: 0;
+}
+
+.gs-input {
+    width: 100%;
+    border: 1.5px solid rgba(0,0,0,0.1);
+    border-radius: var(--gs-radius-sm);
+    background: rgba(255,255,255,0.9);
+    min-height: 46px;
+    color: var(--gs-ink);
+    font: inherit;
+    padding: 0.7rem 0.9rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.gs-input:focus {
+    border-color: rgba(63, 128, 247, 0.5);
+    box-shadow: 0 0 0 3px rgba(63, 128, 247, 0.12);
 }
 
 .analyze-btn {
-    margin-top: 10px;
-    background: linear-gradient(120deg, #2f74f5, #8b67f0);
-    color: #ffffff;
+    width: 100%;
+    padding: 13px 20px;
     border: 0;
-}
-
-.analyze-btn:hover {
-    color: #ffffff;
-    transform: translateY(-1px);
-}
-
-.chart-wrap {
-    height: 270px;
+    border-radius: var(--gs-radius-sm);
+    background: linear-gradient(120deg, var(--gs-primary-dark) 0%, var(--gs-primary) 50%, var(--gs-secondary) 100%);
+    background-size: 200% auto;
+    color: #fff;
+    font: inherit;
+    font-weight: 800;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(63, 128, 247, 0.35);
+    transition: background-position 0.4s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     margin-top: 4px;
 }
 
-.weekly-table {
+.analyze-btn:hover {
+    background-position: right center;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(63, 128, 247, 0.48);
+    color: #fff;
+}
+
+/* ── Study Plan Card ── */
+.plan-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 99px;
+    background: #d4f5ea;
+    color: #1a8060;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.plan-items {
+    display: grid;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.plan-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 14px;
+    border-radius: var(--gs-radius-sm);
+    border-left: 4px solid transparent;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.plan-item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.plan-item.pi-blue   { background: #eef3ff; border-left-color: var(--gs-primary); }
+.plan-item.pi-green  { background: #edfaf4; border-left-color: var(--gs-green); }
+.plan-item.pi-orange { background: #fff7ed; border-left-color: var(--gs-orange); }
+
+.plan-icon-sq {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-size: 1rem;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.pi-blue .plan-icon-sq  { background: var(--gs-primary); }
+.pi-green .plan-icon-sq { background: var(--gs-green); }
+.pi-orange .plan-icon-sq{ background: var(--gs-orange); }
+
+.plan-info { flex: 1; min-width: 0; }
+
+.plan-label-txt {
+    font-weight: 700;
+    font-size: 0.87rem;
+    color: var(--gs-ink);
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.plan-desc-txt {
+    font-size: 0.76rem;
+    color: var(--gs-muted);
+    display: block;
+    margin-top: 2px;
+    line-height: 1.4;
+}
+
+.plan-time-chip {
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--gs-ink);
+    padding: 4px 9px;
+    background: rgba(255,255,255,0.65);
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.plan-info-box {
+    margin-top: 14px;
+    padding: 11px 13px;
+    background: #f9fafb;
+    border-radius: 11px;
+    border: 1px dashed #d1d5db;
+    font-size: 0.78rem;
+    color: #475569;
+    line-height: 1.5;
+}
+
+/* ── Chart Card ── */
+.chart-wrap {
+    height: 270px;
+    margin-top: 6px;
+    position: relative;
+}
+
+/* ── Weekly Table ── */
+.weekly-tbl {
     width: 100%;
     border-collapse: collapse;
 }
 
-.weekly-table th,
-.weekly-table td {
-    border-bottom: 1px solid #edf1f8;
-    padding: 11px 4px;
-    text-align: left;
-    font-size: 0.85rem;
-}
-
-.weekly-table th {
-    color: var(--dark-400);
-    font-size: 0.74rem;
+.weekly-tbl th {
+    color: var(--gs-muted);
+    font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.05em;
+    padding: 10px 6px;
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+    text-align: left;
 }
 
-.pill {
+.weekly-tbl td {
+    padding: 11px 6px;
+    font-size: 0.87rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.weekly-tbl tr:last-child td { border-bottom: none; }
+.weekly-tbl tr:hover td { background: rgba(63,128,247,0.04); }
+
+.impr-pill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 3px 9px;
-    border-radius: 999px;
-    background: #eaf3ff;
-    color: #3069d2;
+    padding: 3px 10px;
+    border-radius: 99px;
+    background: #eef2ff;
+    color: #3f5bd4;
     font-weight: 700;
     font-size: 0.78rem;
 }
 
-.snapshot-list {
+/* ── Snapshot Card ── */
+.snapshot-rows {
     display: grid;
-    gap: 12px;
+    gap: 14px;
+    margin-top: 4px;
 }
 
-.snapshot-item {
+.snapshot-row {
     display: grid;
-    grid-template-columns: 1.2fr 1fr auto;
-    gap: 12px;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
     align-items: center;
     font-size: 0.84rem;
-    padding: 3px 0;
 }
 
-.line-track {
-    height: 4px;
-    background: #edf0f7;
-    border-radius: 8px;
+.snapshot-label {
+    color: var(--gs-muted);
+    font-weight: 500;
+}
+
+.snapshot-val {
+    font-weight: 800;
+    color: var(--gs-ink);
+    font-size: 0.88rem;
+}
+
+.snap-bar-track {
+    grid-column: 1 / -1;
+    height: 5px;
+    background: #edf1f7;
+    border-radius: 99px;
     position: relative;
+    margin-top: -6px;
 }
 
-.line-fill {
+.snap-bar-fill {
     position: absolute;
     left: 0;
     top: 0;
     height: 100%;
-    border-radius: 8px;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--gs-primary), var(--gs-secondary));
 }
 
-.line-fill.blue { background: #3f80f7; }
-.line-fill.violet { background: linear-gradient(90deg, #8b67f0, #3f80f7); }
-
-.snapshot-strong {
-    font-weight: 700;
-    color: #314d90;
-}
-
-.insight-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+/* ── Insights Card ── */
+.insight-rows {
     display: grid;
     gap: 16px;
 }
 
-.insight-item {
+.insight-row {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     align-items: flex-start;
 }
 
-.insight-item i {
-    width: 20px;
-    height: 20px;
+.insight-dot {
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     display: grid;
     place-items: center;
     color: #fff;
     font-size: 0.68rem;
+    flex-shrink: 0;
     margin-top: 2px;
 }
 
-.ic-green { background: #29b888; }
-.ic-orange { background: #f0a34e; }
-.ic-purple { background: #8672f3; }
+.id-green  { background: var(--gs-green); }
+.id-orange { background: var(--gs-orange); }
+.id-purple { background: var(--gs-secondary); }
 
 .insight-title {
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
+    color: var(--gs-ink);
 }
 
 .insight-text {
-    color: var(--dark-500);
-    font-size: 0.83rem;
+    font-size: 0.81rem;
+    color: var(--gs-muted);
+    margin-top: 2px;
+    line-height: 1.45;
 }
 
-.tips-list {
+/* ── Final Advice Card ── */
+.final-advice-card {
+    background: linear-gradient(135deg, rgba(139, 103, 240, 0.08), rgba(63, 128, 247, 0.06));
+    border: 1px solid rgba(139, 103, 240, 0.18);
+}
+
+.final-advice-text {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--gs-muted);
+    font-style: italic;
+}
+
+/* ── Empty State ── */
+.empty-state-card {
+    padding: 40px 30px;
+    text-align: center;
+}
+
+.empty-icon-ring {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(63, 128, 247, 0.12), rgba(139, 103, 240, 0.12));
     display: grid;
-    gap: 10px;
-    list-style: none;
-    padding: 0;
-    margin: 0;
+    place-items: center;
+    margin: 0 auto 20px;
+    font-size: 1.8rem;
+    color: var(--gs-primary);
 }
 
-.tips-list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
+.empty-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--gs-ink);
+    margin-bottom: 8px;
+}
+
+.empty-text {
     font-size: 0.9rem;
-}
-
-.tips-list i {
-    color: #3578f5;
-    margin-top: 3px;
-}
-
-.final-advice {
-    font-size: 0.92rem;
+    color: var(--gs-muted);
     line-height: 1.55;
-    color: var(--dark-600);
+    max-width: 360px;
+    margin: 0 auto 24px;
 }
 
-.empty-goal {
-    margin-top: 10px;
+.go-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: var(--gs-radius-sm);
+    background: linear-gradient(120deg, var(--gs-primary-dark), var(--gs-secondary));
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(63, 128, 247, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-@media (max-width: 1220px) {
-    .goal-main-grid {
-        grid-template-columns: 1fr;
-    }
+.go-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(63, 128, 247, 0.45);
+    color: #fff;
 }
 
-@media (max-width: 840px) {
-    .goal-top-tiles {
-        grid-template-columns: 1fr;
-    }
-
-    .goal-header .page-title {
-        font-size: 1.65rem;
-    }
-
-    .goal-card .card-header {
-        padding: 14px 14px 0;
-    }
-
-    .goal-card .card-body {
-        padding: 12px 14px 14px;
-    }
+/* ── Reveal Animation ── */
+.reveal-gs {
+    opacity: 0;
+    transform: translateY(18px);
+    animation: gsReveal 0.55s ease forwards;
+    animation-delay: var(--d, 0s);
 }
-    /* Study Plan Enhancements */
-    .study-plan-list {
-        display: grid;
-        gap: 12px;
-        margin-top: 8px;
-    }
 
-    .study-plan-item {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        padding: 14px;
-        background: #f8faff;
-        border-radius: 12px;
-        border-right: 4px solid transparent;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    
-    .study-plan-item:hover {
-        transform: translateX(4px);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
+@keyframes gsReveal {
+    to { opacity: 1; transform: translateY(0); }
+}
 
-    .study-plan-item.weak { border-right-color: #3f80f7; background: #f0f5ff; }
-    .study-plan-item.practice { border-right-color: #29b888; background: #f0faf6; }
-    .study-plan-item.revision { border-right-color: #f0a34e; background: #fff8f0; }
+/* ── Responsive ── */
+@media (max-width: 1200px) {
+    .goal-grid {
+        grid-template-columns: 300px 1fr;
+    }
+    .goal-col:last-child { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+}
 
-    .plan-icon {
-        width: 42px;
-        height: 42px;
-        border-radius: 10px;
-        display: grid;
-        place-items: center;
-        font-size: 1.1rem;
-        flex-shrink: 0;
-    }
-    .study-plan-item.weak .plan-icon { background: #3f80f7; color: white; }
-    .study-plan-item.practice .plan-icon { background: #29b888; color: white; }
-    .study-plan-item.revision .plan-icon { background: #f0a34e; color: white; }
-
-    .plan-info { flex: 1; }
-    .plan-label { 
-        font-weight: 700; 
-        font-size: 0.9rem; 
-        display: block; 
-        color: #1a202c;
-        margin-bottom: 2px; 
-    }
-    .plan-desc { 
-        font-size: 0.78rem; 
-        color: #4a5568; 
-        display: block; 
-        line-height: 1.4; 
-    }
-    .plan-time { 
-        font-weight: 800; 
-        font-size: 0.9rem; 
-        color: #2d3748;
-        padding: 4px 8px;
-        background: rgba(255,255,255,0.6);
-        border-radius: 6px;
-    }
+@media (max-width: 900px) {
+    .goal-grid { grid-template-columns: 1fr; }
+    .goal-tiles { grid-template-columns: 1fr; }
+    .goal-col:last-child { grid-template-columns: 1fr; }
+    .goal-page-wrap { padding: 16px 14px 60px; }
+}
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="goal-page">
-    <div class="page-header goal-header">
-        <h1 class="page-title">Goal Setting</h1>
+<div class="goal-page-wrap">
+
+    <!-- ── Hero Header ── -->
+    <div class="goal-hero reveal-gs" style="--d:0.05s">
+        <div>
+            <div class="goal-breadcrumb">
+                <a href="{{ url_for('student.student_dashboard') }}">Dashboard</a>
+                <span style="margin: 0 6px; opacity:0.5;">›</span>
+                Goal Setting
+            </div>
+            <h1 class="goal-page-title">Goal Setting</h1>
+            <p class="goal-page-sub">Set your target score and get a personalized study roadmap.</p>
+        </div>
     </div>
 
     {% if current and goal_analysis %}
-    <section class="goal-top-tiles">
-        <article class="tile pred">
+    <!-- ── Stat Tiles ── -->
+    <section class="goal-tiles">
+        <article class="goal-tile tile-blue reveal-gs" style="--d:0.1s">
             <div class="tile-head">
-                <span class="tile-label">Predicted Score</span>
-                <span class="tile-icon"><i class="fas fa-chart-column"></i></span>
+                <span class="tile-label-text">Predicted Score</span>
+                <span class="tile-icon-box"><i class="fas fa-chart-column"></i></span>
             </div>
-            <div class="tile-value">{{ goal_analysis.predicted_score }}%</div>
-            <span class="tile-chip">{{ goal_analysis.predicted_score }}%</span>
+            <div class="tile-big-val">{{ goal_analysis.predicted_score }}%</div>
+            <div class="tile-sub-label">Your current forecast</div>
         </article>
 
-        <article class="tile target">
+        <article class="goal-tile tile-purple reveal-gs" style="--d:0.15s">
             <div class="tile-head">
-                <span class="tile-label">Target Score</span>
-                <span class="tile-icon"><i class="fas fa-trophy"></i></span>
+                <span class="tile-label-text">Target Score</span>
+                <span class="tile-icon-box"><i class="fas fa-trophy"></i></span>
             </div>
-            <div class="tile-value">{{ goal_analysis.goal_score }}%</div>
+            <div class="tile-big-val">{{ goal_analysis.goal_score }}%</div>
+            <div class="tile-sub-label">Your ambition goal</div>
         </article>
 
-        <article class="tile gap">
+        <article class="goal-tile tile-teal reveal-gs" style="--d:0.2s">
             <div class="tile-head">
-                <span class="tile-label">Gap</span>
-                <span class="tile-icon"><i class="fas fa-arrow-trend-up"></i></span>
+                <span class="tile-label-text">Gap to Close</span>
+                <span class="tile-icon-box"><i class="fas fa-arrow-trend-up"></i></span>
             </div>
-            <div class="tile-value">+{{ goal_analysis.gap }}%</div>
+            <div class="tile-big-val">+{{ goal_analysis.gap }}%</div>
+            <div class="tile-sub-label">Improvement needed</div>
         </article>
     </section>
 
-    <section class="goal-main-grid">
+    <!-- ── Main Grid ── -->
+    <section class="goal-grid">
+
+        <!-- Column 1: Controls -->
         <div class="goal-col">
-            <article class="card goal-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-flag"></i> Set Your Goal</h3>
+            <!-- Set Your Goal -->
+            <article class="gs-card reveal-gs" style="--d:0.25s">
+                <div class="gs-card-head">
+                    <div class="gs-card-icon ic-blue"><i class="fas fa-flag"></i></div>
+                    <h3 class="gs-card-title">Set Your Goal</h3>
                 </div>
-                <div class="card-body">
+                <div class="gs-card-body">
                     <form method="POST" action="{{ url_for('student.student_goal_setting') }}">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                        <div class="form-group">
-                            <label class="form-label">Target Score</label>
-                            <div class="score-slider-wrap">
-                                <div class="slider-row">
-                                    <input
-                                        type="range"
-                                        id="targetSlider"
-                                        class="goal-range"
-                                        min="0"
-                                        max="100"
-                                        step="1"
-                                        value="{{ goal_analysis.goal_score|round|int }}"
-                                    >
-                                    <span class="slider-value" id="targetValue">{{ goal_analysis.goal_score|round|int }}%</span>
-                                </div>
+
+                        <div class="slider-container">
+                            <label class="goal-form-label">Target Score</label>
+                            <div class="slider-row">
+                                <input
+                                    type="range"
+                                    id="targetSlider"
+                                    class="goal-slider"
+                                    min="0" max="100" step="1"
+                                    value="{{ goal_analysis.goal_score|round|int }}"
+                                >
+                                <span class="slider-val-pill" id="targetValue">{{ goal_analysis.goal_score|round|int }}%</span>
                             </div>
-                            <input type="hidden" id="targetPercentageInput" name="target_percentage" value="{{ goal_analysis.goal_score|round|int }}">
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Days Left Until Exam</label>
+                        <input type="hidden" id="targetPercentageInput" name="target_percentage" value="{{ goal_analysis.goal_score|round|int }}">
+
+                        <div style="margin-bottom: 18px;">
+                            <label class="goal-form-label">Days Left Until Exam</label>
                             <input
                                 type="number"
                                 name="days_left"
-                                class="form-input"
-                                min="1"
-                                max="365"
+                                class="gs-input"
+                                min="1" max="365"
                                 value="{{ days_left_default }}"
                                 required
                             >
                         </div>
-                        <button type="submit" class="btn btn-block analyze-btn">
+
+                        <button type="submit" class="analyze-btn">
                             <i class="fas fa-magnifying-glass"></i> Analyze My Goal
                         </button>
                     </form>
                 </div>
             </article>
 
-            <article class="card goal-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-book-open"></i> Daily Study Plan</h3>
+            <!-- Daily Study Plan -->
+            <article class="gs-card reveal-gs" style="--d:0.3s">
+                <div class="gs-card-head">
+                    <div class="gs-card-icon ic-green"><i class="fas fa-book-open"></i></div>
+                    <h3 class="gs-card-title">Daily Study Plan</h3>
                 </div>
-                <div class="card-body">
-                    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px;">
-                        <h4 style="margin: 0; font-size: 0.95rem; color: var(--dark-500);">Target Study: <strong>{{ goal_analysis.daily_hours_min }}-{{ goal_analysis.daily_hours_max }} hrs/day</strong></h4>
-                        <span class="badge badge-success" style="font-size: 0.65rem; background: #29b888; color: white;">Expert Plan</span>
+                <div class="gs-card-body">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <span style="font-size: 0.85rem; color: var(--gs-muted);">Target: <strong style="color: var(--gs-ink);">{{ goal_analysis.daily_hours_min }}-{{ goal_analysis.daily_hours_max }} hrs/day</strong></span>
+                        <span class="plan-badge">Expert Plan</span>
                     </div>
 
-                    <div class="study-plan-list">
-                        <!-- Weak Topics -->
-                        <div class="study-plan-item weak">
-                            <div class="plan-icon"><i class="fas fa-brain"></i></div>
+                    <div class="plan-items">
+                        <div class="plan-item pi-blue">
+                            <div class="plan-icon-sq"><i class="fas fa-brain"></i></div>
                             <div class="plan-info">
-                                <span class="plan-label">Focus: Weak Topics (50%)</span>
-                                <span class="plan-desc">Master the concepts and chapters you find most challenging.</span>
+                                <span class="plan-label-txt">Weak Topics (50%)</span>
+                                <span class="plan-desc-txt">Focus on challenging concepts</span>
                             </div>
                             {% set val = (goal_analysis.daily_hours_min * 0.5) %}
-                            <div class="plan-time">{% if val < 1 %}{{ (val * 60)|round|int }}m{% else %}{{ val|round(1) }}h{% endif %}</div>
+                            <div class="plan-time-chip">{% if val < 1 %}{{ (val * 60)|round|int }}m{% else %}{{ val|round(1) }}h{% endif %}</div>
                         </div>
 
-                        <!-- Practice -->
-                        <div class="study-plan-item practice">
-                            <div class="plan-icon"><i class="fas fa-edit"></i></div>
+                        <div class="plan-item pi-green">
+                            <div class="plan-icon-sq"><i class="fas fa-edit"></i></div>
                             <div class="plan-info">
-                                <span class="plan-label">Practice & Solving (30%)</span>
-                                <span class="plan-desc">Apply your core knowledge by solving mock tests and samples.</span>
+                                <span class="plan-label-txt">Practice & Solving (30%)</span>
+                                <span class="plan-desc-txt">Mock tests & sample problems</span>
                             </div>
                             {% set val = (goal_analysis.daily_hours_min * 0.3) %}
-                            <div class="plan-time">{% if val < 1 %}{{ (val * 60)|round|int }}m{% else %}{{ val|round(1) }}h{% endif %}</div>
+                            <div class="plan-time-chip">{% if val < 1 %}{{ (val * 60)|round|int }}m{% else %}{{ val|round(1) }}h{% endif %}</div>
                         </div>
 
-                        <!-- Revision -->
-                        <div class="study-plan-item revision">
-                            <div class="plan-icon"><i class="fas fa-history"></i></div>
+                        <div class="plan-item pi-orange">
+                            <div class="plan-icon-sq"><i class="fas fa-history"></i></div>
                             <div class="plan-info">
-                                <span class="plan-label">Daily Revision (20%)</span>
-                                <span class="plan-desc">Briefly review everything you learned today for retention.</span>
+                                <span class="plan-label-txt">Daily Revision (20%)</span>
+                                <span class="plan-desc-txt">Review for strong retention</span>
                             </div>
                             {% set val = (goal_analysis.daily_hours_min * 0.2) %}
-                            <div class="plan-time">{% if val < 1 %}{{ (val * 60)|round|int }}m{% else %}{{ val|round(1) }}h{% endif %}</div>
+                            <div class="plan-time-chip">{% if val < 1 %}{{ (val * 60)|round|int }}m{% else %}{{ val|round(1) }}h{% endif %}</div>
                         </div>
                     </div>
 
-                    <div style="margin-top: 22px; padding: 12px; background: #f1f5f9; border-radius: 10px; border: 1px dashed #cbd5e1;">
-                         <p style="font-size: 0.78rem; color: #475569; margin: 0; line-height: 1.5;">
-                            <i class="fas fa-lightbulb" style="color: #f59e0b; margin-right: 5px;"></i> 
-                            To reach this goal, maintain <strong>{{ goal_analysis.required_attendance }}% attendance</strong> and study for <strong>{{ goal_analysis.required_study_hours }} hrs/week</strong>.
-                         </p>
+                    <div class="plan-info-box">
+                        <i class="fas fa-lightbulb" style="color: #f59e0b; margin-right: 6px;"></i>
+                        Maintain <strong>{{ goal_analysis.required_attendance }}% attendance</strong> and study <strong>{{ goal_analysis.required_study_hours }} hrs/week</strong> to reach your goal.
                     </div>
                 </div>
             </article>
         </div>
 
+        <!-- Column 2: Charts & Table -->
         <div class="goal-col">
-            <article class="card goal-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-chart-line"></i> Progress Overview</h3>
+            <!-- Progress Overview Chart -->
+            <article class="gs-card reveal-gs" style="--d:0.35s">
+                <div class="gs-card-head">
+                    <div class="gs-card-icon ic-blue"><i class="fas fa-chart-line"></i></div>
+                    <h3 class="gs-card-title">Progress Overview</h3>
+                    <div style="display:flex;gap:16px;margin-left:auto;font-size:0.78rem;font-weight:600;">
+                        <span style="color: var(--gs-primary);"><span style="display:inline-block;width:12px;height:3px;background:var(--gs-primary);border-radius:2px;vertical-align:middle;margin-right:4px;"></span>Current</span>
+                        <span style="color: var(--gs-orange);"><span style="display:inline-block;width:12px;height:3px;background:var(--gs-orange);border-radius:2px;border-top:2px dashed var(--gs-orange);vertical-align:middle;margin-right:4px;"></span>Target</span>
+                    </div>
                 </div>
-                <div class="card-body">
+                <div class="gs-card-body">
                     <div class="chart-wrap">
                         <canvas id="goalProgressChart"></canvas>
                     </div>
                 </div>
             </article>
 
-            <article class="card goal-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-bullseye"></i> Weekly Targets</h3>
+            <!-- Weekly Targets Table -->
+            <article class="gs-card reveal-gs" style="--d:0.42s">
+                <div class="gs-card-head">
+                    <div class="gs-card-icon ic-purple"><i class="fas fa-bullseye"></i></div>
+                    <h3 class="gs-card-title">Weekly Targets</h3>
                 </div>
-                <div class="card-body">
-                    <table class="weekly-table">
+                <div class="gs-card-body">
+                    <table class="weekly-tbl">
                         <thead>
                             <tr>
                                 <th>Week</th>
                                 <th>Improvement</th>
-                                <th>Target by Week End</th>
+                                <th>Target by End</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for row in goal_analysis.weekly_targets %}
                             <tr>
-                                <td>Week {{ row.week }}</td>
-                                <td><span class="pill">+{{ row.improvement }}%</span></td>
+                                <td style="font-weight:600;">Week {{ row.week }}</td>
+                                <td><span class="impr-pill">+{{ row.improvement }}%</span></td>
                                 <td><strong>{{ row.expected_score }}%</strong></td>
                             </tr>
                             {% endfor %}
@@ -593,94 +858,110 @@
             </article>
         </div>
 
+        <!-- Column 3: Snapshot & Insights -->
         <div class="goal-col">
-            <article class="card goal-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-chart-line"></i> Current Snapshot</h3>
+            <!-- Current Snapshot -->
+            <article class="gs-card reveal-gs" style="--d:0.45s">
+                <div class="gs-card-head">
+                    <div class="gs-card-icon ic-teal"><i class="fas fa-chart-pie"></i></div>
+                    <h3 class="gs-card-title">Current Snapshot</h3>
                 </div>
-                <div class="card-body">
-                    <div class="snapshot-list">
-                        <div class="snapshot-item">
-                            <span>Predicted Final Score</span>
-                            <div class="line-track"><div class="line-fill blue" style="width: {{ goal_analysis.predicted_score }}%"></div></div>
-                            <strong class="snapshot-strong">{{ goal_analysis.predicted_score }}%</strong>
+                <div class="gs-card-body">
+                    <div class="snapshot-rows">
+                        <div class="snapshot-row">
+                            <span class="snapshot-label">Predicted Score</span>
+                            <span class="snapshot-val">{{ goal_analysis.predicted_score }}%</span>
+                            <div class="snap-bar-track">
+                                <div class="snap-bar-fill" style="width:{{ goal_analysis.predicted_score }}%; background: linear-gradient(90deg, var(--gs-primary), var(--gs-secondary));"></div>
+                            </div>
                         </div>
-                        <div class="snapshot-item">
-                            <span>Target Score</span>
-                            <div class="line-track"><div class="line-fill violet" style="width: {{ goal_analysis.goal_score }}%"></div></div>
-                            <strong class="snapshot-strong">{{ goal_analysis.goal_score }}%</strong>
+                        <div class="snapshot-row">
+                            <span class="snapshot-label">Target Score</span>
+                            <span class="snapshot-val">{{ goal_analysis.goal_score }}%</span>
+                            <div class="snap-bar-track">
+                                <div class="snap-bar-fill" style="width:{{ goal_analysis.goal_score }}%; background: linear-gradient(90deg, var(--gs-secondary), #b490ff);"></div>
+                            </div>
                         </div>
-                        <div class="snapshot-item">
-                            <span>Current Study Hours / Week</span>
-                            <span></span>
-                            <strong>{{ current.study_hours }} hrs</strong>
+                        <div class="snapshot-row">
+                            <span class="snapshot-label">Study Hours/Week</span>
+                            <span class="snapshot-val">{{ current.study_hours }} hrs</span>
                         </div>
-                        <div class="snapshot-item">
-                            <span>Current Attendance</span>
-                            <span></span>
-                            <strong>{{ current.attendance }}%</strong>
+                        <div class="snapshot-row">
+                            <span class="snapshot-label">Attendance</span>
+                            <span class="snapshot-val">{{ current.attendance }}%</span>
+                            <div class="snap-bar-track">
+                                <div class="snap-bar-fill" style="width:{{ current.attendance }}%; background: linear-gradient(90deg, var(--gs-teal), #40b5b7);"></div>
+                            </div>
                         </div>
-                        <div class="snapshot-item">
-                            <span>Past Exam Score</span>
-                            <span></span>
-                            <strong>{{ current.previous_marks }}%</strong>
+                        <div class="snapshot-row">
+                            <span class="snapshot-label">Past Exam Score</span>
+                            <span class="snapshot-val">{{ current.previous_marks }}%</span>
                         </div>
                     </div>
                 </div>
             </article>
 
-            <article class="card goal-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-file-waveform"></i> Goal Insights Report</h3>
+            <!-- Goal Insights -->
+            <article class="gs-card reveal-gs" style="--d:0.5s">
+                <div class="gs-card-head">
+                    <div class="gs-card-icon ic-orange"><i class="fas fa-file-waveform"></i></div>
+                    <h3 class="gs-card-title">Goal Insights</h3>
                 </div>
-                <div class="card-body">
-                    <ul class="insight-list">
-                        <li class="insight-item">
-                            <i class="ic-green fas fa-check"></i>
+                <div class="gs-card-body">
+                    <div class="insight-rows">
+                        <div class="insight-row">
+                            <div class="insight-dot id-green"><i class="fas fa-check"></i></div>
                             <div>
                                 <div class="insight-title">Goal Analysis</div>
                                 <div class="insight-text">{{ goal_analysis.feasibility }}</div>
                             </div>
-                        </li>
-                        <li class="insight-item">
-                            <i class="ic-orange fas fa-bolt"></i>
+                        </div>
+                        <div class="insight-row">
+                            <div class="insight-dot id-orange"><i class="fas fa-bolt"></i></div>
                             <div>
                                 <div class="insight-title">Performance Gap</div>
-                                <div class="insight-text">+{{ goal_analysis.gap }}% improvement required</div>
+                                <div class="insight-text">+{{ goal_analysis.gap }}% improvement required to hit your goal</div>
                             </div>
-                        </li>
-                        <li class="insight-item">
-                            <i class="ic-purple fas fa-clock"></i>
+                        </div>
+                        <div class="insight-row">
+                            <div class="insight-dot id-purple"><i class="fas fa-clock"></i></div>
                             <div>
-                                <div class="insight-title">Recommended Study Hours</div>
-                                <div class="insight-text">{{ goal_analysis.daily_hours_min }}-{{ goal_analysis.daily_hours_max }} hrs/day</div>
+                                <div class="insight-title">Study Hours Needed</div>
+                                <div class="insight-text">{{ goal_analysis.daily_hours_min }}-{{ goal_analysis.daily_hours_max }} hrs/day recommended</div>
                             </div>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 </div>
             </article>
 
-            <article class="card goal-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-rocket"></i> Final Advice</h3>
+            <!-- Final Advice -->
+            <article class="gs-card final-advice-card reveal-gs" style="--d:0.56s">
+                <div class="gs-card-head">
+                    <div class="gs-card-icon ic-purple"><i class="fas fa-rocket"></i></div>
+                    <h3 class="gs-card-title">Final Advice</h3>
                 </div>
-                <div class="card-body">
-                    <p class="final-advice">{{ goal_analysis.final_advice }}</p>
+                <div class="gs-card-body">
+                    <p class="final-advice-text">{{ goal_analysis.final_advice }}</p>
                 </div>
             </article>
         </div>
+
     </section>
+
     {% else %}
-    <div class="card empty-goal">
-        <div class="card-body">
-            <h3>No baseline data yet</h3>
-            <p class="section-sub">Please submit at least one prediction from your dashboard to generate goal analytics.</p>
-            <a href="{{ url_for('student.student_dashboard') }}" class="btn btn-primary" style="margin-top: 12px;">
+    <!-- Empty State -->
+    <div class="gs-card reveal-gs" style="--d:0.1s">
+        <div class="empty-state-card">
+            <div class="empty-icon-ring"><i class="fas fa-bullseye"></i></div>
+            <h2 class="empty-title">No Baseline Data Yet</h2>
+            <p class="empty-text">Please submit at least one prediction from your dashboard to unlock goal analytics and your personalized study roadmap.</p>
+            <a href="{{ url_for('student.student_dashboard') }}" class="go-btn">
                 <i class="fas fa-bolt"></i> Go to Dashboard
             </a>
         </div>
     </div>
     {% endif %}
+
 </div>
 {% endblock %}
 
@@ -688,6 +969,7 @@
 {% if current and goal_analysis %}
 <script>
 (function () {
+    // Slider sync
     const slider = document.getElementById("targetSlider");
     const sliderValue = document.getElementById("targetValue");
     const targetInput = document.getElementById("targetPercentageInput");
@@ -697,6 +979,9 @@
         const value = parseInt(slider.value, 10);
         sliderValue.textContent = value + "%";
         targetInput.value = value;
+        // Update gradient position based on value
+        const pct = (value / 100) * 100;
+        slider.style.background = `linear-gradient(90deg, #3f80f7 0%, #8b67f0 ${pct}%, #e2e8f0 ${pct}%, #e2e8f0 100%)`;
     }
 
     if (slider) {
@@ -704,8 +989,9 @@
         syncTarget();
     }
 
+    // Progress Chart
     const ctx = document.getElementById("goalProgressChart");
-    if (!ctx) return;
+    if (!ctx || typeof Chart === 'undefined') return;
 
     const labels = [{% for row in goal_analysis.weekly_targets %}"Week {{ row.week }}"{% if not loop.last %}, {% endif %}{% endfor %}];
     const projected = [{% for row in goal_analysis.weekly_targets %}{{ row.expected_score }}{% if not loop.last %}, {% endif %}{% endfor %}];
@@ -716,8 +1002,14 @@
         const ratio = (idx + 1) / labels.length;
         return +(startScore + (targetScore - startScore) * ratio).toFixed(1);
     });
-    const minAxis = Math.max(0, Math.floor(Math.min(startScore, targetScore) - 10));
-    const maxAxis = Math.min(100, Math.ceil(Math.max(startScore, targetScore) + 10));
+
+    const minAxis = Math.max(0, Math.floor(Math.min(startScore, targetScore) - 12));
+    const maxAxis = Math.min(100, Math.ceil(Math.max(startScore, targetScore) + 12));
+
+    const ctxEl = ctx.getContext('2d');
+    const fillGrad = ctxEl.createLinearGradient(0, 0, 0, 260);
+    fillGrad.addColorStop(0, 'rgba(63, 128, 247, 0.28)');
+    fillGrad.addColorStop(1, 'rgba(63, 128, 247, 0.01)');
 
     new Chart(ctx, {
         type: "line",
@@ -728,23 +1020,29 @@
                     label: "Current Path",
                     data: projected,
                     borderColor: "#3f80f7",
-                    backgroundColor: "rgba(63, 128, 247, 0.14)",
+                    backgroundColor: fillGrad,
                     borderWidth: 2.5,
-                    fill: false,
-                    tension: 0.3,
-                    pointRadius: 4,
-                    pointBackgroundColor: "#3f80f7"
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointHoverRadius: 7,
+                    pointBackgroundColor: "#ffffff",
+                    pointBorderColor: "#3f80f7",
+                    pointBorderWidth: 2.5
                 },
                 {
                     label: "Target Path",
                     data: targetPath,
                     borderColor: "#f0a34e",
-                    borderDash: [6, 6],
+                    borderDash: [7, 5],
                     borderWidth: 2,
                     fill: false,
-                    tension: 0.3,
-                    pointRadius: 3,
-                    pointBackgroundColor: "#f0a34e"
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: "#f0a34e",
+                    pointBorderColor: "#ffffff",
+                    pointBorderWidth: 2
                 }
             ]
         },
@@ -756,25 +1054,31 @@
                 tooltip: {
                     backgroundColor: "#1f2a44",
                     titleColor: "#ffffff",
-                    bodyColor: "#dbe7ff",
-                    padding: 10
+                    bodyColor: "#c7d8ff",
+                    padding: 12,
+                    cornerRadius: 10,
+                    displayColors: true
                 }
             },
             scales: {
                 x: {
-                    grid: { color: "#edf1f8" },
-                    ticks: { color: "#77839f", font: { size: 11 } }
+                    grid: { color: "rgba(0,0,0,0.05)", drawBorder: false },
+                    ticks: { color: "#8a94a6", font: { size: 11, family: 'Plus Jakarta Sans' } }
                 },
                 y: {
                     min: minAxis,
                     max: maxAxis,
-                    grid: { color: "#edf1f8" },
+                    grid: { color: "rgba(0,0,0,0.05)", drawBorder: false },
                     ticks: {
-                        color: "#77839f",
-                        callback: function (value) { return value + "%"; },
-                        font: { size: 11 }
+                        color: "#8a94a6",
+                        callback: function (v) { return v + "%"; },
+                        font: { size: 11, family: 'Plus Jakarta Sans' }
                     }
                 }
+            },
+            animation: {
+                duration: 900,
+                easing: 'easeInOutQuart'
             }
         }
     });
