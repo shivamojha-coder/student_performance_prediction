@@ -3009,11 +3009,106 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ─── History Page ───────────────────────────────────────────── */
 .history-page {
+    width: 100%;
     max-width: 1100px;
     margin: 0 auto;
 }
 
+body.history-theme {
+    background:
+        radial-gradient(95rem 60rem at 95% -20%, rgba(15, 139, 141, 0.55), transparent 56%),
+        radial-gradient(82rem 42rem at -20% 10%, rgba(255, 127, 80, 0.48), transparent 58%),
+        radial-gradient(70rem 40rem at 50% 120%, rgba(56, 189, 248, 0.28), transparent 65%),
+        linear-gradient(180deg, #f6f1e6 0%, #e7f4ff 100%);
+    min-height: 100vh;
+}
+
+body.history-theme .student-layout {
+    background:
+        radial-gradient(95rem 60rem at 95% -20%, rgba(15, 139, 141, 0.38), transparent 56%),
+        radial-gradient(82rem 42rem at -20% 10%, rgba(255, 127, 80, 0.32), transparent 58%),
+        radial-gradient(70rem 40rem at 50% 120%, rgba(56, 189, 248, 0.2), transparent 65%),
+        linear-gradient(180deg, #f6f1e6 0%, #e7f4ff 100%);
+}
+
+body.history-theme .student-main {
+    background: transparent;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+body.history-theme .history-page .card {
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid rgba(31, 42, 49, 0.06);
+    border-radius: 18px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 18px 40px rgba(24, 32, 64, 0.12);
+}
+
+body.history-theme .history-page .table-responsive {
+    padding: 10px 6px 6px;
+}
+
+body.history-theme .history-page .data-table {
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+
+body.history-theme .history-page .data-table thead th {
+    color: #4b5563;
+    border-bottom: 0;
+    padding: 12px 16px 6px;
+}
+
+body.history-theme .history-page .data-table tbody tr {
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: inset 0 0 0 1px rgba(31, 42, 49, 0.04);
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+body.history-theme .history-page .data-table tbody tr:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: 0 12px 24px rgba(24, 32, 64, 0.16);
+}
+
+body.history-theme .history-page .data-table tbody td {
+    color: #1f2a31;
+    border-bottom: 0;
+}
+
+body.history-theme .history-page .score-highlight {
+    font-weight: 800;
+    background: linear-gradient(135deg, #F59E0B 0%, #F97316 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+body.history-theme .history-page .badge {
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 0.7rem;
+}
+
+body.history-theme .history-page .btn-outline {
+    background: rgba(255, 255, 255, 0.7);
+    border-color: rgba(31, 42, 49, 0.12);
+    color: #1f2a31;
+    box-shadow: 0 10px 18px rgba(24, 32, 64, 0.12);
+}
+
+body.history-theme .history-page .btn-outline:hover {
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 12px 22px rgba(24, 32, 64, 0.18);
+    transform: translateY(-1px);
+}
+
 .history-page .page-header {
+    margin-top: 125px;
     margin-bottom: 24px;
 }
 

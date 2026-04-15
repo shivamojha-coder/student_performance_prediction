@@ -1,113 +1,199 @@
 {% extends "base.html" %}
 {% block title %}PredictorHub | Goal Setting{% endblock %}
+{% block body_class %}goal-setting-theme{% endblock %}
 
 {% block head %}
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* ═══════════════════════════════
-   GOAL SETTING — PREMIUM UI
-   PredictorHub Scholastic Glass
-   ═══════════════════════════════ */
 :root {
-    --gs-bg: #faf9f5;
-    --gs-primary: #3f80f7;
-    --gs-primary-dark: #0056c3;
-    --gs-secondary: #8b67f0;
-    --gs-teal: #0f8b8d;
-    --gs-green: #29b888;
-    --gs-orange: #f0a34e;
-    --gs-ink: #1b1c1a;
-    --gs-muted: #5f6d76;
-    --gs-card: rgba(255, 255, 255, 0.82);
-    --gs-border: rgba(0, 0, 0, 0.07);
-    --gs-shadow: 0 8px 32px rgba(0, 0, 0, 0.07);
-    --gs-shadow-hover: 0 16px 48px rgba(63, 128, 247, 0.14);
-    --gs-radius: 20px;
-    --gs-radius-sm: 12px;
+    --gs-radius: 18px;
+    --gs-gap-sm: 16px;
+    --gs-gap-md: 24px;
+    --gs-gap-lg: 32px;
+    --gs-primary: #5a8cff;
+    --gs-secondary: #9b7bff;
+    --gs-teal: #58d4d8;
+    --gs-orange: #f2b45f;
+    --gs-bg-1: #040a1f;
+    --gs-bg-2: #071639;
+    --gs-bg-3: #0b2454;
+    --gs-text: #f3f6ff;
+    --gs-muted: #b5c3e4;
+    --gs-glass: rgba(16, 28, 62, 0.64);
+    --gs-glass-soft: rgba(18, 32, 70, 0.58);
+    --gs-border: rgba(188, 207, 255, 0.24);
+    --gs-shadow: 0 16px 44px rgba(3, 9, 28, 0.36);
+    --gs-shadow-hover: 0 22px 52px rgba(3, 10, 31, 0.48);
 }
 
-/* Layout overrides */
-.student-layout .student-main {
+body.goal-setting-theme {
+    color: var(--gs-text);
+    background: linear-gradient(120deg, var(--gs-bg-1), var(--gs-bg-2), var(--gs-bg-3));
+}
+
+body.goal-setting-theme .student-layout {
+    min-height: 100vh;
+    background:
+        radial-gradient(82rem 58rem at 96% -8%, rgba(38, 95, 231, 0.34), transparent 62%),
+        radial-gradient(62rem 42rem at -8% 80%, rgba(89, 165, 255, 0.2), transparent 62%),
+        linear-gradient(120deg, var(--gs-bg-1), var(--gs-bg-2), var(--gs-bg-3));
+}
+
+body.goal-setting-theme .student-main {
     max-width: none !important;
     width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
+    background: transparent !important;
 }
-.student-main {
-    background:
-        radial-gradient(80rem 50rem at 92% -5%, rgba(15, 139, 141, 0.1), transparent 65%),
-        radial-gradient(60rem 50rem at -5% 80%, rgba(240, 163, 78, 0.1), transparent 65%),
-        var(--gs-bg);
-    min-height: 100vh;
+
+body.goal-setting-theme .student-topnav {
+    background: rgba(5, 12, 35, 0.72);
+    border-bottom: 1px solid rgba(170, 194, 255, 0.14);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 8px 30px rgba(2, 7, 22, 0.35);
+    padding-left: 32px;
+    padding-right: 32px;
+}
+
+body.goal-setting-theme .brand-text,
+body.goal-setting-theme .user-badge-name,
+body.goal-setting-theme .dropdown-user-name,
+body.goal-setting-theme .dropdown-user-email {
+    color: #edf2ff;
+}
+
+body.goal-setting-theme .user-badge-id {
+    color: #9db2e6;
+}
+
+body.goal-setting-theme .student-nav {
+    gap: 10px;
+}
+
+body.goal-setting-theme .student-nav a {
+    color: #c8d5f5;
+    border-bottom: none;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+body.goal-setting-theme .student-nav a:hover,
+body.goal-setting-theme .student-nav a.active {
+    color: #f4f7ff;
+    background: linear-gradient(135deg, rgba(94, 140, 255, 0.34), rgba(120, 93, 255, 0.24));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+body.goal-setting-theme .profile-trigger {
+    background: rgba(18, 31, 68, 0.72);
+    border: 1px solid rgba(170, 194, 255, 0.22);
+    border-radius: 12px;
+}
+
+body.goal-setting-theme .profile-trigger:hover,
+body.goal-setting-theme .profile-trigger.active {
+    background: rgba(28, 45, 94, 0.86);
+    border-color: rgba(188, 208, 255, 0.38);
+}
+
+body.goal-setting-theme .dropdown-menu {
+    background: rgba(10, 20, 52, 0.96);
+    border: 1px solid rgba(170, 194, 255, 0.2);
+    box-shadow: 0 20px 42px rgba(2, 8, 24, 0.52);
+}
+
+body.goal-setting-theme .dropdown-item {
+    color: #d8e2fb;
+}
+
+body.goal-setting-theme .dropdown-item:hover {
+    background: rgba(88, 126, 247, 0.18);
+}
+
+body.goal-setting-theme .app-footer,
+body.goal-setting-theme .student-mobile-nav {
+    background: rgba(5, 12, 35, 0.72);
+    border-color: rgba(170, 194, 255, 0.14);
 }
 
 .goal-page-wrap {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 28px 28px 60px;
+    max-width: none;
+    margin: 0;
+    padding: var(--gs-gap-lg) var(--gs-gap-lg) 72px 24px;
+    font-family: 'Inter', 'Poppins', 'Segoe UI', sans-serif;
 }
 
-/* ── Hero Header ── */
 .goal-hero {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    gap: 16px;
-    margin-bottom: 28px;
+    gap: var(--gs-gap-sm);
+    margin-bottom: var(--gs-gap-lg);
     flex-wrap: wrap;
 }
 
 .goal-breadcrumb {
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--gs-muted);
+    font-size: 12px;
+    font-weight: 700;
+    color: #9fb4e8;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 6px;
+    letter-spacing: 0.11em;
+    margin-bottom: 8px;
 }
 
 .goal-breadcrumb a {
-    color: var(--gs-primary);
+    color: #79a6ff;
     text-decoration: none;
 }
 
 .goal-page-title {
-    font-size: clamp(1.8rem, 3vw, 2.4rem);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: var(--gs-ink);
     margin: 0;
+    font-size: clamp(2rem, 3.4vw, 3.05rem);
+    font-weight: 800;
+    color: #f6f8ff;
+    letter-spacing: -0.02em;
 }
 
 .goal-page-sub {
-    margin-top: 6px;
-    color: var(--gs-muted);
-    font-size: 0.95rem;
+    margin-top: 10px;
+    color: #b7c6ea;
+    font-size: 1.05rem;
 }
 
-/* ── Stat Tiles ── */
 .goal-tiles {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 18px;
-    margin-bottom: 28px;
+    gap: var(--gs-gap-md);
+    margin-bottom: var(--gs-gap-md);
 }
 
 .goal-tile {
-    border-radius: var(--gs-radius);
-    padding: 22px 24px;
-    color: #fff;
+    --tile-accent: #8eb2ff;
     position: relative;
     overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.2);
-    min-height: 110px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: var(--gs-radius);
+    border: 1px solid rgba(176, 200, 255, 0.28);
+    background: linear-gradient(135deg, rgba(84, 124, 232, 0.38), rgba(43, 79, 178, 0.36));
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.16),
+        0 16px 42px rgba(3, 10, 29, 0.36);
+    padding: 24px;
+    min-height: 148px;
+    transition: all 0.3s ease;
 }
 
 .goal-tile:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+    transform: translateY(-4px);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.22),
+        0 22px 52px rgba(3, 10, 31, 0.46);
 }
 
 .goal-tile::before {
@@ -116,14 +202,36 @@
     width: 220px;
     height: 220px;
     right: -80px;
-    top: -100px;
-    background: radial-gradient(circle, rgba(255,255,255,0.22), transparent 65%);
+    top: -120px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 66%);
     pointer-events: none;
 }
 
-.goal-tile.tile-blue   { background: linear-gradient(135deg, #3f80f7 0%, #7ca8ff 100%); }
-.goal-tile.tile-purple { background: linear-gradient(135deg, #8b67f0 0%, #b490ff 100%); }
-.goal-tile.tile-teal   { background: linear-gradient(135deg, #0f8b8d 0%, #40b5b7 100%); }
+.goal-tile::after {
+    content: '';
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    bottom: 0;
+    height: 4px;
+    border-radius: 14px 14px 0 0;
+    background: linear-gradient(90deg, var(--tile-accent), rgba(255, 255, 255, 0.95));
+}
+
+.goal-tile.tile-blue {
+    --tile-accent: #9ec0ff;
+    background: linear-gradient(135deg, rgba(82, 124, 239, 0.45), rgba(49, 86, 196, 0.34));
+}
+
+.goal-tile.tile-purple {
+    --tile-accent: #c9a6ff;
+    background: linear-gradient(135deg, rgba(130, 99, 240, 0.45), rgba(92, 80, 202, 0.34));
+}
+
+.goal-tile.tile-teal {
+    --tile-accent: #9aeaf0;
+    background: linear-gradient(135deg, rgba(67, 172, 190, 0.42), rgba(46, 125, 165, 0.34));
+}
 
 .tile-head {
     display: flex;
@@ -133,124 +241,139 @@
 }
 
 .tile-label-text {
-    font-size: 0.82rem;
+    font-size: 0.88rem;
     font-weight: 700;
-    opacity: 0.92;
-    letter-spacing: 0.04em;
+    color: #d9e4ff;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
 }
 
 .tile-icon-box {
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
     display: grid;
     place-items: center;
-    background: rgba(255,255,255,0.22);
-    font-size: 0.95rem;
+    background: rgba(226, 236, 255, 0.22);
+    border: 1px solid rgba(238, 244, 255, 0.4);
+    color: #ebf2ff;
+    font-size: 0.98rem;
+    box-shadow: 0 10px 18px rgba(2, 8, 26, 0.28);
     flex-shrink: 0;
 }
 
 .tile-big-val {
-    margin-top: 12px;
-    font-size: 2.2rem;
+    margin-top: 14px;
+    font-size: 3rem;
     font-weight: 800;
     line-height: 1;
     letter-spacing: -0.02em;
+    color: #f8fbff;
 }
 
 .tile-sub-label {
-    margin-top: 4px;
-    font-size: 0.78rem;
-    opacity: 0.78;
+    margin-top: 8px;
+    font-size: 0.88rem;
+    color: #d4e1ff;
     font-weight: 500;
 }
 
-/* ── Main Grid ── */
 .goal-grid {
     display: grid;
-    grid-template-columns: 320px 1fr 280px;
-    gap: 20px;
+    grid-template-columns: 320px minmax(0, 1fr) 300px;
+    gap: var(--gs-gap-md);
     align-items: start;
 }
 
 .goal-col {
     display: grid;
-    gap: 20px;
+    gap: var(--gs-gap-md);
 }
 
-/* ── Glass Cards ── */
 .gs-card {
-    background: var(--gs-card);
+    background: linear-gradient(155deg, rgba(20, 34, 76, 0.78), rgba(16, 29, 67, 0.62));
     border: 1px solid var(--gs-border);
     border-radius: var(--gs-radius);
     box-shadow: var(--gs-shadow);
-    backdrop-filter: blur(16px);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
     overflow: hidden;
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .gs-card:hover {
+    transform: translateY(-4px);
     box-shadow: var(--gs-shadow-hover);
-    transform: translateY(-2px);
 }
 
 .gs-card-head {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 18px 20px 0;
+    gap: 12px;
+    padding: 22px 22px 0;
 }
 
 .gs-card-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 9px;
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
     display: grid;
     place-items: center;
-    font-size: 0.85rem;
     color: #fff;
+    font-size: 0.88rem;
     flex-shrink: 0;
 }
 
-.gs-card-icon.ic-blue   { background: linear-gradient(135deg, #3f80f7, #7ca8ff); }
-.gs-card-icon.ic-purple { background: linear-gradient(135deg, #8b67f0, #b490ff); }
-.gs-card-icon.ic-teal   { background: linear-gradient(135deg, #0f8b8d, #40b5b7); }
-.gs-card-icon.ic-green  { background: linear-gradient(135deg, #29b888, #52ccaa); }
-.gs-card-icon.ic-orange { background: linear-gradient(135deg, #f0a34e, #f7c27c); }
+.gs-card-icon.ic-blue {
+    background: linear-gradient(135deg, #4f8dff, #7eabff);
+}
+
+.gs-card-icon.ic-purple {
+    background: linear-gradient(135deg, #8f70ff, #b79eff);
+}
+
+.gs-card-icon.ic-teal {
+    background: linear-gradient(135deg, #3fc4c8, #74e1e2);
+}
+
+.gs-card-icon.ic-green {
+    background: linear-gradient(135deg, #2ec18f, #70d7b4);
+}
+
+.gs-card-icon.ic-orange {
+    background: linear-gradient(135deg, #e7a44f, #f4c084);
+}
 
 .gs-card-title {
     margin: 0;
-    font-size: 1rem;
+    color: #f1f5ff;
+    font-size: 1.45rem;
     font-weight: 700;
-    color: var(--gs-ink);
     letter-spacing: -0.01em;
 }
 
 .gs-card-body {
-    padding: 16px 20px 20px;
+    padding: 20px 22px 22px;
 }
 
-/* ── Goal Form Card ── */
 .goal-form-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--gs-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 8px;
     display: block;
+    margin-bottom: 6px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #adc0ea;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
 }
 
 .slider-container {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .slider-row {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-top: 8px;
 }
 
 .goal-slider {
@@ -259,9 +382,9 @@
     border-radius: 99px;
     appearance: none;
     outline: none;
-    background: linear-gradient(90deg, var(--gs-primary) 0%, var(--gs-secondary) 100%);
+    background: #3a4a79;
+    border: 1px solid rgba(192, 211, 255, 0.26);
     cursor: pointer;
-    border: none;
 }
 
 .goal-slider::-webkit-slider-thumb {
@@ -269,251 +392,261 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: #fff;
+    background: #eef4ff;
     border: 3px solid var(--gs-primary);
-    box-shadow: 0 3px 8px rgba(63, 128, 247, 0.35);
+    box-shadow: 0 4px 10px rgba(53, 98, 224, 0.46);
     cursor: pointer;
-    transition: transform 0.15s ease;
-}
-
-.goal-slider::-webkit-slider-thumb:hover {
-    transform: scale(1.15);
 }
 
 .slider-val-pill {
-    min-width: 58px;
+    min-width: 60px;
     text-align: center;
-    padding: 5px 10px;
+    padding: 6px 10px;
     border-radius: 10px;
-    background: #eef2ff;
-    color: #3f5bd4;
+    background: rgba(92, 134, 255, 0.24);
+    border: 1px solid rgba(174, 197, 255, 0.3);
+    color: #e6efff;
+    font-size: 0.92rem;
     font-weight: 800;
-    font-size: 0.85rem;
-    border: 1px solid #d4dcff;
-    flex-shrink: 0;
 }
 
 .gs-input {
     width: 100%;
-    border: 1.5px solid rgba(0,0,0,0.1);
-    border-radius: var(--gs-radius-sm);
-    background: rgba(255,255,255,0.9);
     min-height: 46px;
-    color: var(--gs-ink);
+    border-radius: 12px;
+    border: 1.5px solid rgba(185, 205, 255, 0.28);
+    background: rgba(21, 35, 74, 0.74);
+    color: #f4f7ff;
     font: inherit;
-    padding: 0.7rem 0.9rem;
+    padding: 0.72rem 0.95rem;
     outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    font-size: 0.9rem;
+    transition: all 0.3s ease;
 }
 
 .gs-input:focus {
-    border-color: rgba(63, 128, 247, 0.5);
-    box-shadow: 0 0 0 3px rgba(63, 128, 247, 0.12);
+    border-color: rgba(114, 158, 255, 0.84);
+    box-shadow: 0 0 0 3px rgba(82, 129, 255, 0.2);
+}
+
+@keyframes globalGradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .analyze-btn {
     width: 100%;
-    padding: 13px 20px;
+    height: 46px;
+    margin-top: 20px;
     border: 0;
-    border-radius: var(--gs-radius-sm);
-    background: linear-gradient(120deg, var(--gs-primary-dark) 0%, var(--gs-primary) 50%, var(--gs-secondary) 100%);
-    background-size: 200% auto;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #0891b2, #14b8a6, #fb923c, #0891b2);
+    background-size: 300% 100%;
+    animation: globalGradientShift 3s ease infinite;
     color: #fff;
     font: inherit;
+    font-size: 1.05rem;
     font-weight: 800;
-    font-size: 0.95rem;
-    letter-spacing: 0.01em;
-    cursor: pointer;
-    box-shadow: 0 8px 24px rgba(63, 128, 247, 0.35);
-    transition: background-position 0.4s ease, transform 0.2s ease, box-shadow 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    margin-top: 4px;
+    cursor: pointer;
+    box-shadow: 0 12px 28px rgba(45, 99, 215, 0.44);
+    transition: all 0.3s ease;
 }
 
 .analyze-btn:hover {
-    background-position: right center;
-    transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(63, 128, 247, 0.48);
-    color: #fff;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 18px 34px rgba(45, 99, 215, 0.54);
 }
 
-/* ── Study Plan Card ── */
-.plan-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 3px 10px;
-    border-radius: 99px;
-    background: #d4f5ea;
-    color: #1a8060;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-}
-
-.plan-items {
-    display: grid;
-    gap: 10px;
+.goal-helper {
     margin-top: 14px;
-}
-
-.plan-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 13px 14px;
-    border-radius: var(--gs-radius-sm);
-    border-left: 4px solid transparent;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.plan-item:hover {
-    transform: translateX(4px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-.plan-item.pi-blue   { background: #eef3ff; border-left-color: var(--gs-primary); }
-.plan-item.pi-green  { background: #edfaf4; border-left-color: var(--gs-green); }
-.plan-item.pi-orange { background: #fff7ed; border-left-color: var(--gs-orange); }
-
-.plan-icon-sq {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    display: grid;
-    place-items: center;
-    font-size: 1rem;
-    color: #fff;
-    flex-shrink: 0;
-}
-
-.pi-blue .plan-icon-sq  { background: var(--gs-primary); }
-.pi-green .plan-icon-sq { background: var(--gs-green); }
-.pi-orange .plan-icon-sq{ background: var(--gs-orange); }
-
-.plan-info { flex: 1; min-width: 0; }
-
-.plan-label-txt {
-    font-weight: 700;
-    font-size: 0.87rem;
-    color: var(--gs-ink);
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.plan-desc-txt {
-    font-size: 0.76rem;
-    color: var(--gs-muted);
-    display: block;
-    margin-top: 2px;
-    line-height: 1.4;
-}
-
-.plan-time-chip {
-    font-weight: 800;
-    font-size: 0.85rem;
-    color: var(--gs-ink);
-    padding: 4px 9px;
-    background: rgba(255,255,255,0.65);
-    border-radius: 8px;
-    flex-shrink: 0;
-}
-
-.plan-info-box {
-    margin-top: 14px;
-    padding: 11px 13px;
-    background: #f9fafb;
-    border-radius: 11px;
-    border: 1px dashed #d1d5db;
-    font-size: 0.78rem;
-    color: #475569;
+    font-size: 0.88rem;
+    color: #afc0e9;
     line-height: 1.5;
 }
 
-/* ── Chart Card ── */
+.weekly-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.week-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(226, 236, 255, 0.14);
+    border: 1px solid rgba(190, 209, 255, 0.24);
+    transition: all 0.3s ease;
+}
+
+.week-item:hover {
+    transform: translateX(4px);
+    background: rgba(226, 236, 255, 0.18);
+}
+
+.week-item-left {
+    min-width: 0;
+}
+
+.week-item-title {
+    display: block;
+    color: #eff4ff;
+    font-size: 1.03rem;
+    font-weight: 700;
+}
+
+.week-item-sub {
+    display: block;
+    color: #b2c1e6;
+    font-size: 0.85rem;
+    margin-top: 2px;
+}
+
+.week-item-tag {
+    border-radius: 999px;
+    padding: 5px 11px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: #e8f0ff;
+    background: rgba(95, 139, 255, 0.26);
+    border: 1px solid rgba(166, 192, 255, 0.26);
+    flex-shrink: 0;
+}
+
+.plan-note {
+    margin-top: 14px;
+    font-size: 0.84rem;
+    color: #afc0e9;
+}
+
 .chart-wrap {
-    height: 270px;
-    margin-top: 6px;
+    height: 300px;
+    min-height: 300px;
+    margin-top: 16px;
     position: relative;
 }
 
-/* ── Weekly Table ── */
-.weekly-tbl {
-    width: 100%;
-    border-collapse: collapse;
+.legend-row {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
-.weekly-tbl th {
-    color: var(--gs-muted);
-    font-size: 0.72rem;
+.legend-chip {
+    color: #c4d3f8;
+    font-size: 0.86rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend-chip i {
+    display: inline-block;
+    width: 14px;
+    height: 3px;
+    border-radius: 2px;
+}
+
+.legend-chip.current i {
+    background: #6da0ff;
+}
+
+.legend-chip.target i {
+    background: #f2b45f;
+    border-top: 2px dashed #f2b45f;
+}
+
+.weekly-tbl {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+}
+
+.weekly-tbl thead th {
+    padding: 0 10px 6px;
+    color: #afc0e9;
+    font-size: 0.74rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 10px 6px;
-    border-bottom: 1px solid rgba(0,0,0,0.07);
+    letter-spacing: 0.08em;
     text-align: left;
 }
 
-.weekly-tbl td {
-    padding: 11px 6px;
-    font-size: 0.87rem;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+.weekly-tbl tbody tr {
+    background: rgba(230, 238, 255, 0.12);
+    border: 1px solid rgba(195, 211, 255, 0.22);
 }
 
-.weekly-tbl tr:last-child td { border-bottom: none; }
-.weekly-tbl tr:hover td { background: rgba(63,128,247,0.04); }
+.weekly-tbl tbody tr td {
+    padding: 14px 10px;
+    font-size: 0.95rem;
+    color: #e6eeff;
+}
+
+.weekly-tbl tbody tr td:first-child {
+    border-radius: 12px 0 0 12px;
+}
+
+.weekly-tbl tbody tr td:last-child {
+    border-radius: 0 12px 12px 0;
+}
+
+.weekly-tbl tbody tr:hover {
+    transform: translateY(-1px);
+}
 
 .impr-pill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 3px 10px;
-    border-radius: 99px;
-    background: #eef2ff;
-    color: #3f5bd4;
+    border-radius: 999px;
+    padding: 4px 11px;
+    background: rgba(96, 141, 255, 0.24);
+    border: 1px solid rgba(167, 193, 255, 0.24);
+    color: #dbe8ff;
+    font-size: 0.85rem;
     font-weight: 700;
-    font-size: 0.78rem;
 }
 
-/* ── Snapshot Card ── */
 .snapshot-rows {
     display: grid;
-    gap: 14px;
-    margin-top: 4px;
+    gap: 13px;
 }
 
 .snapshot-row {
     display: grid;
     grid-template-columns: 1fr auto;
-    gap: 8px;
+    gap: 10px;
     align-items: center;
-    font-size: 0.84rem;
+    font-size: 0.92rem;
 }
 
 .snapshot-label {
-    color: var(--gs-muted);
+    color: #b2c1e6;
     font-weight: 500;
 }
 
 .snapshot-val {
-    font-weight: 800;
-    color: var(--gs-ink);
-    font-size: 0.88rem;
+    color: #eef3ff;
+    font-weight: 700;
 }
 
 .snap-bar-track {
     grid-column: 1 / -1;
     height: 5px;
-    background: #edf1f7;
-    border-radius: 99px;
+    background: rgba(194, 211, 255, 0.2);
+    border-radius: 999px;
+    margin-top: -4px;
     position: relative;
-    margin-top: -6px;
 }
 
 .snap-bar-fill {
@@ -521,95 +654,653 @@
     left: 0;
     top: 0;
     height: 100%;
-    border-radius: 99px;
+    border-radius: inherit;
     background: linear-gradient(90deg, var(--gs-primary), var(--gs-secondary));
 }
 
-/* ── Insights Card ── */
 .insight-rows {
     display: grid;
-    gap: 16px;
+    gap: 14px;
 }
 
 .insight-row {
     display: flex;
-    gap: 12px;
     align-items: flex-start;
+    gap: 12px;
 }
 
 .insight-dot {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
     display: grid;
     place-items: center;
     color: #fff;
-    font-size: 0.68rem;
+    font-size: 0.72rem;
     flex-shrink: 0;
-    margin-top: 2px;
+    margin-top: 1px;
 }
 
-.id-green  { background: var(--gs-green); }
-.id-orange { background: var(--gs-orange); }
-.id-purple { background: var(--gs-secondary); }
+.id-green {
+    background: #32c699;
+}
+
+.id-orange {
+    background: #eba657;
+}
+
+.id-purple {
+    background: #8a77ff;
+}
 
 .insight-title {
+    color: #eaf1ff;
+    font-size: 1rem;
     font-weight: 700;
-    font-size: 0.88rem;
-    color: var(--gs-ink);
 }
 
 .insight-text {
-    font-size: 0.81rem;
-    color: var(--gs-muted);
     margin-top: 2px;
-    line-height: 1.45;
+    color: #b1c0e6;
+    font-size: 0.9rem;
+    line-height: 1.5;
 }
 
-/* ── Final Advice Card ── */
-.final-advice-card {
-    background: linear-gradient(135deg, rgba(139, 103, 240, 0.08), rgba(63, 128, 247, 0.06));
-    border: 1px solid rgba(139, 103, 240, 0.18);
+.cta-card {
+    background: linear-gradient(140deg, rgba(50, 87, 196, 0.56), rgba(39, 74, 176, 0.44));
+    border: 1px solid rgba(180, 202, 255, 0.3);
 }
 
-.final-advice-text {
+.cta-btn {
+    width: 100%;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 14px;
+    background: linear-gradient(90deg, #0891b2, #14b8a6, #fb923c, #0891b2);
+    background-size: 300% 100%;
+    animation: globalGradientShift 3s ease infinite;
+    color: #ffffff;
+    text-decoration: none;
+    font: inherit;
+    font-size: 1.12rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 14px 34px rgba(45, 99, 215, 0.46);
+    transition: all 0.3s ease;
+}
+
+.cta-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 20px 42px rgba(45, 99, 215, 0.58);
+    color: #fff;
+}
+
+.cta-subtext {
+    margin-top: 12px;
+    color: #d1ddff;
     font-size: 0.88rem;
-    line-height: 1.65;
-    color: var(--gs-muted);
-    font-style: italic;
-}
-
-/* ── Empty State ── */
-.empty-state-card {
-    padding: 40px 30px;
     text-align: center;
 }
 
+/* Light mode: keep white background unless dashboard dark mode is ON */
+body.goal-setting-theme:not(.site-dark-mode) {
+    color: #111827;
+    background: linear-gradient(135deg, #f5f7fb, #eef2ff);
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .student-layout {
+    background: linear-gradient(135deg, #f5f7fb, #eef2ff);
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .student-topnav {
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .brand-text,
+body.goal-setting-theme:not(.site-dark-mode) .user-badge-name,
+body.goal-setting-theme:not(.site-dark-mode) .dropdown-user-name,
+body.goal-setting-theme:not(.site-dark-mode) .dropdown-user-email {
+    color: #0f172a;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .user-badge-id {
+    color: #64748b;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .student-nav a {
+    color: #334155;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .student-nav a:hover,
+body.goal-setting-theme:not(.site-dark-mode) .student-nav a.active {
+    color: #1e293b;
+    background: #e2e8f0;
+    box-shadow: none;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .profile-trigger {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .profile-trigger:hover,
+body.goal-setting-theme:not(.site-dark-mode) .profile-trigger.active {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .dropdown-menu {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 18px 34px rgba(15, 23, 42, 0.12);
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .dropdown-item {
+    color: #1f2937;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .dropdown-item:hover {
+    background: #eef2ff;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .app-footer,
+body.goal-setting-theme:not(.site-dark-mode) .student-mobile-nav {
+    background: #ffffff;
+    border-color: #e2e8f0;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-breadcrumb {
+    color: #64748b;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-breadcrumb a {
+    color: #2563eb;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-page-title {
+    color: #0f172a;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-page-sub {
+    color: #475569;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-tile,
+body.goal-setting-theme:not(.site-dark-mode) .goal-tile.tile-blue,
+body.goal-setting-theme:not(.site-dark-mode) .goal-tile.tile-purple,
+body.goal-setting-theme:not(.site-dark-mode) .goal-tile.tile-teal,
+body.goal-setting-theme:not(.site-dark-mode) .gs-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-tile::before {
+    display: none;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .tile-label-text,
+body.goal-setting-theme:not(.site-dark-mode) .tile-sub-label,
+body.goal-setting-theme:not(.site-dark-mode) .goal-form-label,
+body.goal-setting-theme:not(.site-dark-mode) .snapshot-label,
+body.goal-setting-theme:not(.site-dark-mode) .insight-text,
+body.goal-setting-theme:not(.site-dark-mode) .week-item-sub,
+body.goal-setting-theme:not(.site-dark-mode) .plan-note,
+body.goal-setting-theme:not(.site-dark-mode) .goal-helper {
+    color: #64748b;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .tile-big-val,
+body.goal-setting-theme:not(.site-dark-mode) .gs-card-title,
+body.goal-setting-theme:not(.site-dark-mode) .snapshot-val,
+body.goal-setting-theme:not(.site-dark-mode) .insight-title,
+body.goal-setting-theme:not(.site-dark-mode) .week-item-title,
+body.goal-setting-theme:not(.site-dark-mode) .weekly-tbl tbody td,
+body.goal-setting-theme:not(.site-dark-mode) .legend-chip {
+    color: #0f172a;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .tile-icon-box {
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
+    color: #4f46e5;
+    box-shadow: none;
+}
+
+/* Fix invisible tile accent bar on white cards */
+body.goal-setting-theme:not(.site-dark-mode) .goal-tile::after {
+    background: linear-gradient(90deg, #4F46E5, #818CF8);
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-slider {
+    background: #e2e8f0;
+    border-color: #cbd5e1;
+}
+
+/* ★ FIX: Slider value pill — was invisible (light text on white) */
+body.goal-setting-theme:not(.site-dark-mode) .slider-val-pill {
+    background: #EEF2FF;
+    border: 1px solid #C7D2FE;
+    color: #4338CA;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .gs-input {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    color: #0f172a;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .gs-input:focus {
+    border-color: #818CF8;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+/* ★ FIX: Goal helper text */
+body.goal-setting-theme:not(.site-dark-mode) .goal-helper {
+    color: #4338CA;
+    background: #EEF2FF;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #E0E7FF;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .weekly-tbl thead th {
+    color: #64748b;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .weekly-tbl tbody tr,
+body.goal-setting-theme:not(.site-dark-mode) .week-item {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+}
+
+/* ★ FIX: Weekly item tag — was invisible (light text on light bg) */
+body.goal-setting-theme:not(.site-dark-mode) .week-item-tag {
+    background: #EEF2FF;
+    border: 1px solid #C7D2FE;
+    color: #4338CA;
+}
+
+/* ★ FIX: Improvement pill — was invisible (light text on white row) */
+body.goal-setting-theme:not(.site-dark-mode) .impr-pill {
+    background: #EEF2FF;
+    border: 1px solid #C7D2FE;
+    color: #4338CA;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .legend-chip.current i {
+    background: #3b82f6;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .legend-chip.target i {
+    background: #f59e0b;
+    border-top: 2px dashed #f59e0b;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .snap-bar-track {
+    background: #e2e8f0;
+}
+
+/* ★ FIX: Snap bar fills need visible colors in light mode */
+body.goal-setting-theme:not(.site-dark-mode) .snap-bar-fill {
+    background: linear-gradient(90deg, #4F46E5, #818CF8);
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .cta-card {
+    background: #ffffff;
+    border-color: #e2e8f0;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .cta-subtext,
+body.goal-setting-theme:not(.site-dark-mode) .empty-text {
+    color: #64748b;
+}
+
+/* ★ FIX: Plan note text */
+body.goal-setting-theme:not(.site-dark-mode) .plan-note {
+    color: #64748b;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .empty-title {
+    color: #0f172a;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .empty-icon-ring {
+    background: #eef2ff;
+    color: #4f46e5;
+    border-color: #c7d2fe;
+}
+
+/* ★ FIX: Dropdown arrow visibility */
+body.goal-setting-theme:not(.site-dark-mode) .dropdown-arrow {
+    color: #64748b;
+}
+
+/* ═══════════════════════════════════════════════════════
+   LIGHT MODE — ANIMATIONS & MICRO-INTERACTIONS
+   Making the light mode feel alive, premium, and dynamic
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Stat Tile: Shimmer Gradient on Hover ── */
+@keyframes tileShimmer {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-tile {
+    background: linear-gradient(135deg, #F8FAFC, #EEF2FF, #F0F0FF, #F8FAFC) !important;
+    background-size: 300% 300% !important;
+    transition: transform 0.35s cubic-bezier(0.22,0.61,0.36,1),
+                box-shadow 0.35s ease,
+                border-color 0.35s ease !important;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-tile:hover {
+    animation: tileShimmer 3s ease infinite;
+    transform: translateY(-6px) scale(1.015);
+    box-shadow: 0 16px 40px rgba(79, 70, 229, 0.12), 0 2px 6px rgba(0,0,0,0.04) !important;
+    border-color: #C7D2FE !important;
+}
+
+/* Tile big number color pop on hover */
+body.goal-setting-theme:not(.site-dark-mode) .goal-tile:hover .tile-big-val {
+    color: #4F46E5 !important;
+    transition: color 0.3s ease;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-tile .tile-big-val {
+    transition: color 0.3s ease;
+}
+
+/* Tile icon box spin on hover */
+body.goal-setting-theme:not(.site-dark-mode) .goal-tile:hover .tile-icon-box {
+    transform: rotate(8deg) scale(1.1);
+    background: #4F46E5 !important;
+    color: #fff !important;
+    border-color: #4F46E5 !important;
+    transition: all 0.35s cubic-bezier(0.22,0.61,0.36,1);
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .tile-icon-box {
+    transition: all 0.35s cubic-bezier(0.22,0.61,0.36,1);
+}
+
+/* ── Cards: Lift + Accent Border on Hover ── */
+body.goal-setting-theme:not(.site-dark-mode) .gs-card {
+    transition: transform 0.35s cubic-bezier(0.22,0.61,0.36,1),
+                box-shadow 0.35s ease,
+                border-color 0.3s ease !important;
+    border-left: 3px solid transparent;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .gs-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 18px 44px rgba(79, 70, 229, 0.10), 0 4px 12px rgba(0,0,0,0.04) !important;
+    border-left-color: #4F46E5;
+}
+
+/* Card icon pulse on card hover */
+body.goal-setting-theme:not(.site-dark-mode) .gs-card:hover .gs-card-icon {
+    transform: scale(1.12);
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .gs-card-icon {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ── Analyze Button: Gradient Shift + Glow ── */
+@keyframes btnGradientShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .analyze-btn {
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    box-shadow: 0 8px 24px rgba(8, 145, 178, 0.30) !important;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .analyze-btn:hover {
+    transform: translateY(-3px) scale(1.02) !important;
+    box-shadow: 0 14px 36px rgba(20, 184, 166, 0.42), 0 0 20px rgba(251, 146, 60, 0.18) !important;
+}
+
+/* ── CTA Button: Floating Glow ── */
+@keyframes ctaGlow {
+    0%, 100% { box-shadow: 0 10px 28px rgba(8, 145, 178, 0.35); }
+    50%      { box-shadow: 0 14px 40px rgba(20, 184, 166, 0.50), 0 0 24px rgba(251, 146, 60, 0.15); }
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .cta-btn {
+    animation: globalGradientShift 3s ease infinite, ctaGlow 3s ease-in-out infinite !important;
+    transition: transform 0.3s ease !important;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .cta-btn:hover {
+    transform: translateY(-4px) scale(1.03) !important;
+}
+
+/* ── .go-btn same treatment ── */
+body.goal-setting-theme:not(.site-dark-mode) .go-btn {
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .go-btn:hover {
+    transform: translateY(-3px) scale(1.04) !important;
+    box-shadow: 0 14px 32px rgba(8, 145, 178, 0.38) !important;
+}
+
+/* ── Slider Thumb: Pulse Ring ── */
+@keyframes sliderPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4); }
+    70%  { box-shadow: 0 0 0 8px rgba(79, 70, 229, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-slider::-webkit-slider-thumb {
+    background: #fff;
+    border: 3px solid #4F46E5;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.35);
+    transition: transform 0.2s ease;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    animation: sliderPulse 1.5s ease infinite;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-slider:active::-webkit-slider-thumb {
+    transform: scale(1.25);
+    border-color: #6366F1;
+}
+
+/* ── Slider Value Pill: Pop on change ── */
+body.goal-setting-theme:not(.site-dark-mode) .slider-val-pill {
+    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+/* ── Input Focus: Glow Ring ── */
+body.goal-setting-theme:not(.site-dark-mode) .gs-input {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease !important;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .gs-input:focus {
+    transform: translateY(-1px);
+    border-color: #818CF8 !important;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.10), 0 4px 12px rgba(79, 70, 229, 0.06) !important;
+}
+
+/* ── Weekly Items: Slide + Color Flash ── */
+body.goal-setting-theme:not(.site-dark-mode) .week-item {
+    transition: transform 0.3s cubic-bezier(0.22,0.61,0.36,1),
+                box-shadow 0.3s ease,
+                background 0.3s ease,
+                border-color 0.3s ease !important;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .week-item:hover {
+    transform: translateX(6px) !important;
+    background: #EEF2FF !important;
+    border-color: #C7D2FE !important;
+    box-shadow: 0 6px 18px rgba(79, 70, 229, 0.08) !important;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .week-item:hover .week-item-tag {
+    background: #4F46E5 !important;
+    color: #fff !important;
+    border-color: #4F46E5 !important;
+    transform: scale(1.05);
+    transition: all 0.25s ease;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .week-item-tag {
+    transition: all 0.25s ease;
+}
+
+/* ── Weekly Table Rows ── */
+body.goal-setting-theme:not(.site-dark-mode) .weekly-tbl tbody tr {
+    transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .weekly-tbl tbody tr:hover {
+    transform: translateY(-2px);
+    background: #EEF2FF !important;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.06);
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .weekly-tbl tbody tr:hover .impr-pill {
+    background: #4F46E5 !important;
+    color: #fff !important;
+    border-color: #4F46E5 !important;
+    transition: all 0.25s ease;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .impr-pill {
+    transition: all 0.25s ease;
+}
+
+/* ── Snapshot Rows: Bar Fill Animation ── */
+@keyframes barGrow {
+    from { width: 0; }
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .snap-bar-fill {
+    animation: barGrow 1s cubic-bezier(0.22,0.61,0.36,1) forwards;
+    animation-delay: 0.4s;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .snapshot-row {
+    transition: background 0.25s ease;
+    padding: 8px 10px;
+    border-radius: 8px;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .snapshot-row:hover {
+    background: #F1F5F9;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .snapshot-row:hover .snapshot-val {
+    color: #4F46E5;
+    transition: color 0.25s ease;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .snapshot-val {
+    transition: color 0.25s ease;
+}
+
+/* ── Insight Rows: Dot Bounce + Background ── */
+body.goal-setting-theme:not(.site-dark-mode) .insight-row {
+    padding: 10px 12px;
+    border-radius: 10px;
+    transition: background 0.25s ease, transform 0.25s ease;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .insight-row:hover {
+    background: #F1F5F9;
+    transform: translateX(4px);
+}
+
+@keyframes dotBounce {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.2); }
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .insight-row:hover .insight-dot {
+    animation: dotBounce 0.5s ease;
+}
+
+/* ── Reveal Animation: Spring Effect (Light mode uses longer, springier motion) ── */
+body.goal-setting-theme:not(.site-dark-mode) .reveal-gs {
+    animation: gsRevealSpring 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards !important;
+}
+
+@keyframes gsRevealSpring {
+    0%   { opacity: 0; transform: translateY(24px) scale(0.97); }
+    70%  { opacity: 1; transform: translateY(-3px) scale(1.005); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Hero Section: Subtle Floating ── */
+@keyframes heroFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-4px); }
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-hero {
+    animation: heroFloat 6s ease-in-out infinite;
+    animation-delay: 1.5s;
+}
+
+/* ── Light Mode: Subtle page background pattern ── */
+body.goal-setting-theme:not(.site-dark-mode) .student-layout {
+    background:
+        radial-gradient(ellipse 50rem 35rem at 85% 5%, rgba(79, 70, 229, 0.04), transparent 50%),
+        radial-gradient(ellipse 40rem 30rem at 10% 80%, rgba(99, 102, 241, 0.03), transparent 50%),
+        #f8fafc !important;
+}
+
+.empty-state-card {
+    text-align: center;
+    padding: 52px 26px;
+}
+
 .empty-icon-ring {
-    width: 72px;
-    height: 72px;
+    width: 74px;
+    height: 74px;
     border-radius: 50%;
-    background: linear-gradient(135deg, rgba(63, 128, 247, 0.12), rgba(139, 103, 240, 0.12));
+    margin: 0 auto 18px;
     display: grid;
     place-items: center;
-    margin: 0 auto 20px;
-    font-size: 1.8rem;
-    color: var(--gs-primary);
+    background: rgba(101, 143, 255, 0.2);
+    color: #dce9ff;
+    border: 1px solid rgba(170, 194, 255, 0.32);
+    font-size: 1.75rem;
 }
 
 .empty-title {
-    font-size: 1.15rem;
+    margin: 0;
+    color: #f1f5ff;
+    font-size: 1.35rem;
     font-weight: 800;
-    color: var(--gs-ink);
-    margin-bottom: 8px;
 }
 
 .empty-text {
-    font-size: 0.9rem;
-    color: var(--gs-muted);
-    line-height: 1.55;
-    max-width: 360px;
-    margin: 0 auto 24px;
+    margin: 10px auto 24px;
+    max-width: 420px;
+    color: #b1c0e5;
+    line-height: 1.6;
 }
 
 .go-btn {
@@ -617,23 +1308,22 @@
     align-items: center;
     gap: 8px;
     padding: 12px 24px;
-    border-radius: var(--gs-radius-sm);
-    background: linear-gradient(120deg, var(--gs-primary-dark), var(--gs-secondary));
+    border-radius: 12px;
+    background: linear-gradient(90deg, #0891b2, #14b8a6, #fb923c, #0891b2);
+    background-size: 300% 100%;
+    animation: globalGradientShift 3s ease infinite;
     color: #fff;
     font-weight: 700;
-    font-size: 0.9rem;
     text-decoration: none;
-    box-shadow: 0 8px 24px rgba(63, 128, 247, 0.3);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .go-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(63, 128, 247, 0.45);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 16px 30px rgba(45, 99, 215, 0.44);
     color: #fff;
 }
 
-/* ── Reveal Animation ── */
 .reveal-gs {
     opacity: 0;
     transform: translateY(18px);
@@ -642,22 +1332,171 @@
 }
 
 @keyframes gsReveal {
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* ── Responsive ── */
-@media (max-width: 1200px) {
-    .goal-grid {
-        grid-template-columns: 300px 1fr;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
-    .goal-col:last-child { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 }
 
-@media (max-width: 900px) {
-    .goal-grid { grid-template-columns: 1fr; }
-    .goal-tiles { grid-template-columns: 1fr; }
-    .goal-col:last-child { grid-template-columns: 1fr; }
-    .goal-page-wrap { padding: 16px 14px 60px; }
+@media (max-width: 1300px) {
+    .goal-grid {
+        grid-template-columns: 320px 1fr;
+    }
+
+    .goal-col:last-child {
+        grid-column: 1 / -1;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        display: grid;
+    }
+}
+
+@media (max-width: 980px) {
+    body.goal-setting-theme .student-topnav {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .goal-page-wrap {
+        padding: 24px 16px 84px;
+    }
+
+    .goal-tiles {
+        grid-template-columns: 1fr;
+    }
+
+    .goal-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .goal-col,
+    .goal-col:last-child {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .tile-big-val {
+        font-size: 2.5rem;
+    }
+
+    .gs-card-title {
+        font-size: 1.28rem;
+    }
+}
+
+/* ─────────────────────────────────────────────
+   Goal Page: Soft SaaS Light Theme (Match Dashboard)
+   ───────────────────────────────────────────── */
+body.goal-setting-theme:not(.site-dark-mode) {
+    background: linear-gradient(135deg, #f7f3ee 0%, #f1f4f6 55%, #eaf6f5 100%) !important;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .student-layout {
+    background:
+        radial-gradient(60rem 40rem at 90% 5%, rgba(86, 203, 210, 0.15), transparent 60%),
+        radial-gradient(60rem 40rem at 10% 85%, rgba(250, 196, 124, 0.18), transparent 60%),
+        linear-gradient(135deg, #f7f3ee 0%, #f1f4f6 55%, #eaf6f5 100%) !important;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-page-wrap {
+    max-width: 1240px !important;
+    margin: 0 auto !important;
+    padding: 28px 24px 72px !important;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-tile,
+body.goal-setting-theme:not(.site-dark-mode) .goal-tile.tile-blue,
+body.goal-setting-theme:not(.site-dark-mode) .goal-tile.tile-purple,
+body.goal-setting-theme:not(.site-dark-mode) .goal-tile.tile-teal,
+body.goal-setting-theme:not(.site-dark-mode) .gs-card {
+    background: rgba(255, 255, 255, 0.96) !important;
+    border: 1px solid rgba(224, 232, 240, 0.9) !important;
+    box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08) !important;
+    backdrop-filter: none !important;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-tile::after {
+    background: linear-gradient(90deg, #5d7cff, #7a8cff) !important;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .tile-icon-box {
+    background: #f1f5ff !important;
+    border-color: #dbe3ff !important;
+    color: #4f46e5 !important;
+    box-shadow: 0 6px 14px rgba(79, 70, 229, 0.12) !important;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .tile-big-val,
+body.goal-setting-theme:not(.site-dark-mode) .gs-card-title,
+body.goal-setting-theme:not(.site-dark-mode) .week-item-title,
+body.goal-setting-theme:not(.site-dark-mode) .snapshot-val,
+body.goal-setting-theme:not(.site-dark-mode) .insight-title,
+body.goal-setting-theme:not(.site-dark-mode) .weekly-tbl tbody td {
+    color: #111827 !important;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-page-title {
+    color: #1f2937 !important;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-page-sub,
+body.goal-setting-theme:not(.site-dark-mode) .goal-breadcrumb {
+    color: #6b7280 !important;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .analyze-btn,
+body.goal-setting-theme:not(.site-dark-mode) .cta-btn,
+body.goal-setting-theme:not(.site-dark-mode) .go-btn {
+    background: linear-gradient(90deg, #0f97ad, #2fb7be) !important;
+    box-shadow: 0 14px 26px rgba(15, 151, 173, 0.25) !important;
+}
+
+body.goal-setting-theme:not(.site-dark-mode) .goal-hero {
+    animation: none !important;
+}
+
+/* Force the soft SaaS look even if dark mode is enabled */
+body.goal-setting-theme,
+body.goal-setting-theme.site-dark-mode {
+    background: linear-gradient(135deg, #f7f3ee 0%, #f1f4f6 55%, #eaf6f5 100%) !important;
+    color: #1f2937 !important;
+}
+
+body.goal-setting-theme .student-layout,
+body.goal-setting-theme.site-dark-mode .student-layout {
+    background:
+        radial-gradient(60rem 40rem at 90% 5%, rgba(86, 203, 210, 0.18), transparent 60%),
+        radial-gradient(60rem 40rem at 10% 85%, rgba(250, 196, 124, 0.22), transparent 60%),
+        linear-gradient(135deg, #f7f3ee 0%, #f1f4f6 55%, #eaf6f5 100%) !important;
+}
+
+body.goal-setting-theme .goal-page-title,
+body.goal-setting-theme .goal-page-sub,
+body.goal-setting-theme .goal-breadcrumb {
+    color: #1f2937 !important;
+}
+
+body.goal-setting-theme .goal-page-sub {
+    color: #6b7280 !important;
+}
+
+body.goal-setting-theme .goal-tile,
+body.goal-setting-theme .goal-tile.tile-blue,
+body.goal-setting-theme .goal-tile.tile-purple,
+body.goal-setting-theme .goal-tile.tile-teal,
+body.goal-setting-theme .gs-card {
+    background: rgba(255, 255, 255, 0.96) !important;
+    border: 1px solid rgba(224, 232, 240, 0.9) !important;
+    box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08) !important;
+    backdrop-filter: none !important;
+}
+
+body.goal-setting-theme .tile-big-val,
+body.goal-setting-theme .gs-card-title,
+body.goal-setting-theme .week-item-title,
+body.goal-setting-theme .snapshot-val,
+body.goal-setting-theme .insight-title,
+body.goal-setting-theme .weekly-tbl tbody td {
+    color: #111827 !important;
 }
 </style>
 {% endblock %}
@@ -670,7 +1509,7 @@
         <div>
             <div class="goal-breadcrumb">
                 <a href="{{ url_for('student.student_dashboard') }}">Dashboard</a>
-                <span style="margin: 0 6px; opacity:0.5;">›</span>
+                <span style="margin: 0 6px; opacity:0.5;">&gt;</span>
                 Goal Setting
             </div>
             <h1 class="goal-page-title">Goal Setting</h1>
@@ -687,7 +1526,7 @@
                 <span class="tile-icon-box"><i class="fas fa-chart-column"></i></span>
             </div>
             <div class="tile-big-val">{{ goal_analysis.predicted_score }}%</div>
-            <div class="tile-sub-label">Your current forecast</div>
+            <div class="tile-sub-label">Current Performance</div>
         </article>
 
         <article class="goal-tile tile-purple reveal-gs" style="--d:0.15s">
@@ -696,7 +1535,7 @@
                 <span class="tile-icon-box"><i class="fas fa-trophy"></i></span>
             </div>
             <div class="tile-big-val">{{ goal_analysis.goal_score }}%</div>
-            <div class="tile-sub-label">Your ambition goal</div>
+            <div class="tile-sub-label">Your Goal</div>
         </article>
 
         <article class="goal-tile tile-teal reveal-gs" style="--d:0.2s">
@@ -705,7 +1544,7 @@
                 <span class="tile-icon-box"><i class="fas fa-arrow-trend-up"></i></span>
             </div>
             <div class="tile-big-val">+{{ goal_analysis.gap }}%</div>
-            <div class="tile-sub-label">Improvement needed</div>
+            <div class="tile-sub-label">Improvement Needed</div>
         </article>
     </section>
 
@@ -754,57 +1593,33 @@
                         <button type="submit" class="analyze-btn">
                             <i class="fas fa-magnifying-glass"></i> Analyze My Goal
                         </button>
+                        <p class="goal-helper">
+                            Based on your input, you need to study ~{{ goal_analysis.daily_hours_min }}-{{ goal_analysis.daily_hours_max }} hrs/day to reach your goal.
+                        </p>
                     </form>
                 </div>
             </article>
 
-            <!-- Daily Study Plan -->
+            <!-- Weekly Targets List -->
             <article class="gs-card reveal-gs" style="--d:0.3s">
                 <div class="gs-card-head">
-                    <div class="gs-card-icon ic-green"><i class="fas fa-book-open"></i></div>
-                    <h3 class="gs-card-title">Daily Study Plan</h3>
+                    <div class="gs-card-icon ic-teal"><i class="fas fa-list-check"></i></div>
+                    <h3 class="gs-card-title">Weekly Targets</h3>
                 </div>
                 <div class="gs-card-body">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                        <span style="font-size: 0.85rem; color: var(--gs-muted);">Target: <strong style="color: var(--gs-ink);">{{ goal_analysis.daily_hours_min }}-{{ goal_analysis.daily_hours_max }} hrs/day</strong></span>
-                        <span class="plan-badge">Expert Plan</span>
+                    <div class="weekly-list">
+                        {% for row in goal_analysis.weekly_targets %}
+                        <div class="week-item">
+                            <div class="week-item-left">
+                                <span class="week-item-title">Week {{ row.week }}</span>
+                                <span class="week-item-sub">Improve by +{{ row.improvement }}% this week</span>
+                            </div>
+                            <span class="week-item-tag">{{ row.expected_score }}%</span>
+                        </div>
+                        {% endfor %}
                     </div>
-
-                    <div class="plan-items">
-                        <div class="plan-item pi-blue">
-                            <div class="plan-icon-sq"><i class="fas fa-brain"></i></div>
-                            <div class="plan-info">
-                                <span class="plan-label-txt">Weak Topics (50%)</span>
-                                <span class="plan-desc-txt">Focus on challenging concepts</span>
-                            </div>
-                            {% set val = (goal_analysis.daily_hours_min * 0.5) %}
-                            <div class="plan-time-chip">{% if val < 1 %}{{ (val * 60)|round|int }}m{% else %}{{ val|round(1) }}h{% endif %}</div>
-                        </div>
-
-                        <div class="plan-item pi-green">
-                            <div class="plan-icon-sq"><i class="fas fa-edit"></i></div>
-                            <div class="plan-info">
-                                <span class="plan-label-txt">Practice & Solving (30%)</span>
-                                <span class="plan-desc-txt">Mock tests & sample problems</span>
-                            </div>
-                            {% set val = (goal_analysis.daily_hours_min * 0.3) %}
-                            <div class="plan-time-chip">{% if val < 1 %}{{ (val * 60)|round|int }}m{% else %}{{ val|round(1) }}h{% endif %}</div>
-                        </div>
-
-                        <div class="plan-item pi-orange">
-                            <div class="plan-icon-sq"><i class="fas fa-history"></i></div>
-                            <div class="plan-info">
-                                <span class="plan-label-txt">Daily Revision (20%)</span>
-                                <span class="plan-desc-txt">Review for strong retention</span>
-                            </div>
-                            {% set val = (goal_analysis.daily_hours_min * 0.2) %}
-                            <div class="plan-time-chip">{% if val < 1 %}{{ (val * 60)|round|int }}m{% else %}{{ val|round(1) }}h{% endif %}</div>
-                        </div>
-                    </div>
-
-                    <div class="plan-info-box">
-                        <i class="fas fa-lightbulb" style="color: #f59e0b; margin-right: 6px;"></i>
-                        Maintain <strong>{{ goal_analysis.required_attendance }}% attendance</strong> and study <strong>{{ goal_analysis.required_study_hours }} hrs/week</strong> to reach your goal.
+                    <div class="plan-note">
+                        Maintain <strong>{{ goal_analysis.required_attendance }}% attendance</strong> and <strong>{{ goal_analysis.required_study_hours }} hrs/week</strong> to stay on track.
                     </div>
                 </div>
             </article>
@@ -817,9 +1632,9 @@
                 <div class="gs-card-head">
                     <div class="gs-card-icon ic-blue"><i class="fas fa-chart-line"></i></div>
                     <h3 class="gs-card-title">Progress Overview</h3>
-                    <div style="display:flex;gap:16px;margin-left:auto;font-size:0.78rem;font-weight:600;">
-                        <span style="color: var(--gs-primary);"><span style="display:inline-block;width:12px;height:3px;background:var(--gs-primary);border-radius:2px;vertical-align:middle;margin-right:4px;"></span>Current</span>
-                        <span style="color: var(--gs-orange);"><span style="display:inline-block;width:12px;height:3px;background:var(--gs-orange);border-radius:2px;border-top:2px dashed var(--gs-orange);vertical-align:middle;margin-right:4px;"></span>Target</span>
+                    <div class="legend-row">
+                        <span class="legend-chip current"><i></i>Current</span>
+                        <span class="legend-chip target"><i></i>Target</span>
                     </div>
                 </div>
                 <div class="gs-card-body">
@@ -883,7 +1698,7 @@
                             </div>
                         </div>
                         <div class="snapshot-row">
-                            <span class="snapshot-label">Study Hours/Week</span>
+                            <span class="snapshot-label">Study Hours</span>
                             <span class="snapshot-val">{{ current.study_hours }} hrs</span>
                         </div>
                         <div class="snapshot-row">
@@ -894,7 +1709,7 @@
                             </div>
                         </div>
                         <div class="snapshot-row">
-                            <span class="snapshot-label">Past Exam Score</span>
+                            <span class="snapshot-label">Past Score</span>
                             <span class="snapshot-val">{{ current.previous_marks }}%</span>
                         </div>
                     </div>
@@ -912,7 +1727,7 @@
                         <div class="insight-row">
                             <div class="insight-dot id-green"><i class="fas fa-check"></i></div>
                             <div>
-                                <div class="insight-title">Goal Analysis</div>
+                                <div class="insight-title">Goal Difficulty</div>
                                 <div class="insight-text">{{ goal_analysis.feasibility }}</div>
                             </div>
                         </div>
@@ -926,22 +1741,21 @@
                         <div class="insight-row">
                             <div class="insight-dot id-purple"><i class="fas fa-clock"></i></div>
                             <div>
-                                <div class="insight-title">Study Hours Needed</div>
-                                <div class="insight-text">{{ goal_analysis.daily_hours_min }}-{{ goal_analysis.daily_hours_max }} hrs/day recommended</div>
+                                <div class="insight-title">Study Recommendation</div>
+                                <div class="insight-text">{{ goal_analysis.daily_hours_min }}-{{ goal_analysis.daily_hours_max }} hrs/day suggested</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </article>
 
-            <!-- Final Advice -->
-            <article class="gs-card final-advice-card reveal-gs" style="--d:0.56s">
-                <div class="gs-card-head">
-                    <div class="gs-card-icon ic-purple"><i class="fas fa-rocket"></i></div>
-                    <h3 class="gs-card-title">Final Advice</h3>
-                </div>
+            <!-- CTA -->
+            <article class="gs-card cta-card reveal-gs" style="--d:0.56s">
                 <div class="gs-card-body">
-                    <p class="final-advice-text">{{ goal_analysis.final_advice }}</p>
+                    <a href="{{ url_for('student.student_dashboard') }}" class="cta-btn">
+                        Start My Study Plan 🚀
+                    </a>
+                    <p class="cta-subtext">{{ goal_analysis.final_advice }}</p>
                 </div>
             </article>
         </div>
@@ -973,6 +1787,20 @@
     const slider = document.getElementById("targetSlider");
     const sliderValue = document.getElementById("targetValue");
     const targetInput = document.getElementById("targetPercentageInput");
+    const isDarkTheme = document.body.classList.contains("site-dark-mode");
+
+    const theme = {
+        sliderActive: isDarkTheme ? "#5a8cff" : "#3f80f7",
+        sliderTrack: isDarkTheme ? "#3a4a79" : "#e2e8f0",
+        chartCurrent: isDarkTheme ? "#6da0ff" : "#3f80f7",
+        chartTarget: isDarkTheme ? "#f2b45f" : "#f0a34e",
+        fillTop: isDarkTheme ? "rgba(91, 140, 255, 0.36)" : "rgba(63, 128, 247, 0.28)",
+        fillBottom: isDarkTheme ? "rgba(91, 140, 255, 0.02)" : "rgba(63, 128, 247, 0.02)",
+        tooltipBg: isDarkTheme ? "rgba(10, 18, 44, 0.92)" : "#1f2a44",
+        tooltipBody: isDarkTheme ? "#d7e3ff" : "#c7d8ff",
+        grid: isDarkTheme ? "rgba(182, 201, 250, 0.16)" : "rgba(0, 0, 0, 0.06)",
+        ticks: isDarkTheme ? "#9db4e8" : "#64748b"
+    };
 
     function syncTarget() {
         if (!slider || !sliderValue || !targetInput) return;
@@ -981,7 +1809,7 @@
         targetInput.value = value;
         // Update gradient position based on value
         const pct = (value / 100) * 100;
-        slider.style.background = `linear-gradient(90deg, #3f80f7 0%, #8b67f0 ${pct}%, #e2e8f0 ${pct}%, #e2e8f0 100%)`;
+        slider.style.background = `linear-gradient(90deg, ${theme.sliderActive} 0%, ${theme.sliderActive} ${pct}%, ${theme.sliderTrack} ${pct}%, ${theme.sliderTrack} 100%)`;
     }
 
     if (slider) {
@@ -1008,8 +1836,8 @@
 
     const ctxEl = ctx.getContext('2d');
     const fillGrad = ctxEl.createLinearGradient(0, 0, 0, 260);
-    fillGrad.addColorStop(0, 'rgba(63, 128, 247, 0.28)');
-    fillGrad.addColorStop(1, 'rgba(63, 128, 247, 0.01)');
+    fillGrad.addColorStop(0, theme.fillTop);
+    fillGrad.addColorStop(1, theme.fillBottom);
 
     new Chart(ctx, {
         type: "line",
@@ -1019,28 +1847,30 @@
                 {
                     label: "Current Path",
                     data: projected,
-                    borderColor: "#3f80f7",
+                    borderColor: theme.chartCurrent,
                     backgroundColor: fillGrad,
                     borderWidth: 2.5,
                     fill: true,
-                    tension: 0.4,
+                    tension: 0.38,
+                    cubicInterpolationMode: "monotone",
                     pointRadius: 5,
                     pointHoverRadius: 7,
                     pointBackgroundColor: "#ffffff",
-                    pointBorderColor: "#3f80f7",
+                    pointBorderColor: theme.chartCurrent,
                     pointBorderWidth: 2.5
                 },
                 {
                     label: "Target Path",
                     data: targetPath,
-                    borderColor: "#f0a34e",
+                    borderColor: theme.chartTarget,
                     borderDash: [7, 5],
                     borderWidth: 2,
                     fill: false,
-                    tension: 0.4,
+                    tension: 0.38,
+                    cubicInterpolationMode: "monotone",
                     pointRadius: 4,
                     pointHoverRadius: 6,
-                    pointBackgroundColor: "#f0a34e",
+                    pointBackgroundColor: theme.chartTarget,
                     pointBorderColor: "#ffffff",
                     pointBorderWidth: 2
                 }
@@ -1052,9 +1882,9 @@
             plugins: {
                 legend: { display: false },
                 tooltip: {
-                    backgroundColor: "#1f2a44",
+                    backgroundColor: theme.tooltipBg,
                     titleColor: "#ffffff",
-                    bodyColor: "#c7d8ff",
+                    bodyColor: theme.tooltipBody,
                     padding: 12,
                     cornerRadius: 10,
                     displayColors: true
@@ -1062,17 +1892,17 @@
             },
             scales: {
                 x: {
-                    grid: { color: "rgba(0,0,0,0.05)", drawBorder: false },
-                    ticks: { color: "#8a94a6", font: { size: 11, family: 'Plus Jakarta Sans' } }
+                    grid: { color: theme.grid, drawBorder: false },
+                    ticks: { color: theme.ticks, font: { size: 11, family: 'Inter' } }
                 },
                 y: {
                     min: minAxis,
                     max: maxAxis,
-                    grid: { color: "rgba(0,0,0,0.05)", drawBorder: false },
+                    grid: { color: theme.grid, drawBorder: false },
                     ticks: {
-                        color: "#8a94a6",
+                        color: theme.ticks,
                         callback: function (v) { return v + "%"; },
-                        font: { size: 11, family: 'Plus Jakarta Sans' }
+                        font: { size: 11, family: 'Inter' }
                     }
                 }
             },
@@ -1086,3 +1916,5 @@
 </script>
 {% endif %}
 {% endblock %}
+
+
