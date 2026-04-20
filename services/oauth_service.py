@@ -7,7 +7,9 @@ from werkzeug.security import generate_password_hash
 import config
 from core.extensions import db
 from models.entities import User
-from services.id_service import generate_student_id
+from services.email_service import queue_login_otp_email
+from services.id_service import generate_otp, generate_student_id
+from services.otp_service import store_otp
 
 
 def get_google_provider_cfg():
@@ -40,6 +42,26 @@ def social_login_user(provider, provider_id, name, email, picture):
     user = User.query.filter_by(email=email).first()
 
     if user:
+        if picture and not user.profile_image_path:
+            user.profile_image_path = picture
+            db.session.commit()
+        if user.two_factor_enabled:
+            otp_code = generate_otp()
+            try:
+                queue_login_otp_email(user.email, otp_code)
+                store_otp(user.email, otp_code, purpose="login_2fa")
+            except Exception as e:
+                print(f"[OTP] Social login challenge queue error: {e}")
+                flash("Failed to send login verification code. Please try again.", "danger")
+                return redirect(url_for("auth.login"))
+            session["pending_login"] = {
+                "user_id": user.id,
+                "email": user.email,
+                "role": user.role,
+            }
+            flash("A sign-in verification code was sent to your email.", "info")
+            return redirect(url_for("auth.verify_login_otp"))
+
         session.permanent = True
         session["user_id"] = user.id
         session["user_name"] = user.name
@@ -48,7 +70,7 @@ def social_login_user(provider, provider_id, name, email, picture):
         session["class_name"] = user.class_name
         session["section"] = user.section
         session["student_id"] = user.student_id
-        session["profile_picture"] = picture
+        session["profile_picture"] = user.profile_image_path or picture or ""
         flash(f"Welcome back, {user.name}!", "success")
         if user.role == "admin":
             return redirect(url_for("admin.admin_dashboard"))
@@ -66,19 +88,36 @@ def social_login_user(provider, provider_id, name, email, picture):
         section="A",
         student_id=student_id,
         is_verified=1,
+        profile_image_path=picture or None,
     )
     db.session.add(new_user)
     db.session.commit()
-    new_id = new_user.id
+
+    if new_user.two_factor_enabled:
+        otp_code = generate_otp()
+        try:
+            queue_login_otp_email(new_user.email, otp_code)
+            store_otp(new_user.email, otp_code, purpose="login_2fa")
+        except Exception as e:
+            print(f"[OTP] Social signup challenge queue error: {e}")
+            flash("Failed to send login verification code. Please try again.", "danger")
+            return redirect(url_for("auth.login"))
+        session["pending_login"] = {
+            "user_id": new_user.id,
+            "email": new_user.email,
+            "role": new_user.role,
+        }
+        flash("A sign-in verification code was sent to your email.", "info")
+        return redirect(url_for("auth.verify_login_otp"))
 
     session.permanent = True
-    session["user_id"] = new_id
-    session["user_name"] = name
-    session["role"] = "student"
-    session["email"] = email
-    session["class_name"] = "Computer Science 101"
-    session["section"] = "A"
-    session["student_id"] = student_id
-    session["profile_picture"] = picture
+    session["user_id"] = new_user.id
+    session["user_name"] = new_user.name
+    session["role"] = new_user.role
+    session["email"] = new_user.email
+    session["class_name"] = new_user.class_name
+    session["section"] = new_user.section
+    session["student_id"] = new_user.student_id
+    session["profile_picture"] = new_user.profile_image_path or ""
     flash(f"Welcome, {name}! Your account has been created via {provider}.", "success")
     return redirect(url_for("student.student_dashboard"))

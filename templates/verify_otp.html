@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}SuccessPredict — Verify Email{% endblock %}
+{% block title %}{{ page_title|default('SuccessPredict - Verify Email') }}{% endblock %}
 {% block body_class %}auth-page{% endblock %}
 
 {% block content %}
@@ -13,11 +13,8 @@
                 </div>
                 <span class="brand-text">SuccessPredict</span>
             </div>
-            <h1 class="auth-headline">Almost There!<br>Verify Your Email.</h1>
-            <p class="auth-subtext">
-                We've sent a 6-digit verification code to your email.
-                Enter it below to complete your registration.
-            </p>
+            <h1 class="auth-headline">{{ hero_headline|default('Almost There!<br>Verify Your Email.')|safe }}</h1>
+            <p class="auth-subtext">{{ hero_subtext|default("We've sent a 6-digit verification code to your email. Enter it below to complete your registration.") }}</p>
             <div class="auth-stats">
                 <div class="auth-stat">
                     <span class="stat-number"><i class="fas fa-shield-alt"></i></span>
@@ -38,12 +35,12 @@
             <div class="otp-icon-wrap">
                 <i class="fas fa-envelope-open-text"></i>
             </div>
-            <h2 class="auth-form-title">Email Verification</h2>
+            <h2 class="auth-form-title">{{ form_title|default('Email Verification') }}</h2>
             <p class="auth-form-subtitle">
                 Enter the 6-digit code sent to <strong>{{ masked_email }}</strong>
             </p>
 
-            <form method="POST" action="{{ url_for('auth.verify_otp_page') }}" class="auth-form" id="otpForm">
+            <form method="POST" action="{{ form_action|default(url_for('auth.verify_otp_page')) }}" class="auth-form" id="otpForm">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="otp-input-group">
                     <input type="text" maxlength="1" class="otp-box" data-idx="0" inputmode="numeric" autofocus>
@@ -57,20 +54,20 @@
                 <input type="hidden" name="otp" id="otpHidden">
 
                 <button type="submit" class="btn btn-primary btn-block btn-lg" id="verifyBtn">
-                    <i class="fas fa-check-circle"></i> Verify &amp; Create Account
+                    <i class="fas fa-{{ submit_icon|default('check-circle') }}"></i> {{ submit_label|default('Verify & Create Account') }}
                 </button>
             </form>
 
             <div class="otp-resend">
                 <p>Didn't receive the code?</p>
-                <form method="POST" action="{{ url_for('auth.resend_otp') }}" style="display:inline;">
+                <form method="POST" action="{{ resend_action|default(url_for('auth.resend_otp')) }}" style="display:inline;">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button type="submit" class="btn-link" id="resendBtn">Resend Code</button>
                 </form>
             </div>
 
             <p class="auth-switch-text">
-                <a href="{{ url_for('auth.register') }}"><i class="fas fa-arrow-left"></i> Back to Registration</a>
+                <a href="{{ back_url|default(url_for('auth.register')) }}"><i class="fas fa-arrow-left"></i> {{ back_label|default('Back to Registration') }}</a>
             </p>
 
             <div class="auth-footer-links">

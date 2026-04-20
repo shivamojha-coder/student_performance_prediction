@@ -160,17 +160,9 @@ export default function App() {
         </section>
 
         <section className="action-row">
-          <div className="action-spacer" />
-
           <button className="primary-button" type="button">
             Save Changes
           </button>
-
-          <div className="danger-wrap">
-            <button className="danger-button" type="button">
-              Deactivate Account
-            </button>
-          </div>
         </section>
       </main>
     </div>

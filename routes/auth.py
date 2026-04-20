@@ -1,5 +1,6 @@
 import os
 import random
+import smtplib
 import string
 import time
 from urllib.parse import urlencode
@@ -20,7 +21,7 @@ from forms.auth_forms import (
     VerifyOtpForm,
 )
 from models.entities import User
-from services.email_service import queue_otp_email, queue_reset_email
+from services.email_service import queue_login_otp_email, queue_otp_email, send_reset_email
 from services.id_service import generate_otp, generate_student_id
 from services.oauth_service import get_google_provider_cfg, get_oauth_redirect_uri, social_login_user
 from services.otp_service import store_otp, verify_otp
@@ -33,6 +34,44 @@ def _flash_form_errors(form):
     for errors in form.errors.values():
         for err in errors:
             flash(err, "danger")
+
+
+def _mask_email(email):
+    if not email or "@" not in email:
+        return email or ""
+    local, domain = email.split("@", 1)
+    masked_local = local[0] + ("*" * max(len(local) - 1, 0)) if local else "***"
+    return f"{masked_local}@{domain}"
+
+
+def _set_authenticated_session(user):
+    session.permanent = True
+    session["user_id"] = user.id
+    session["user_name"] = user.name
+    session["role"] = user.role
+    session["email"] = user.email
+    session["class_name"] = user.class_name
+    session["section"] = user.section
+    session["student_id"] = user.student_id
+    session["profile_picture"] = user.profile_image_path or ""
+
+
+def _start_login_otp_challenge(user):
+    otp_code = generate_otp()
+    try:
+        queue_login_otp_email(user.email, otp_code)
+        store_otp(user.email, otp_code, purpose="login_2fa")
+    except Exception as e:
+        print(f"[OTP] Login challenge queue error: {e}")
+        flash("Failed to send login verification code. Please try again.", "danger")
+        return False
+
+    session["pending_login"] = {
+        "user_id": user.id,
+        "email": user.email,
+        "role": user.role,
+    }
+    return True
 
 
 @auth_bp.route("/login", methods=["GET", "POST"])
@@ -50,16 +89,16 @@ def login():
         if user and check_password_hash(user.password_hash, password):
             if user.role != role:
                 flash(f"This account is registered as {user.role}, not {role}.", "danger")
-                return render_template("login.html")
+                return render_template("login.html", login_form=login_form, register_form=register_form)
 
-            session.permanent = True
-            session["user_id"] = user.id
-            session["user_name"] = user.name
-            session["role"] = user.role
-            session["email"] = user.email
-            session["class_name"] = user.class_name
-            session["section"] = user.section
-            session["student_id"] = user.student_id
+            session.pop("pending_login", None)
+            if user.two_factor_enabled:
+                if not _start_login_otp_challenge(user):
+                    return render_template("login.html", login_form=login_form, register_form=register_form)
+                flash("A sign-in verification code was sent to your email.", "info")
+                return redirect(url_for("auth.verify_login_otp"))
+
+            _set_authenticated_session(user)
 
             flash(f"Welcome back, {user.name}!", "success")
             if user.role == "admin":
@@ -149,17 +188,9 @@ def verify_otp_page():
                 flash("Email already registered.", "danger")
                 return redirect(url_for("auth.login"))
 
-            new_user_id = user.id
             session.pop("pending_reg", None)
 
-            session.permanent = True
-            session["user_id"] = new_user_id
-            session["user_name"] = pending["name"]
-            session["role"] = "student"
-            session["email"] = email
-            session["class_name"] = pending["class_name"]
-            session["section"] = pending.get("section", "A")
-            session["student_id"] = student_id
+            _set_authenticated_session(user)
 
             flash(f"Welcome, {pending['name']}! Your account has been created successfully.", "success")
             return redirect(url_for("student.student_dashboard"))
@@ -168,10 +199,23 @@ def verify_otp_page():
     elif request.method == "POST":
         _flash_form_errors(form)
 
-    masked_email = pending["email"]
-    at_idx = masked_email.index("@")
-    masked_email = masked_email[0] + "***" + masked_email[at_idx:]
-    return render_template("verify_otp.html", masked_email=masked_email, otp_form=form, resend_form=resend_form)
+    masked_email = _mask_email(pending["email"])
+    return render_template(
+        "verify_otp.html",
+        masked_email=masked_email,
+        otp_form=form,
+        resend_form=resend_form,
+        page_title="SuccessPredict - Verify Email",
+        hero_headline="Almost There!<br>Verify Your Email.",
+        hero_subtext="We've sent a 6-digit verification code to your email. Enter it below to complete your registration.",
+        form_title="Email Verification",
+        submit_label="Verify & Create Account",
+        submit_icon="check-circle",
+        form_action=url_for("auth.verify_otp_page"),
+        resend_action=url_for("auth.resend_otp"),
+        back_url=url_for("auth.register"),
+        back_label="Back to Registration",
+    )
 
 
 @auth_bp.route("/resend-otp", methods=["POST"])
@@ -199,6 +243,82 @@ def resend_otp():
     return redirect(url_for("auth.verify_otp_page"))
 
 
+@auth_bp.route("/verify-login-otp", methods=["GET", "POST"])
+def verify_login_otp():
+    form = VerifyOtpForm()
+    resend_form = ResendOtpForm()
+    pending = session.get("pending_login")
+    if not pending:
+        flash("Please log in first.", "warning")
+        return redirect(url_for("auth.login"))
+
+    user = User.query.filter_by(id=pending.get("user_id"), email=pending.get("email")).first()
+    if not user:
+        session.pop("pending_login", None)
+        flash("Your sign-in session expired. Please log in again.", "warning")
+        return redirect(url_for("auth.login"))
+
+    if form.validate_on_submit():
+        user_otp = form.otp.data.strip()
+        if verify_otp(user.email, user_otp, purpose="login_2fa"):
+            session.pop("pending_login", None)
+            _set_authenticated_session(user)
+            flash(f"Welcome back, {user.name}!", "success")
+            if user.role == "admin":
+                return redirect(url_for("admin.admin_dashboard"))
+            return redirect(url_for("student.student_dashboard"))
+        flash("Invalid or expired OTP. Please try again.", "danger")
+    elif request.method == "POST":
+        _flash_form_errors(form)
+
+    return render_template(
+        "verify_otp.html",
+        masked_email=_mask_email(user.email),
+        otp_form=form,
+        resend_form=resend_form,
+        page_title="SuccessPredict - Verify Sign In",
+        hero_headline="Secure Sign In Check",
+        hero_subtext="Two-factor authentication is enabled on your account. Enter the code sent to your email to continue.",
+        form_title="Sign-In Verification",
+        submit_label="Verify & Sign In",
+        submit_icon="shield-alt",
+        form_action=url_for("auth.verify_login_otp"),
+        resend_action=url_for("auth.resend_login_otp"),
+        back_url=url_for("auth.login"),
+        back_label="Back to Login",
+    )
+
+
+@auth_bp.route("/resend-login-otp", methods=["POST"])
+def resend_login_otp():
+    form = ResendOtpForm()
+    if not form.validate_on_submit():
+        _flash_form_errors(form)
+        return redirect(url_for("auth.verify_login_otp"))
+
+    pending = session.get("pending_login")
+    if not pending:
+        flash("Your sign-in session expired. Please log in again.", "warning")
+        return redirect(url_for("auth.login"))
+
+    user = User.query.filter_by(id=pending.get("user_id"), email=pending.get("email")).first()
+    if not user:
+        session.pop("pending_login", None)
+        flash("Your sign-in session expired. Please log in again.", "warning")
+        return redirect(url_for("auth.login"))
+
+    otp_code = generate_otp()
+    try:
+        queue_login_otp_email(user.email, otp_code)
+        store_otp(user.email, otp_code, purpose="login_2fa")
+        flash("A new sign-in code has been sent to your email.", "info")
+    except Exception as e:
+        print(f"[OTP] Login resend queue error: {e}")
+        flash("Failed to resend code. Please try again.", "danger")
+
+    return redirect(url_for("auth.verify_login_otp"))
+
+
 @auth_bp.route("/forgot-password", methods=["GET", "POST"])
 def forgot_password():
     form = ForgotPasswordForm()
@@ -213,14 +333,55 @@ def forgot_password():
             user.reset_token = token
             user.reset_token_expiry = expiry
             db.session.commit()
+            reset_link = url_for("auth.reset_password", token=token, _external=True)
 
             try:
-                reset_link = url_for("auth.reset_password", token=token, _external=True)
-                queue_reset_email(email, reset_link)
+                send_reset_email(email, reset_link)
                 flash("Password reset link sent to your email.", "info")
+            except RuntimeError as e:
+                print(f"SMTP configuration error while sending reset email: {e}")
+                if config.DEBUG:
+                    flash("Email service is not configured. Using local debug reset link below.", "warning")
+                    flash(f"Debug reset link: {reset_link}", "info")
+                else:
+                    user.reset_token = None
+                    user.reset_token_expiry = None
+                    db.session.commit()
+                    flash("Email service is not configured. Please set SMTP_EMAIL and SMTP_PASSWORD.", "danger")
+            except smtplib.SMTPAuthenticationError as e:
+                print(f"SMTP auth failed while sending reset email: {e}")
+                if config.DEBUG:
+                    configured_smtp = _mask_email((config.SMTP_EMAIL or "").strip())
+                    if configured_smtp:
+                        flash(
+                            f"SMTP authentication failed for {configured_smtp}. Using local debug reset link below.",
+                            "warning",
+                        )
+                    else:
+                        flash("SMTP authentication failed. Using local debug reset link below.", "warning")
+                    flash(f"Debug reset link: {reset_link}", "info")
+                else:
+                    user.reset_token = None
+                    user.reset_token_expiry = None
+                    db.session.commit()
+                    configured_smtp = _mask_email((config.SMTP_EMAIL or "").strip())
+                    if configured_smtp:
+                        flash(
+                            f"SMTP authentication failed for {configured_smtp}. Please verify Gmail app password and try again.",
+                            "danger",
+                        )
+                    else:
+                        flash("SMTP authentication failed. Please verify Gmail app password and try again.", "danger")
             except Exception as e:
-                print(f"Error queueing email: {e}")
-                flash("Error sending email. Please try again later.", "danger")
+                print(f"Error sending reset email: {e}")
+                if config.DEBUG:
+                    flash("Error sending email. Using local debug reset link below.", "warning")
+                    flash(f"Debug reset link: {reset_link}", "info")
+                else:
+                    user.reset_token = None
+                    user.reset_token_expiry = None
+                    db.session.commit()
+                    flash("Error sending email. Please try again later.", "danger")
         else:
             flash("Email address not found.", "danger")
 

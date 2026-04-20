@@ -1,12 +1,43 @@
 import os
 
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    load_dotenv = None
+
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+
+
+def _fallback_load_dotenv(dotenv_path):
+    """Minimal .env reader used only when python-dotenv is unavailable."""
+    if not os.path.exists(dotenv_path):
+        return
+
+    with open(dotenv_path, "r", encoding="utf-8") as env_file:
+        for line in env_file:
+            raw = line.strip()
+            if not raw or raw.startswith("#") or "=" not in raw:
+                continue
+            key, value = raw.split("=", 1)
+            key = key.strip()
+            if not key:
+                continue
+            value = value.strip().strip('"').strip("'")
+            os.environ.setdefault(key, value)
+
+dotenv_file = os.path.join(BASE_DIR, ".env")
+if load_dotenv:
+    load_dotenv(dotenv_file, override=True)
+else:
+    _fallback_load_dotenv(dotenv_file)
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
 DATABASE = os.path.join(BASE_DIR, 'student_perf.db')
 MODEL_PATH = os.path.join(BASE_DIR, 'ml', 'models', 'student_model.pkl')
 DATASET_PATH = os.path.join(BASE_DIR, 'ml', 'data', 'student_performance_dataset.csv')
 DEBUG = True
+PROFILE_IMAGE_UPLOAD_SUBDIR = os.environ.get('PROFILE_IMAGE_UPLOAD_SUBDIR', 'uploads/profile_pictures')
+PROFILE_IMAGE_MAX_BYTES = int(os.environ.get('PROFILE_IMAGE_MAX_BYTES', 5 * 1024 * 1024))
 
 # â”€â”€â”€ Email / OTP Configuration (Gmail SMTP with App Password) â”€â”€â”€â”€â”€â”€â”€
 # To use Gmail:
@@ -14,10 +45,10 @@ DEBUG = True
 #   2. Go to https://myaccount.google.com/apppasswords
 #   3. Generate an App Password for "Mail"
 #   4. Paste that 16-char App Password below (or set via environment variable)
-SMTP_SERVER = 'smtp.gmail.com'
-SMTP_PORT = 587
-SMTP_EMAIL = os.environ.get('SMTP_EMAIL', 'mrsnewzebral82@gmail.com')
-SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', 'cbyg hpwu qzsr mvdm')
+SMTP_SERVER = os.environ.get('SMTP_SERVER', 'smtp.gmail.com').strip() or 'smtp.gmail.com'
+SMTP_PORT = int(os.environ.get('SMTP_PORT', '587'))
+SMTP_EMAIL = os.environ.get('SMTP_EMAIL', '').strip()
+SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '').strip()
 OTP_EXPIRY_SECONDS = 300  # 5 minutes
 
 # â”€â”€â”€ Google OAuth 2.0 Configuration â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€

@@ -190,6 +190,7 @@
             {% endwith %}
     {% elif session.get('role') == 'student' %}
     <!-- Student Top Nav Layout -->
+    {% set nav_profile_picture = session.get('profile_picture', '') %}
     <div class="app-layout student-layout">
         <header class="student-topnav">
             <div class="brand-row">
@@ -207,7 +208,15 @@
                 <div class="profile-dropdown">
                     <button class="profile-trigger" id="profileTrigger" onclick="toggleDropdown(event)">
                         <div class="avatar student-avatar">
-                            <span>{{ session.get('user_name', 'S')[0] }}</span>
+                            {% if nav_profile_picture %}
+                                {% if nav_profile_picture.startswith('http://') or nav_profile_picture.startswith('https://') or nav_profile_picture.startswith('data:') %}
+                                    <img src="{{ nav_profile_picture }}" alt="Profile picture" class="avatar-image">
+                                {% else %}
+                                    <img src="{{ url_for('static', filename=nav_profile_picture) }}" alt="Profile picture" class="avatar-image">
+                                {% endif %}
+                            {% else %}
+                                <span>{{ session.get('user_name', 'S')[0] }}</span>
+                            {% endif %}
                         </div>
                         <div class="user-badge-info desktop-only">
                             <span class="user-badge-name">{{ session.get('user_name', 'Student') }}</span>

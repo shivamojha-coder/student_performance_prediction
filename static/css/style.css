@@ -421,6 +421,14 @@ h1, h2, h3, h4, h5, h6 {
     flex-shrink: 0;
 }
 
+.avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+}
+
 .avatar-sm {
     width: 34px;
     height: 34px;
@@ -5081,6 +5089,15 @@ body.site-dark-mode .student-nav a.active,
 body.site-dark-mode .nav-item:hover,
 body.site-dark-mode .nav-item.active {
     color: #f8fafc !important;
+}
+
+body.site-dark-mode .student-nav a:hover {
+    background: rgba(148, 163, 184, 0.14) !important;
+}
+
+body.site-dark-mode .student-nav a.active {
+    background: rgba(56, 189, 248, 0.22) !important;
+    box-shadow: inset 0 0 0 1px rgba(125, 211, 252, 0.42) !important;
 }
 
 body.site-dark-mode .card,

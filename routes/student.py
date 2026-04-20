@@ -1,7 +1,12 @@
-from flask import Blueprint, flash, redirect, render_template, request, session, url_for
-from sqlalchemy import func
-from werkzeug.security import generate_password_hash
+import os
+from uuid import uuid4
 
+from flask import Blueprint, current_app, flash, redirect, render_template, request, session, url_for
+from sqlalchemy import func
+from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
+
+import config
 from core.decorators import login_required
 from core.extensions import db
 from models.entities import Prediction, StudentGoal, User
@@ -10,6 +15,36 @@ from services.ml_service import predict_score
 
 
 student_bp = Blueprint("student", __name__)
+
+_ALLOWED_PROFILE_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp"}
+
+
+def _resolve_profile_image_url(profile_image_path):
+    if not profile_image_path:
+        return ""
+    if profile_image_path.startswith(("http://", "https://", "data:")):
+        return profile_image_path
+    return url_for("static", filename=profile_image_path)
+
+
+def _delete_local_profile_image(profile_image_path):
+    if not profile_image_path:
+        return
+    if profile_image_path.startswith(("http://", "https://", "data:")):
+        return
+
+    safe_relative = profile_image_path.lstrip("/\\")
+    file_path = os.path.join(current_app.static_folder, safe_relative)
+    file_path = os.path.normpath(file_path)
+    static_root = os.path.normpath(current_app.static_folder)
+    if not file_path.startswith(static_root):
+        return
+
+    if os.path.exists(file_path):
+        try:
+            os.remove(file_path)
+        except OSError:
+            pass
 
 
 @student_bp.route("/student/dashboard")
@@ -295,13 +330,42 @@ def student_profile():
         return redirect(url_for("student.student_dashboard"))
 
     if request.method == "POST":
-        name = request.form.get("name")
-        email = request.form.get("email")
-        mobile = request.form.get("mobile")
-        new_password = request.form.get("new_password")
-        confirm_password = request.form.get("confirm_password")
+        name = (request.form.get("name") or "").strip()
+        email = (request.form.get("email") or "").strip()
+        mobile = (request.form.get("mobile") or "").strip()
+        current_password = request.form.get("current_password") or ""
+        new_password = request.form.get("new_password") or ""
+        confirm_password = request.form.get("confirm_password") or ""
+        two_factor_enabled = 1 if request.form.get("two_factor_enabled") == "1" else 0
+        uploaded_image = request.files.get("profile_image")
+        old_profile_image_path = user.profile_image_path
+        saved_image_path = None
 
         try:
+            if not name or not email or not mobile:
+                flash("Name, email, and mobile number are required.", "danger")
+                return redirect(url_for("student.student_profile"))
+
+            if not mobile.isdigit() or len(mobile) != 10:
+                flash("Please enter a valid 10-digit mobile number.", "danger")
+                return redirect(url_for("student.student_profile"))
+
+            if (new_password or confirm_password) and not current_password:
+                flash("Current password is required to change your password.", "danger")
+                return redirect(url_for("student.student_profile"))
+
+            if confirm_password and not new_password:
+                flash("Please enter a new password before confirming it.", "danger")
+                return redirect(url_for("student.student_profile"))
+
+            if (new_password or confirm_password) and not check_password_hash(user.password_hash, current_password):
+                flash("Current password is incorrect.", "danger")
+                return redirect(url_for("student.student_profile"))
+
+            if new_password and len(new_password) < 6:
+                flash("New password must be at least 6 characters long.", "danger")
+                return redirect(url_for("student.student_profile"))
+
             if new_password and new_password != confirm_password:
                 flash("Passwords do not match!", "danger")
                 return redirect(url_for("student.student_profile"))
@@ -311,21 +375,56 @@ def student_profile():
                 flash("Email is already in use.", "danger")
                 return redirect(url_for("student.student_profile"))
 
+            if uploaded_image and uploaded_image.filename:
+                original_filename = secure_filename(uploaded_image.filename)
+                _, extension = os.path.splitext(original_filename)
+                extension = extension.lower()
+                if extension not in _ALLOWED_PROFILE_IMAGE_EXTENSIONS:
+                    flash("Only PNG, JPG, JPEG, and WEBP images are allowed.", "danger")
+                    return redirect(url_for("student.student_profile"))
+
+                uploaded_image.stream.seek(0, os.SEEK_END)
+                file_size = uploaded_image.stream.tell()
+                uploaded_image.stream.seek(0)
+                if file_size > config.PROFILE_IMAGE_MAX_BYTES:
+                    flash("Profile image must be 5MB or smaller.", "danger")
+                    return redirect(url_for("student.student_profile"))
+
+                upload_subdir = config.PROFILE_IMAGE_UPLOAD_SUBDIR.strip("/\\")
+                upload_root = os.path.join(current_app.static_folder, upload_subdir)
+                os.makedirs(upload_root, exist_ok=True)
+
+                new_filename = f"user_{user_id}_{uuid4().hex}{extension}"
+                saved_image_path = os.path.join(upload_root, new_filename)
+                uploaded_image.save(saved_image_path)
+                user.profile_image_path = f"{upload_subdir}/{new_filename}".replace("\\", "/")
+
             user.name = name
             user.email = email
             user.mobile = mobile
+            user.two_factor_enabled = two_factor_enabled
             if new_password:
                 user.password_hash = generate_password_hash(new_password)
             db.session.commit()
 
+            if old_profile_image_path and old_profile_image_path != user.profile_image_path:
+                _delete_local_profile_image(old_profile_image_path)
+
             session["user_name"] = name
             session["email"] = email
+            session["profile_picture"] = user.profile_image_path or ""
 
             flash("Profile updated successfully!", "success")
             return redirect(url_for("student.student_profile"))
         except Exception as e:
             db.session.rollback()
+            if saved_image_path and os.path.exists(saved_image_path):
+                try:
+                    os.remove(saved_image_path)
+                except OSError:
+                    pass
             flash(f"Update failed: {str(e)}", "danger")
             return redirect(url_for("student.student_profile"))
 
-    return render_template("student/profile.html", user=user)
+    profile_image_url = _resolve_profile_image_url(user.profile_image_path)
+    return render_template("student/profile.html", user=user, profile_image_url=profile_image_url)

@@ -13,6 +13,8 @@ CREATE TABLE users (
     section TEXT DEFAULT 'A',
     student_id TEXT UNIQUE,
     is_verified INTEGER DEFAULT 0,
+    profile_image_path TEXT,
+    two_factor_enabled INTEGER NOT NULL DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

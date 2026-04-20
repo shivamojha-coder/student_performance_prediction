@@ -292,6 +292,14 @@
     text-transform: uppercase;
   }
 
+  .profile-avatar-image {
+    width: 82px;
+    height: 82px;
+    border-radius: 16px;
+    object-fit: cover;
+    display: block;
+  }
+
   .upload-tile {
     border: 1px dashed rgba(148, 163, 184, 0.58);
     border-radius: 18px;
@@ -302,6 +310,7 @@
     min-height: 82px;
     align-content: center;
     transition: border-color 0.24s ease, transform 0.24s ease, box-shadow 0.24s ease;
+    cursor: pointer;
   }
 
   .upload-tile:hover {
@@ -419,15 +428,10 @@
 
   .actions-row {
     margin-top: 34px;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    display: flex;
+    justify-content: center;
     align-items: center;
     gap: 16px;
-  }
-
-  .danger-wrap {
-    display: flex;
-    justify-content: flex-end;
   }
 
   .btn {
@@ -464,23 +468,12 @@
     box-shadow: 0 16px 34px rgba(13, 148, 136, 0.36);
   }
 
-  .btn-danger {
-    min-width: 210px;
-    background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
-    box-shadow: 0 15px 30px rgba(244, 63, 94, 0.34);
-  }
-
   .btn:hover {
     transform: translateY(-2px);
   }
 
   .btn-primary:hover {
     box-shadow: 0 20px 40px rgba(13, 148, 136, 0.44);
-  }
-
-  .btn-danger:hover {
-    box-shadow: 0 20px 36px rgba(244, 63, 94, 0.4);
-    filter: saturate(1.08);
   }
 
   .btn:hover::before {
@@ -552,20 +545,10 @@
     }
 
     .actions-row {
-      grid-template-columns: 1fr;
       justify-items: center;
     }
 
-    .danger-wrap {
-      justify-content: center;
-    }
-
-    .actions-spacer {
-      display: none;
-    }
-
-    .btn-primary,
-    .btn-danger {
+    .btn-primary {
       width: min(100%, 300px);
     }
   }
@@ -584,7 +567,7 @@
     </div>
   </div>
 
-  <form method="POST" action="{{ url_for('student.student_profile') }}" class="profile-wrap">
+  <form method="POST" action="{{ url_for('student.student_profile') }}" class="profile-wrap" enctype="multipart/form-data">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
     <header>
@@ -623,13 +606,18 @@
 
           <div class="profile-upload-row">
             <div class="profile-avatar-wrap">
-              <div class="profile-avatar-tile">{{ user.name[0] if user and user.name else 'S' }}</div>
+              {% if profile_image_url %}
+                <img src="{{ profile_image_url }}" alt="Profile image" class="profile-avatar-image">
+              {% else %}
+                <div class="profile-avatar-tile">{{ user.name[0] if user and user.name else 'S' }}</div>
+              {% endif %}
             </div>
 
-            <button class="upload-tile" type="button">
+            <label class="upload-tile" for="profileImageInput">
               <span class="upload-title"><i class="fas fa-upload"></i>Upload picture</span>
-              <span class="upload-subtitle">PNG or JPG up to 5MB</span>
-            </button>
+              <span class="upload-subtitle" id="uploadFileHint">PNG/JPG/JPEG/WEBP up to 5MB</span>
+            </label>
+            <input id="profileImageInput" type="file" name="profile_image" accept=".png,.jpg,.jpeg,.webp" hidden>
           </div>
         </div>
       </article>
@@ -694,7 +682,7 @@
           <label class="field-group">
             <span class="field-label">Current Password</span>
             <span class="field-control">
-              <input class="profile-input" type="password" placeholder="Enter current password" data-password="current_password">
+              <input class="profile-input" type="password" name="current_password" placeholder="Enter current password" data-password="current_password">
               <button class="field-icon-btn" type="button" data-toggle-password="current_password"><i class="fas fa-eye"></i></button>
             </span>
           </label>
@@ -717,8 +705,9 @@
 
           <div class="toggle-row">
             <span class="toggle-label">Two-Factor Authentication</span>
+            <input type="hidden" name="two_factor_enabled" id="twoFactorEnabledField" value="{{ 1 if user.two_factor_enabled else 0 }}">
             <label class="toggle">
-              <input type="checkbox">
+              <input type="checkbox" id="twoFactorToggle" {% if user.two_factor_enabled %}checked{% endif %}>
               <span class="toggle-track"><span class="toggle-thumb"></span></span>
             </label>
           </div>
@@ -727,13 +716,7 @@
     </section>
 
     <section class="actions-row">
-      <div class="actions-spacer"></div>
-
       <button type="submit" class="btn btn-primary">Save Changes</button>
-
-      <div class="danger-wrap">
-        <a href="#" class="btn btn-danger">Deactivate Account</a>
-      </div>
     </section>
   </form>
 </div>
@@ -814,5 +797,25 @@
       }
     });
   });
+
+  var twoFactorToggle = document.getElementById("twoFactorToggle");
+  var twoFactorEnabledField = document.getElementById("twoFactorEnabledField");
+  if (twoFactorToggle && twoFactorEnabledField) {
+    twoFactorToggle.addEventListener("change", function () {
+      twoFactorEnabledField.value = twoFactorToggle.checked ? "1" : "0";
+    });
+  }
+
+  var profileImageInput = document.getElementById("profileImageInput");
+  var uploadFileHint = document.getElementById("uploadFileHint");
+  if (profileImageInput && uploadFileHint) {
+    profileImageInput.addEventListener("change", function () {
+      if (!profileImageInput.files || !profileImageInput.files.length) {
+        uploadFileHint.textContent = "PNG/JPG/JPEG/WEBP up to 5MB";
+        return;
+      }
+      uploadFileHint.textContent = profileImageInput.files[0].name;
+    });
+  }
 </script>
 {% endblock %}

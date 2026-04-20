@@ -498,19 +498,13 @@
 
 .action-row {
   margin-top: 34px;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
+  justify-content: center;
   align-items: center;
   gap: 16px;
 }
 
-.danger-wrap {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.primary-button,
-.danger-button {
+.primary-button {
   position: relative;
   border: 0;
   border-radius: 999px;
@@ -522,8 +516,7 @@
   transition: transform 0.24s ease, box-shadow 0.24s ease, filter 0.24s ease;
 }
 
-.primary-button::before,
-.danger-button::before {
+.primary-button::before {
   content: "";
   position: absolute;
   top: -120%;
@@ -546,21 +539,8 @@
   box-shadow: 0 20px 40px rgba(13, 148, 136, 0.44);
 }
 
-.primary-button:hover::before,
-.danger-button:hover::before {
+.primary-button:hover::before {
   left: 120%;
-}
-
-.danger-button {
-  min-width: 210px;
-  background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
-  box-shadow: 0 15px 30px rgba(244, 63, 94, 0.34);
-}
-
-.danger-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 20px 36px rgba(244, 63, 94, 0.4);
-  filter: saturate(1.08);
 }
 
 @keyframes floatOrb {
@@ -622,20 +602,10 @@
   }
 
   .action-row {
-    grid-template-columns: 1fr;
-    justify-items: center;
-  }
-
-  .danger-wrap {
     justify-content: center;
   }
 
-  .action-spacer {
-    display: none;
-  }
-
-  .primary-button,
-  .danger-button {
+  .primary-button {
     width: min(100%, 300px);
   }
 }

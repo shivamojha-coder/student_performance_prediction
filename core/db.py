@@ -26,6 +26,10 @@ def _ensure_sqlite_columns():
                 conn.execute(text("ALTER TABLE users ADD COLUMN reset_token_expiry REAL"))
             if not has_column("users", "section"):
                 conn.execute(text("ALTER TABLE users ADD COLUMN section TEXT DEFAULT 'A'"))
+            if not has_column("users", "profile_image_path"):
+                conn.execute(text("ALTER TABLE users ADD COLUMN profile_image_path TEXT"))
+            if not has_column("users", "two_factor_enabled"):
+                conn.execute(text("ALTER TABLE users ADD COLUMN two_factor_enabled INTEGER NOT NULL DEFAULT 0"))
 
         if "predictions" in inspector.get_table_names():
             if not has_column("predictions", "section"):
