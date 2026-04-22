@@ -3042,10 +3042,10 @@ body.history-theme .student-layout {
 body.history-theme .student-main {
     background: transparent;
     display: flex;
-    flex-direction: row;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     min-height: calc(100vh - 120px);
+    padding: 24px;
 }
 
 body.history-theme .history-page .card {
@@ -3055,7 +3055,8 @@ body.history-theme .history-page .card {
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     box-shadow: 0 34px 80px rgba(24, 32, 64, 0.32);
-    width: min(100%, 980px);
+    width: 100%;
+    max-width: 980px;
     margin: 0 auto;
     align-self: center;
 }
@@ -3146,12 +3147,12 @@ body.history-theme .history-page .btn-outline:hover {
 }
 
 body.history-theme .history-page {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: calc(100vh - 120px);
-    padding: 24px 0 40px;
+    width: 100%;
+    max-width: 1040px;
+    margin: 0 auto;
+    display: block;
+    min-height: auto;
+    padding: 0;
 }
 
 .py-40 { padding: 40px 0; }

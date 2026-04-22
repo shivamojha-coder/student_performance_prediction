@@ -2,6 +2,40 @@
 {% block title %}PredictorHub — Prediction History{% endblock %}
 {% block body_class %}history-theme{% endblock %}
 
+{% block head %}
+<style>
+    body.history-theme main.student-main.main-content {
+        max-width: none !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 24px !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: flex-start !important;
+    }
+
+    body.history-theme main.student-main.main-content > .history-page {
+        width: 100% !important;
+        max-width: 1040px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    body.history-theme .history-page .card {
+        width: 100% !important;
+        max-width: 980px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    @media (max-width: 768px) {
+        body.history-theme main.student-main.main-content {
+            padding: 16px !important;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="history-page">
     <div class="page-header">
