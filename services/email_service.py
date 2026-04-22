@@ -25,15 +25,10 @@ def _refresh_dotenv_runtime():
         load_dotenv(dotenv_path, override=True)
 
 
-def _build_otp_message(recipient_email, otp_code, flow="registration"):
-    if flow == "login":
-        subject = "SuccessPredict - Sign-In Verification Code"
-        intro = "Use the code below to complete your sign-in request."
-        plain_text = f"Your SuccessPredict sign-in verification code is: {otp_code}"
-    else:
-        subject = "SuccessPredict - Email Verification Code"
-        intro = "Use the code below to verify your email and complete your registration."
-        plain_text = f"Your SuccessPredict verification code is: {otp_code}"
+def _build_otp_message(recipient_email, otp_code):
+    subject = "SuccessPredict - Email Verification Code"
+    intro = "Use the code below to verify your email and complete your registration."
+    plain_text = f"Your SuccessPredict verification code is: {otp_code}"
 
     html_body = f"""
     <div style="font-family:'Inter',Arial,sans-serif;max-width:480px;margin:auto;
@@ -113,29 +108,15 @@ def _log_background_result(future, recipient_email, email_type):
 
 def send_otp_email(recipient_email, otp_code):
     """Send an OTP verification email via Gmail SMTP."""
-    msg = _build_otp_message(recipient_email, otp_code, flow="registration")
+    msg = _build_otp_message(recipient_email, otp_code)
     _send_message(recipient_email, msg)
 
 
 def queue_otp_email(recipient_email, otp_code):
     """Queue OTP email sending in a background thread."""
-    msg = _build_otp_message(recipient_email, otp_code, flow="registration")
+    msg = _build_otp_message(recipient_email, otp_code)
     future = _email_executor.submit(_send_message, recipient_email, msg)
     future.add_done_callback(lambda f: _log_background_result(f, recipient_email, "OTP"))
-    return future
-
-
-def send_login_otp_email(recipient_email, otp_code):
-    """Send a sign-in OTP email via Gmail SMTP."""
-    msg = _build_otp_message(recipient_email, otp_code, flow="login")
-    _send_message(recipient_email, msg)
-
-
-def queue_login_otp_email(recipient_email, otp_code):
-    """Queue sign-in OTP email sending in a background thread."""
-    msg = _build_otp_message(recipient_email, otp_code, flow="login")
-    future = _email_executor.submit(_send_message, recipient_email, msg)
-    future.add_done_callback(lambda f: _log_background_result(f, recipient_email, "login-otp"))
     return future
 
 

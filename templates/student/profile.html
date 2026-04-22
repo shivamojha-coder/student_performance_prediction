@@ -702,15 +702,6 @@
               <button class="field-icon-btn" type="button" data-toggle-password="confirm_password"><i class="fas fa-eye"></i></button>
             </span>
           </label>
-
-          <div class="toggle-row">
-            <span class="toggle-label">Two-Factor Authentication</span>
-            <input type="hidden" name="two_factor_enabled" id="twoFactorEnabledField" value="{{ 1 if user.two_factor_enabled else 0 }}">
-            <label class="toggle">
-              <input type="checkbox" id="twoFactorToggle" {% if user.two_factor_enabled %}checked{% endif %}>
-              <span class="toggle-track"><span class="toggle-thumb"></span></span>
-            </label>
-          </div>
         </div>
       </article>
     </section>
@@ -797,14 +788,6 @@
       }
     });
   });
-
-  var twoFactorToggle = document.getElementById("twoFactorToggle");
-  var twoFactorEnabledField = document.getElementById("twoFactorEnabledField");
-  if (twoFactorToggle && twoFactorEnabledField) {
-    twoFactorToggle.addEventListener("change", function () {
-      twoFactorEnabledField.value = twoFactorToggle.checked ? "1" : "0";
-    });
-  }
 
   var profileImageInput = document.getElementById("profileImageInput");
   var uploadFileHint = document.getElementById("uploadFileHint");

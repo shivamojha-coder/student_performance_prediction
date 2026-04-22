@@ -21,7 +21,7 @@ from forms.auth_forms import (
     VerifyOtpForm,
 )
 from models.entities import User
-from services.email_service import queue_login_otp_email, queue_otp_email, send_reset_email
+from services.email_service import queue_otp_email, send_reset_email
 from services.id_service import generate_otp, generate_student_id
 from services.oauth_service import get_google_provider_cfg, get_oauth_redirect_uri, social_login_user
 from services.otp_service import store_otp, verify_otp
@@ -56,22 +56,28 @@ def _set_authenticated_session(user):
     session["profile_picture"] = user.profile_image_path or ""
 
 
-def _start_login_otp_challenge(user):
-    otp_code = generate_otp()
-    try:
-        queue_login_otp_email(user.email, otp_code)
-        store_otp(user.email, otp_code, purpose="login_2fa")
-    except Exception as e:
-        print(f"[OTP] Login challenge queue error: {e}")
-        flash("Failed to send login verification code. Please try again.", "danger")
-        return False
-
-    session["pending_login"] = {
-        "user_id": user.id,
-        "email": user.email,
-        "role": user.role,
+def _google_oauth_is_configured():
+    blocked_values = {
+        "",
+        "your_id_here",
+        "your_secret_here",
+        "your_google_client_id",
+        "your_google_client_secret",
+        "xxxx",
+        "xxxxx",
+        "change_me",
+        "test",
+        "demo",
     }
-    return True
+    client_id = (config.GOOGLE_CLIENT_ID or "").strip()
+    client_secret = (config.GOOGLE_CLIENT_SECRET or "").strip()
+    if client_id.lower() in blocked_values or client_secret.lower() in blocked_values:
+        return False, "Google OAuth credentials are missing or still placeholder values."
+    if ".apps.googleusercontent.com" not in client_id:
+        return False, "GOOGLE_CLIENT_ID format looks invalid."
+    if not client_secret.startswith("GOCSPX-"):
+        return False, "GOOGLE_CLIENT_SECRET format looks invalid."
+    return True, ""
 
 
 @auth_bp.route("/login", methods=["GET", "POST"])
@@ -90,13 +96,6 @@ def login():
             if user.role != role:
                 flash(f"This account is registered as {user.role}, not {role}.", "danger")
                 return render_template("login.html", login_form=login_form, register_form=register_form)
-
-            session.pop("pending_login", None)
-            if user.two_factor_enabled:
-                if not _start_login_otp_challenge(user):
-                    return render_template("login.html", login_form=login_form, register_form=register_form)
-                flash("A sign-in verification code was sent to your email.", "info")
-                return redirect(url_for("auth.verify_login_otp"))
 
             _set_authenticated_session(user)
 
@@ -243,82 +242,6 @@ def resend_otp():
     return redirect(url_for("auth.verify_otp_page"))
 
 
-@auth_bp.route("/verify-login-otp", methods=["GET", "POST"])
-def verify_login_otp():
-    form = VerifyOtpForm()
-    resend_form = ResendOtpForm()
-    pending = session.get("pending_login")
-    if not pending:
-        flash("Please log in first.", "warning")
-        return redirect(url_for("auth.login"))
-
-    user = User.query.filter_by(id=pending.get("user_id"), email=pending.get("email")).first()
-    if not user:
-        session.pop("pending_login", None)
-        flash("Your sign-in session expired. Please log in again.", "warning")
-        return redirect(url_for("auth.login"))
-
-    if form.validate_on_submit():
-        user_otp = form.otp.data.strip()
-        if verify_otp(user.email, user_otp, purpose="login_2fa"):
-            session.pop("pending_login", None)
-            _set_authenticated_session(user)
-            flash(f"Welcome back, {user.name}!", "success")
-            if user.role == "admin":
-                return redirect(url_for("admin.admin_dashboard"))
-            return redirect(url_for("student.student_dashboard"))
-        flash("Invalid or expired OTP. Please try again.", "danger")
-    elif request.method == "POST":
-        _flash_form_errors(form)
-
-    return render_template(
-        "verify_otp.html",
-        masked_email=_mask_email(user.email),
-        otp_form=form,
-        resend_form=resend_form,
-        page_title="SuccessPredict - Verify Sign In",
-        hero_headline="Secure Sign In Check",
-        hero_subtext="Two-factor authentication is enabled on your account. Enter the code sent to your email to continue.",
-        form_title="Sign-In Verification",
-        submit_label="Verify & Sign In",
-        submit_icon="shield-alt",
-        form_action=url_for("auth.verify_login_otp"),
-        resend_action=url_for("auth.resend_login_otp"),
-        back_url=url_for("auth.login"),
-        back_label="Back to Login",
-    )
-
-
-@auth_bp.route("/resend-login-otp", methods=["POST"])
-def resend_login_otp():
-    form = ResendOtpForm()
-    if not form.validate_on_submit():
-        _flash_form_errors(form)
-        return redirect(url_for("auth.verify_login_otp"))
-
-    pending = session.get("pending_login")
-    if not pending:
-        flash("Your sign-in session expired. Please log in again.", "warning")
-        return redirect(url_for("auth.login"))
-
-    user = User.query.filter_by(id=pending.get("user_id"), email=pending.get("email")).first()
-    if not user:
-        session.pop("pending_login", None)
-        flash("Your sign-in session expired. Please log in again.", "warning")
-        return redirect(url_for("auth.login"))
-
-    otp_code = generate_otp()
-    try:
-        queue_login_otp_email(user.email, otp_code)
-        store_otp(user.email, otp_code, purpose="login_2fa")
-        flash("A new sign-in code has been sent to your email.", "info")
-    except Exception as e:
-        print(f"[OTP] Login resend queue error: {e}")
-        flash("Failed to resend code. Please try again.", "danger")
-
-    return redirect(url_for("auth.verify_login_otp"))
-
-
 @auth_bp.route("/forgot-password", methods=["GET", "POST"])
 def forgot_password():
     form = ForgotPasswordForm()
@@ -422,8 +345,12 @@ def reset_password(token):
 
 @auth_bp.route("/auth/google")
 def google_login():
-    if not config.GOOGLE_CLIENT_ID or not config.GOOGLE_CLIENT_SECRET:
-        flash("Google sign-in is not configured. Add Google OAuth credentials first.", "danger")
+    is_configured, reason = _google_oauth_is_configured()
+    if not is_configured:
+        flash(
+            f"{reason} Update GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env, then restart the server.",
+            "danger",
+        )
         return redirect(url_for("auth.login"))
 
     try:

@@ -336,7 +336,6 @@ def student_profile():
         current_password = request.form.get("current_password") or ""
         new_password = request.form.get("new_password") or ""
         confirm_password = request.form.get("confirm_password") or ""
-        two_factor_enabled = 1 if request.form.get("two_factor_enabled") == "1" else 0
         uploaded_image = request.files.get("profile_image")
         old_profile_image_path = user.profile_image_path
         saved_image_path = None
@@ -402,7 +401,6 @@ def student_profile():
             user.name = name
             user.email = email
             user.mobile = mobile
-            user.two_factor_enabled = two_factor_enabled
             if new_password:
                 user.password_hash = generate_password_hash(new_password)
             db.session.commit()

@@ -7,9 +7,7 @@ from werkzeug.security import generate_password_hash
 import config
 from core.extensions import db
 from models.entities import User
-from services.email_service import queue_login_otp_email
-from services.id_service import generate_otp, generate_student_id
-from services.otp_service import store_otp
+from services.id_service import generate_student_id
 
 
 def get_google_provider_cfg():
@@ -45,22 +43,6 @@ def social_login_user(provider, provider_id, name, email, picture):
         if picture and not user.profile_image_path:
             user.profile_image_path = picture
             db.session.commit()
-        if user.two_factor_enabled:
-            otp_code = generate_otp()
-            try:
-                queue_login_otp_email(user.email, otp_code)
-                store_otp(user.email, otp_code, purpose="login_2fa")
-            except Exception as e:
-                print(f"[OTP] Social login challenge queue error: {e}")
-                flash("Failed to send login verification code. Please try again.", "danger")
-                return redirect(url_for("auth.login"))
-            session["pending_login"] = {
-                "user_id": user.id,
-                "email": user.email,
-                "role": user.role,
-            }
-            flash("A sign-in verification code was sent to your email.", "info")
-            return redirect(url_for("auth.verify_login_otp"))
 
         session.permanent = True
         session["user_id"] = user.id
@@ -92,23 +74,6 @@ def social_login_user(provider, provider_id, name, email, picture):
     )
     db.session.add(new_user)
     db.session.commit()
-
-    if new_user.two_factor_enabled:
-        otp_code = generate_otp()
-        try:
-            queue_login_otp_email(new_user.email, otp_code)
-            store_otp(new_user.email, otp_code, purpose="login_2fa")
-        except Exception as e:
-            print(f"[OTP] Social signup challenge queue error: {e}")
-            flash("Failed to send login verification code. Please try again.", "danger")
-            return redirect(url_for("auth.login"))
-        session["pending_login"] = {
-            "user_id": new_user.id,
-            "email": new_user.email,
-            "role": new_user.role,
-        }
-        flash("A sign-in verification code was sent to your email.", "info")
-        return redirect(url_for("auth.verify_login_otp"))
 
     session.permanent = True
     session["user_id"] = new_user.id

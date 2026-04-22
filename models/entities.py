@@ -18,7 +18,6 @@ class User(db.Model):
     reset_token = db.Column(db.Text, nullable=True, index=True)
     reset_token_expiry = db.Column(db.Float, nullable=True)
     profile_image_path = db.Column(db.Text, nullable=True)
-    two_factor_enabled = db.Column(db.Integer, nullable=False, default=0)
 
     predictions = db.relationship("Prediction", back_populates="user", lazy="dynamic")
 

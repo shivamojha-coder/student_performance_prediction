@@ -23,12 +23,6 @@ def add_reset_columns():
         print("Added 'profile_image_path' column.")
     except sqlite3.OperationalError as e:
         print(f"Skipping 'profile_image_path': {e}")
-
-    try:
-        cursor.execute("ALTER TABLE users ADD COLUMN two_factor_enabled INTEGER NOT NULL DEFAULT 0")
-        print("Added 'two_factor_enabled' column.")
-    except sqlite3.OperationalError as e:
-        print(f"Skipping 'two_factor_enabled': {e}")
         
     conn.commit()
     conn.close()

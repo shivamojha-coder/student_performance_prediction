@@ -154,7 +154,6 @@ export default function App() {
                 placeholder="Enter new password"
                 icon={<EyeOff size={15} />}
               />
-              <Toggle label="Two-Factor Authentication" />
             </div>
           </GlassCard>
         </section>
