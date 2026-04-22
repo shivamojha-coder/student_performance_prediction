@@ -58,14 +58,8 @@ OTP_EXPIRY_SECONDS = 300  # 5 minutes
 #   3. Add http://localhost:5000 to Authorized JavaScript Origins
 #   4. Add http://localhost:5000/auth/google/callback to Authorized Redirect URIs
 #   5. Copy the Client ID and Client Secret below
-GOOGLE_CLIENT_ID = os.environ.get(
-    'GOOGLE_CLIENT_ID',
-    'your_id_here'
-)
-GOOGLE_CLIENT_SECRET = os.environ.get(
-    'GOOGLE_CLIENT_SECRET',
-    'your_secret_here'
-)
+GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
 GOOGLE_DISCOVERY_URL = 'https://accounts.google.com/.well-known/openid-configuration'
 # Optional overrides for OAuth callback URLs:
 # - GOOGLE_REDIRECT_URI: full callback URL for Google only
